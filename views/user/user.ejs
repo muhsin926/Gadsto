@@ -1,0 +1,7 @@
+<h1>This is user page </h1>
+<% if (!login) { %> 
+<p>Without session</p>
+<% } %>
+<form action="/login" method="post">
+    <button type="submit">Logout</button>
+</form>

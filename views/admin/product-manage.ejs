@@ -1,0 +1,67 @@
+<%- include('./layouts/header.ejs') -%>
+<%- include('./layouts/skins.ejs') -%>
+<%- include("./layouts/sidebar.ejs") -%>
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <a class=" text-end" href="/admin/addProduct"><button class="btn btn-primary mb-3">Add Product</button></a>
+        <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title ">All Products</h4>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Category</th>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Stock</th>
+                            <th>Price</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% allProducts.forEach((data)=> { %>
+                            <tr>
+                              <td>
+                                <%= data.category %>
+                              </td>
+                              <td>
+                                <img src="/<%= data.image %>" alt="">
+                              </td>
+                              <td>
+                                <%= data.name %>
+                              </td>
+                              <td>
+                                <%= data.description %>
+                              </td>
+                              <td>
+                                <%= data.stock %>
+                              </td>
+                              <td>
+                                <%= data.price %>
+                              </td>
+                              <td>
+                                <form action="/admin/editproduct/<%= data._id %>" method="post">
+                                <button type="submit" class="btn border">Edit</button>
+                              </form>
+                                </td>
+                                <td>
+                                <form action="/admin/deleteProduct/<%= data._id %>" method="post">
+                              <button type="submit" class="btn btn-danger">Delete</button></form>
+                              </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%- include('./layouts/footer') -%>

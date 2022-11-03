@@ -1,0 +1,68 @@
+<%- include('./layouts/header.ejs') -%>
+    <%- include('./layouts/skins.ejs') -%>
+        <%- include('./layouts/sidebar.ejs') -%>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class=" grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Add Product</h4>
+                                    <!-- <p class="card-description">
+                                        Basic form elements
+                                    </p> -->
+                                    
+                                    <form class="forms-sample" action="/admin/addProduct" method="post" enctype="multipart/form-data" >
+                                        <div class="form-group">
+                                            <label class="">Category</label>
+                                            <div class="">
+                                               <select class="form-control">
+                                                <% categories.forEach((data)=> { %>
+                                                <option><%= data.category %></option>
+                                                <% }) %>
+                                              </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail3">Product Name</label>
+                                            <input type="text" name="name" class="form-control" id="exampleInputEmail3"
+                                                placeholder="Name">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleTextarea1">Product Description</label>
+                                            <textarea class="form-control" type="text" name="description" placeholder="Discription" id="exampleTextarea1" rows="4"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleSelectGender">Product Price</label>
+                                            <input type="number" name="price" class="form-control" id="exampleInputPassword4"
+                                            placeholder="Price">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleSelectGender">Product Stock</label>
+                                            <input type="number" name="stock" class="form-control" id="exampleInputPassword4"
+                                            placeholder="Stock">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>File upload</label>
+                                            <!-- <input type="file" name="imag" class="file-upload-default">
+                                            <div class="input-group col-xs-12"> -->
+                                                <input type="file" name="image" class="form-control file-upload-info" 
+                                                    placeholder="Upload Image">
+                                                <!-- <span class="input-group-append">
+                                                    <button class="file-upload-browse btn btn-primary"
+                                                        type="button">Upload</button>
+                                                </span> -->
+                                            </div>
+                                        </div>
+                                        
+                                       <a href=""><button type="submit" class="btn btn-primary ">Submit</button></a>
+                                       <a href=""> <button class="btn btn-light">Cancel</button></a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<%- include("./layouts/footer.ejs") -%>

@@ -1,0 +1,55 @@
+<%- include('./layouts/header.ejs') -%>
+<%- include('./layouts/skins.ejs') -%>
+<%- include('./layouts/sidebar.ejs') -%>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+      
+      <div class="row">
+        <form action="/admin/addCategory" method="post">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="category" placeholder="Add Category" aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <button type="submit" class="input-group-text btn btn-success" id="basic-addon2">Add Category</button>
+        </div>
+      </form>
+    
+        
+        <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">All Categories</h4>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Category Name</th>
+                            <th></th>
+                            
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <%  categories.forEach((data)=> { %>
+                            <tr>
+                              <td>
+                                <%= data.category %>
+                              </td>
+                             
+                             
+                              <td><form action="/admin/deleteCategory/<%= data._id %>" method="post">
+                                <button type="submit" class="btn ">Delete</button>
+                                </form>
+                             
+                              </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<%- include('./layouts/footer.ejs') -%>

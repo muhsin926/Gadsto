@@ -1,0 +1,64 @@
+<%- include('./layouts/header.ejs') -%>
+  <%- include('./layouts/skins.ejs') -%>
+    <!-- partial -->
+    <!-- partial:../../partials/_sidebar.html -->
+    <%- include("./layouts/sidebar.ejs") -%>')
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="row">
+                  <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">All Users</h4>
+                        <div class="table-responsive">
+                          <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                               
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% allUsers.forEach((data)=> { %>
+                                <tr>
+                                  <td>
+                                    <%= data.name %>
+                                  </td>
+                                  <td>
+                                    <%= data.email %>
+                                  </td>
+                                  <% if(data.type == "User") { %>
+                                  <td>
+                                    <%= data.type %>
+                                  </td>
+                                  <% }else { %>
+                                    <td class="text-danger"> <%= data.type %></td> <% } %>
+                                  <td>
+                                   
+                                    <% if(data.type == "User") { %>
+                                      <form action="/admin/blockUser/<%= data._id %>" method="post">
+                                    <button type="submit" class="btn border border-danger">Block</button>
+                                  </form>
+                                    <% }else { %>
+                                   
+                                      <form action="/admin/unBlockUser/<%= data._id %>" method="post">
+                                    <button type="submit" class="btn border border-success">Unblock</button></form>
+                                    <% } %>
+                                  </td>
+                                  
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <%- include('./layouts/footer.ejs') -%>

@@ -16,9 +16,9 @@
                                         <div class="form-group">
                                             <label class="">Category</label>
                                             <div class="">
-                                               <select class="form-control">
+                                               <select class="form-control" name="category">
                                                 <% categories.forEach((data)=> { %>
-                                                <option><%= data.category %></option>
+                                                <option value="<%= data.category %>"></option>
                                                 <% }) %>
                                               </select>
                                             </div>

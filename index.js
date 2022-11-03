@@ -13,7 +13,7 @@ const app = express();
 //view engin setup
 app.set('view engine','ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-app.use("images",express.static(path.join(__dirname, 'images')));
+// app.use("images",express.static(path.join(__dirname, 'images')));
 app.use(express.urlencoded({extended:true}))
 
 // Cash controller
@@ -29,6 +29,7 @@ const storage = multer.diskStorage({
   },
   filename: (req,file,cb) => {
     cb(null,file.fieldname + Date.now() + path.extname(file.originalname))
+    console.log(file.fieldname + Date.now() + path.extname(file.originalname));
     
   },
 });

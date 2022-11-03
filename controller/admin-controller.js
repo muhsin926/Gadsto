@@ -46,12 +46,13 @@ module.exports = {
 
     //product management
     createProduct: async (req, res) => {
-        const categories = await categoryModel.find({delete:{$ne:true}})
-        res.render('admin/addproduct',{categories})
+        const categories = await categoryModel.find({ delete: { $ne: true } })
+        res.render('admin/addproduct', { categories })
     },
 
     // Add product
     addProdcut: async (req, res) => {
+        console.log(req.body)
         const { category, name, description, price, stock } = (req.body)
         const image = (req.file);
         const newProduct = productModel({
@@ -60,14 +61,14 @@ module.exports = {
             description,
             price,
             stock,
-            image: image.path
+            image: image.filename
         })
         await newProduct.save()
-        res.redirect('/admin/addProduct')
+        res.redirect('/admin/product-manage')
     },
     //category Management
     categoryMange: async (req, res) => {
-        const categories = await categoryModel.find({delete:{$ne:true}})
+        const categories = await categoryModel.find({ delete: { $ne: true } })
         res.render('admin/category', { categories })
     },
 
@@ -102,9 +103,10 @@ module.exports = {
     //edit Product
     editProduct: async (req, res) => {
         const id = req.params.id
+        const categories = await categoryModel.find({ delete: { $ne: true } })
         const product = await productModel.findOne({ _id: id })
         if (product) {
-            res.render('admin/editproduct', { product })
+            res.render('admin/editproduct', { product , categories })
         } else {
             console.log("not working");
         }
@@ -113,8 +115,8 @@ module.exports = {
     //update product
     updateProduct: async (req, res) => {
         const id = req.params.id
-
         const image = req.file
+        console.log(req.body)
         const { category, name, description, price, stock } = req.body
         const product = await productModel.findByIdAndUpdate(
             { _id: id },
@@ -125,7 +127,7 @@ module.exports = {
                     description,
                     price,
                     stock,
-                    image: image.path
+                    image: image.filename
                 }
             })
         await product.save()
@@ -136,24 +138,24 @@ module.exports = {
     },
 
     //new Category
-    addCategory: async (req,res) => {
-        const {category} = req.body
+    addCategory: async (req, res) => {
+        const { category } = req.body
         const newCategory = await categoryModel({ category })
         await newCategory.save()
             .then(() => {
                 res.redirect('/admin/category-manage')
             })
-        
+
     },
 
     //delete category
-    deleteCategory: async (req,res) => {
+    deleteCategory: async (req, res) => {
         const id = req.params.id
-        const deleteCategory = await categoryModel.findByIdAndUpdate({_id:id},{$set:{delete:true}})
+        const deleteCategory = await categoryModel.findByIdAndUpdate({ _id: id }, { $set: { delete: true } })
         await deleteCategory.save()
-        .then(() =>{
-            res.redirect('/admin/category-manage')
-        })
+            .then(() => {
+                res.redirect('/admin/category-manage')
+            })
     }
 
 }

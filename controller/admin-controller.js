@@ -3,6 +3,7 @@ const userModel = require('../model/signupModel')
 const productModel = require('../model/productModel')
 const categoryModel = require('../model/categoryModel')
 const bcrypt = require('bcrypt')
+const session = require("express-session")
 
 module.exports = {
 
@@ -156,6 +157,12 @@ module.exports = {
             .then(() => {
                 res.redirect('/admin/category-manage')
             })
+    },
+
+    //Admin Logout
+    adminLogout: (req,res) => {
+        req.session.destroy()
+        res.redirect('/admin')
     }
 
 }

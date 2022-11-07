@@ -5,7 +5,7 @@ const productModel = require('../model/productModel')
 module.exports = {
     // User landing page
     home: async(req, res) => {
-        const viewProduct = await productModel.find({})
+        const viewProduct = await productModel.find({delete:{$ne:true}})
         if (req.session.login) {
             res.render('user/index', { login: req.session.login ,viewProduct })
         } else {
@@ -76,6 +76,11 @@ module.exports = {
                 res.redirect('/login')
             }
         }
+    },
+
+    //User Profile
+    myProfile: (req,res) => {
+        res.render('user/myProfile')
     },
 
     // User logout

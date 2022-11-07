@@ -53,8 +53,8 @@
                               </form>
                                 </td>
                                 <td>
-                                <form action="/admin/deleteProduct/<%= data._id %>" method="post">
-                              <button type="submit" class="btn btn-danger">Delete</button></form>
+                             
+                              <button onclick="deleteProduct('<%= data._id %>')" type="submit" class="btn btn-danger">Delete</button>
                               </td>
                             </tr>
                             <% }) %>

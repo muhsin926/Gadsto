@@ -1,0 +1,36 @@
+
+.total{
+    display: flex;
+    
+}
+.body{
+    background-color:#dddddd ;
+    
+}
+.content{
+    margin-top: 6rem;
+    margin-left: 2rem;
+    
+    
+}
+.profile{
+    width: 66rem;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    border-radius: 10px;
+}
+.user-icon{
+    font-size: 50px;
+    
+}
+.user-info{
+    width: 66rem;
+    background-color: #fff;
+    margin-top: 2rem;
+    border-radius: 10px;
+}
+.a{
+    text-decoration: none;
+}

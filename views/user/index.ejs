@@ -50,6 +50,18 @@
 					<div class="left-top-bar">
 						Free shipping for standard order over ₹500
 					</div>
+					<% if (!login) { %>
+					<div class="right-top-bar flex-w h-full">
+						<a href="/signup" class="flex-c-m trans-04 p-lr-25">
+							Signup
+						</a>
+
+						<a href="/login" class="flex-c-m trans-04 p-lr-25">
+						Signin 
+						</a>
+						<% } %>
+						
+					</div>
 				</div>
 			</div>
 
@@ -102,7 +114,7 @@
 						<div class="btn-group">
 							<button type="button" class="btn  dropdown-toggle" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">
-								<i class="zmdi zmdi-account"></i>
+								<i class="zmdi zmdi-account ml-2 " style="font-size: 25px;"></i>
 							</button>
 							<% if (login) { %>
 							<div class="dropdown-menu">
@@ -352,7 +364,7 @@
 				</div>
 
 				<div class="item-slick1"
-					style="background-image: url(/image/—Pngtree—taobao\ tmall\ headphones\ business\ home_1021467.jpg);">
+					style="background-image: url(/images/—Pngtree—taobao\ tmall\ headphones\ business\ home_1021467.jpg);">
 					<div class="container h-full">
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 							<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft"

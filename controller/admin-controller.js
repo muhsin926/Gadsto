@@ -8,14 +8,14 @@ const session = require("express-session")
 
 module.exports = {
 
-    // Admin login page
+    // Admin Login Page
     login: (req, res) => {
         if (req.session.adminLogin) {
             res.render('admin/index')
         } else { res.render("admin/login") }
     },
 
-    // Admin submit
+    // Admin Submit Login
     adminDologin: async (req, res) => {
         const { email, password } = req.body;
         const admin = await userModel.findOne({ $and: [{ email: email }, { type: 'admin' }] })
@@ -30,14 +30,30 @@ module.exports = {
         } else {
             res.redirect('/admin')
         }
-
     },
 
-    // User manage
+    // User Manage
     userManage: async (req, res) => {
         allUsers = await userModel.find({ type: { $ne: 'admin' } })
-
         res.render('admin/user-management', { allUsers },)
+    },
+
+     //block User
+     blockUser: async (req, res) => {
+        const id = req.params.id;
+        await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "Blocked" } })
+            .then(() => {
+                res.redirect('/admin/user-manage')
+            })
+    },
+
+    // Unblock User
+    unBlockUser: async (req, res) => {
+        const id = req.params.id
+        await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "User" } })
+            .then(() => {
+                res.redirect('/admin/user-manage')
+            })
     },
 
     //Products Management
@@ -46,15 +62,14 @@ module.exports = {
         res.render('admin/product-manage', { allProducts })
     },
 
-    //product management
+    // Render Add Product Page 
     createProduct: async (req, res) => {
         const categories = await categoryModel.find({ delete: { $ne: true } })
         res.render('admin/addproduct', { categories })
     },
 
-    // Add product
+    // Add Product
     addProdcut: async (req, res) => {
-        console.log(req.body)
         const { category, name, description, price, stock } = (req.body)
         const image = (req.file);
         const newProduct = productModel({
@@ -68,13 +83,8 @@ module.exports = {
         await newProduct.save()
         res.redirect('/admin/product-manage')
     },
-    //category Management
-    categoryMange: async (req, res) => {
-        const categories = await categoryModel.find({ delete: { $ne: true } })
-        res.render('admin/category', { categories })
-    },
 
-    //delete product
+    //Delete product
     deleteProduct: async (req, res) => {
         const id = req.params.id;
         await productModel.findByIdAndUpdate({ _id: id }, { $set: { delete: true } })
@@ -84,46 +94,22 @@ module.exports = {
 
     },
 
-    //block user
-    blockUser: async (req, res) => {
-        const id = req.params.id;
-        await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "Blocked" } })
-            .then(() => {
-                res.redirect('/admin/user-manage')
-            })
-    },
-
-    // Unblock user
-    unBlockUser: async (req, res) => {
-        const id = req.params.id
-        await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "User" } })
-            .then(() => {
-                res.redirect('/admin/user-manage')
-            })
-    },
-
-    //edit Product
-    editProduct: async (req, res) => {
+     //Edit Product
+     editProduct: async (req, res) => {
         const id = req.params.id
         const categories = await categoryModel.find({ delete: { $ne: true } })
         const product = await productModel.findOne({ _id: id })
         if (product) {
             res.render('admin/editproduct', { product , categories })
-        } else {
-            console.log("not working");
-        }
+        } 
     },
 
     //update product
     updateProduct: async (req, res) => {
         const id = req.params.id
         const image = req.file
-        console.log(req.body)
         const { category, name, description, price, stock } = req.body
-        const product = await productModel.findByIdAndUpdate(
-            { _id: id },
-            {
-                $set: {
+        const product = await productModel.findByIdAndUpdate({ _id: id },{$set:{
                     category,
                     name,
                     description,
@@ -137,6 +123,13 @@ module.exports = {
                 res.redirect('/admin/product-manage')
             })
 
+    },
+
+
+    //category Management
+    categoryMange: async (req, res) => {
+        const categories = await categoryModel.find({ delete: { $ne: true } })
+        res.render('admin/category', { categories })
     },
 
     //new Category
@@ -171,7 +164,6 @@ module.exports = {
     newBanner: async (req,res) =>{
         const {category,title,text} = req.body
         const image = req.file
-        console.log(req.file)
         const newBanner = await bannerModel({
             category,
             title,

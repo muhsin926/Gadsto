@@ -4,7 +4,8 @@ const productModel = require('../model/productModel')
 const bannerModel = require('../model/bannerModel')
 
 module.exports = {
-    // User landing page
+
+    // User Landing Page
     home: async(req, res) => {
         const viewProduct = await productModel.find({delete:{$ne:true}})
         const allBanner = await bannerModel.find ({delete:{$ne:true}})
@@ -15,22 +16,13 @@ module.exports = {
         }
     },
 
-    // User signup
+    // User Signup
     signup: (req, res) => {
         res.render('user/signup', { unique: req.session.uniqueErr })
     },
 
-    // User login
-    login: (req, res) => {
-        if (req.session.login) {
-            res.redirect('/')
-        } else {
-            res.render('user/login', { email: req.session.emailErr, pass: req.session.passErr })
-        }
-    },
-
-    // User submit signup
-    dosignup: async (req, res) => {
+    // User Submit Signup
+    dosignup: async (req,res) => {
         if (!req.session.login) {
             const { name, email, password } = req.body;
             const user = await userModel.findOne({ email });
@@ -47,24 +39,29 @@ module.exports = {
             });
             try {
                 await newUser.save();
-                console.log(req.body);
                 req.session.login = true
                 res.redirect('/')
             } catch (error) {
                 res.redirect('/login')
             }
+        } else { res.redirect('user/user') }
+    },
+
+    // User Login
+    login: (req, res) => {
+        if (req.session.login) {
+            res.redirect('/')
         } else {
-            res.redirect('user/user')
+            res.render('user/login', { email: req.session.emailErr, pass: req.session.passErr })
         }
     },
 
-    //User submit login
+    //User Submit Login
     dologin: async (req, res) => {
         const { email, password } = req.body;
         req.session.emailErr = false
         req.session.passErr = false
         const user = await userModel.findOne({ $and: [{ email: email }, { type: 'User' }] });
-
         if (!user) {
             req.session.emailErr = true
             res.redirect('/login')
@@ -85,7 +82,7 @@ module.exports = {
         res.render('user/myProfile')
     },
 
-    // User logout
+    // User Logout
     logoutUser: (req, res) => {
         req.session.destroy()
         res.redirect('/login')

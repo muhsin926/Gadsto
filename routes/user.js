@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const userController = require('../controller/user-controller')
-const userSession = require('../middileware/admin')
+const userSession = require('../middileware/sessionControl')
 
 
 // Get routes

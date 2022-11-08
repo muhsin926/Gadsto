@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const adminController = require('../controller/admin-controller')
-const authControl = require('../middileware/admin')
+const authControl = require('../middileware/sessionControl')
 // const app = express();
 
 // get routes
@@ -34,4 +34,5 @@ router
 router
     .route('/editBanner/:id')
     .get(authControl.sessionControl, adminController.editBanner)
+    
 module.exports = router

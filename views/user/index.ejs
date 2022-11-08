@@ -356,12 +356,12 @@
 
 						<a href="product.html"
 							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-							<div class="block1-txt-child1 flex-col-l">
-								<span class="block1-name ltext-102 trans-04 p-b-8">
+							<div class=" block1-txt-child1 flex-col-l">
+								<span class=" text-white block1-name ltext-102 trans-04 p-b-8">
 									Cameras
 								</span>
 
-								<span class="block1-info stext-102 trans-04">
+								<span class=" text-white block1-info stext-102 trans-04">
 									Spring 2018
 								</span>
 							</div>
@@ -383,11 +383,11 @@
 						<a href="product.html"
 							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
-								<span class="block1-name ltext-102 trans-04 p-b-8">
+								<span class=" text-white block1-name ltext-102 trans-04 p-b-8">
 									Bluetooth Speakers
 								</span>
 
-								<span class="block1-info stext-102 trans-04">
+								<span class="text-white block1-info stext-102 trans-04">
 									Spring 2018
 								</span>
 							</div>
@@ -409,11 +409,11 @@
 						<a href="product.html"
 							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
-								<span class="block1-name ltext-102 trans-04 p-b-8">
+								<span class="text-white block1-name ltext-102 trans-04 p-b-8">
 									Watches
 								</span>
 
-								<span class="block1-info stext-102 trans-04">
+								<span class="text-white block1-info stext-102 trans-04">
 									New Trend
 								</span>
 							</div>
@@ -446,19 +446,19 @@
 						All Products
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-						Camera
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Camera">
+						Cameras
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-						Headset
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".headset">
+						Headsets
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-						Tablet
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".speaker">
+						Speakers
 					</button>
 
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watches">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watch">
 						Watches
 					</button>
 				</div>
@@ -687,11 +687,11 @@
 
 			<div class="row isotope-grid">
 				<% viewProduct.forEach((data)=>{ %>
-					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%=data.category %>">
 						<!-- Block2 -->
 						<div class="block2">
 							<div class="block2-pic hov-img0">
-								<img class="productImg" src="/images/<%= data.image %>" alt="IMG-PRODUCT">
+								<img src="/images/<%= data.image %>" alt="IMG-PRODUCT">
 
 								<a href="#"
 									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
@@ -707,7 +707,7 @@
 									</a>
 
 									<span class="stext-105 cl3">
-										<%= data.price %>
+										₹ <%= data.price %>
 									</span>
 								</div>
 

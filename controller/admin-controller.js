@@ -2,6 +2,7 @@ const { dologin } = require("./user-controller")
 const userModel = require('../model/signupModel')
 const productModel = require('../model/productModel')
 const categoryModel = require('../model/categoryModel')
+const bannerModel = require('../model/bannerModel')
 const bcrypt = require('bcrypt')
 const session = require("express-session")
 
@@ -157,6 +158,65 @@ module.exports = {
             .then(() => {
                 res.redirect('/admin/category-manage')
             })
+    },
+
+    //Banner Management
+    bannerManage: async(req,res) => {
+        const allBanner = await bannerModel.find( {delete:{$ne:true}} )
+        const categories = await categoryModel.find( {delete:{$ne:true}} )
+        res.render('admin/banner-manage', {allBanner,categories} )
+    },
+
+    //Create a new banner
+    newBanner: async (req,res) =>{
+        const {category,title,text} = req.body
+        const image = req.file
+        console.log(req.file)
+        const newBanner = await bannerModel({
+            category,
+            title,
+            text,
+            imageUrl:image.filename
+        })
+        await newBanner.save()
+        .then(()=>{
+            res.redirect('/admin/banner-manage')
+        })
+    },
+
+    // Delete Banner 
+    deleteBanner: async (req,res) => {
+        const id = req.params.id
+        const deleteBanner = await bannerModel.findOneAndUpdate({_id:id},{$set: {delete:true} })
+        deleteBanner.save()
+        .then(()=>{
+            res.redirect('/admin/banner-manage')
+        })
+    },
+
+    // Edit Banner
+    editBanner: async (req,res) => {
+        const id = req.params.id
+        const banner = await bannerModel.findOne({_id:id})
+        const categories = await categoryModel.find( {delete:{$ne:true}} )
+        res.render('admin/editBanner', {banner, categories})
+    },
+
+    // Update Banner
+    updateBanner: async (req,res) => {
+        const id = req.params.id 
+        const { category,title,text} = req.body
+        const image = req.file
+        const banner = await bannerModel.findByIdAndUpdate({_id:id},{$set:{
+                category,
+                title,
+                text,
+                imageUrl:image.filename
+        }});
+        banner.save()
+        .then(()=>{
+            res.redirect('/admin/banner-manage', )
+        })
     },
 
     //Admin Logout

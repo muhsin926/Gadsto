@@ -22,7 +22,7 @@
                                 <th>Email</th>
                                 <th>Role</th>
                                 <th>Action</th>
-                               
+
                               </tr>
                             </thead>
                             <tbody>
@@ -34,25 +34,29 @@
                                   <td>
                                     <%= data.email %>
                                   </td>
-                                  <% if(data.type == "User") { %>
-                                  <td>
-                                    <%= data.type %>
-                                  </td>
-                                  <% }else { %>
-                                    <td class="text-danger"> <%= data.type %></td> <% } %>
-                                  <td>
-                                   
-                                    <% if(data.type == "User") { %>
-                                      <form action="/admin/blockUser/<%= data._id %>" method="post">
-                                    <button type="submit" class="btn border border-danger">Block</button>
-                                  </form>
+                                  <% if(data.type=="User" ) { %>
+                                    <td>
+                                      <%= data.type %>
+                                    </td>
                                     <% }else { %>
-                                   
-                                      <form action="/admin/unBlockUser/<%= data._id %>" method="post">
-                                    <button type="submit" class="btn border border-success">Unblock</button></form>
-                                    <% } %>
-                                  </td>
-                                  
+                                      <td class="text-danger">
+                                        <%= data.type %>
+                                      </td>
+                                      <% } %>
+                                        <td>
+
+                                          <% if(data.type=="User" ) { %>
+                                            <form action="/admin/blockUser/<%= data._id %>" method="post">
+                                              <button type="submit" class="btn border border-danger">Block</button>
+                                            </form>
+                                            <% }else { %>
+
+                                              <form action="/admin/unBlockUser/<%= data._id %>" method="post">
+                                                <button type="submit" class="btn border border-success">Unblock</button>
+                                              </form>
+                                              <% } %>
+                                        </td>
+
                                 </tr>
                                 <% }) %>
                             </tbody>
@@ -61,5 +65,5 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <%- include('./layouts/footer.ejs') -%>

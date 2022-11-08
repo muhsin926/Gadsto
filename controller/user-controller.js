@@ -1,15 +1,17 @@
 const userModel = require('../model/signupModel')
 const bcrypt = require('bcrypt')
 const productModel = require('../model/productModel')
+const bannerModel = require('../model/bannerModel')
 
 module.exports = {
     // User landing page
     home: async(req, res) => {
         const viewProduct = await productModel.find({delete:{$ne:true}})
+        const allBanner = await bannerModel.find ({delete:{$ne:true}})
         if (req.session.login) {
-            res.render('user/index', { login: req.session.login ,viewProduct })
+            res.render('user/index', { login: req.session.login ,viewProduct, allBanner})
         } else {
-            res.render('user/index', { login: req.session.login ,viewProduct})
+            res.render('user/index', { login: req.session.login ,viewProduct, allBanner})
         }
     },
 

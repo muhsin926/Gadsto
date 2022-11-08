@@ -1,0 +1,62 @@
+<%- include('./layouts/header.ejs') %>
+<div class="container">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class=" grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Edit Product</h4>
+                        <!-- <p class="card-description">
+                                        Basic form elements
+                                    </p> -->
+
+                        <form class="forms-sample" action="/admin/editBanner/<%= banner._id %>" method="post"
+                            enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="">Category</label>
+                                <div class="">
+                                    <select class="form-control " name="category">
+                                        <% for(let x of categories){ %>
+                                            <option value="<%= banner.category %>">
+                                                <%= x.category %>
+                                            </option>
+                                            <% } %>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail3">Banner Title</label>
+                                <input type="text" value="<%=banner.title %>" name="title" class="form-control"
+                                    id="exampleInputEmail3">
+
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="exampleSelectGender">Banner Text</label>
+                                <input type="text" name="text" value="<%= banner.text %>" class="form-control"
+                                    id="exampleInputPassword4">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>File upload</label>
+                                <!-- <input type="file" name="imag" class="file-upload-default">
+                                            <div class="input-group col-xs-12"> -->
+                                <input type="file" value="<%= banner.imageUrl %>" name="image"
+                                    class="form-control file-upload-info" placeholder="Upload Image">
+                                <!-- <span class="input-group-append">
+                                                    <button class="file-upload-browse btn btn-primary"
+                                                        type="button">Upload</button>
+                                                </span> -->
+                            </div>
+                    </div>
+
+
+
+                    <a href=""><button type="submit" class="btn btn-primary ">Submit</button></a>
+                 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

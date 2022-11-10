@@ -69,6 +69,9 @@ module.exports = {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
                 req.session.login = true
+                console.log(user);
+                req.session.userId = user._id
+               
                 res.redirect('/')
             } else {
                 req.session.passErr = true
@@ -78,8 +81,11 @@ module.exports = {
     },
 
     //User Profile
-    myProfile: (req,res) => {
-        res.render('user/myProfile')
+    myProfile: async(req,res) => {
+
+        const id = req.session.userId
+        const user = await userModel.findOne({_id:id})
+        res.render('user/myProfile',{user})
     },
 
     // Product View Page
@@ -88,6 +94,17 @@ module.exports = {
         const product = await productModel.findOne({_id:id})
         const relatedProduct = await productModel.find({category:product.category,delete:{$ne:true}})
         res.render('user/product-view',{login:req.session.login, product, relatedProduct })
+    },
+
+    // Edit and Update user 
+    editUser: async (req,res) =>{
+        const {name,email}= req.body
+        const id = req.session.userId
+        const updateUser = await userModel.findByIdAndUpdate({_id:id}, {$set:{name,email}})
+        updateUser.save()
+        .then(()=>{
+            res.redirect('/productView')
+        })
     },
 
     // User Logout

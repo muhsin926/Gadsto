@@ -4,7 +4,6 @@
 
       <div class="main-panel">
         <div class="content-wrapper">
-
           <div class="row">
             <form action="/admin/addCategory" method="post">
               <div class="input-group mb-3">
@@ -13,8 +12,6 @@
                 <button type="submit" class="input-group-text btn btn-success" id="basic-addon2">Add Category</button>
               </div>
             </form>
-
-
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="row">
@@ -27,21 +24,18 @@
                             <thead>
                               <tr>
                                 <th>Category Name</th>
-                                <th></th>
-
-
+                                <th>Delete</th>
                               </tr>
                             </thead>
                             <tbody>
                               <% categories.forEach((data)=> { %>
                                 <tr>
                                   <td>
-                                    <%= data.category %>
+                                    <%= data.category>
                                   </td>
-
-
                                   <td>
-                                      <button onclick="deleteCategory('<%= data._id %>')"  type="submit" class="btn ">Delete</button>
+                                    <button onclick="deleteCategory('<%= data._id %>')" type="submit"
+                                      class="btn ">Delete</button>
                                   </td>
                                 </tr>
                                 <% }) %>

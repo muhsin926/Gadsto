@@ -15,6 +15,7 @@ router.get('/productView/:id', userController.productView)
 // post routes
 router.post('/signup',userController.dosignup)
 router.post('/login',userController.dologin)
+router.post('/editUser',userController.editUser)
 
 
 

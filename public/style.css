@@ -8,8 +8,9 @@
     
 }
 .content{
+    margin: 2rem;
     margin-top: 6rem;
-    margin-left: 2rem;
+    
     
     
 }
@@ -19,18 +20,18 @@
     display: flex;
     align-items: center;
     padding: 2rem;
-    border-radius: 10px;
+   
 }
 .user-icon{
     font-size: 50px;
     
 }
 .user-info{
-    width: 66rem;
+    width: 60rem;
     background-color: #fff;
     margin-top: 2rem;
-    border-radius: 10px;
 }
-.a{
+
+a{
     text-decoration: none;
 }

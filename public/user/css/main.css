@@ -544,8 +544,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   right: 0;
   top: -45px;
   opacity: 0.8;
-}
-
+} 
 .btn-hide-modal-search:hover {
   opacity: 1;
 }
@@ -1866,7 +1865,7 @@ input.num-product::-webkit-inner-spin-button {
 
 
 /*//////////////////////////////////////////////////////////////////
-[ Modal1 ]*/
+/* [ Modal1 ]*/
 .wrap-modal1 {
   position: fixed;
   width: 100%;
@@ -1881,13 +1880,13 @@ input.num-product::-webkit-inner-spin-button {
   -moz-transition: all 0.4s;
   transition: all 0.4s;
 
-  visibility: hidden;
+   visibility: hidden; 
   opacity: 0;
-}
+} 
 
 .overlay-modal1 {
   position: fixed;
-  z-index: -1;
+   z-index: -1; 
   width: 100%;
   height: 100%;
   top: 0;

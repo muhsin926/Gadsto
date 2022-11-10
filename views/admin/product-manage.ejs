@@ -16,8 +16,8 @@
                       <table class="table table-hover">
                         <thead>
                           <tr>
-                            <th>Category</th>
                             <th>Image</th>
+                            <th>Category</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Stock</th>
@@ -30,10 +30,10 @@
                           <% allProducts.forEach((data)=> { %>
                             <tr>
                               <td>
-                                <%= data.category %>
+                                <img src="../images/<%= data.image %>" alt=""> <%= data.category %>
                               </td>
                               <td>
-                                <img src="../images/<%= data.image %>" alt="">
+                                <%= data.category %>
                               </td>
                               <td>
                                 <%= data.name %>

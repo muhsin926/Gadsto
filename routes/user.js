@@ -10,6 +10,7 @@ router.get('/signup',userController.signup)
 router.get('/login',userController.login)
 router.get('/logoutUser',userController.logoutUser)
 router.get('/myProfile', userSession.userSession, userController.myProfile)
+router.get('/productView/:id', userController.productView)
 
 // post routes
 router.post('/signup',userController.dosignup)

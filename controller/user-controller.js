@@ -82,6 +82,14 @@ module.exports = {
         res.render('user/myProfile')
     },
 
+    // Product View Page
+    productView: async(req,res) => {
+        const id = req.params.id
+        const product = await productModel.findOne({_id:id})
+        const relatedProduct = await productModel.find({category:product.category,delete:{$ne:true}})
+        res.render('user/product-view',{login:req.session.login, product, relatedProduct })
+    },
+
     // User Logout
     logoutUser: (req, res) => {
         req.session.destroy()

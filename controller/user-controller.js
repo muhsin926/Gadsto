@@ -2,6 +2,7 @@ const userModel = require('../model/signupModel')
 const bcrypt = require('bcrypt')
 const productModel = require('../model/productModel')
 const bannerModel = require('../model/bannerModel')
+const cartModel = require('../model/cartModel')
 
 module.exports = {
 
@@ -69,9 +70,7 @@ module.exports = {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
                 req.session.login = true
-                console.log(user);
                 req.session.userId = user._id
-               
                 res.redirect('/')
             } else {
                 req.session.passErr = true
@@ -80,31 +79,77 @@ module.exports = {
         }
     },
 
-    //User Profile
-    myProfile: async(req,res) => {
 
-        const id = req.session.userId
-        const user = await userModel.findOne({_id:id})
-        res.render('user/myProfile',{user})
-    },
-
-    // Product View Page
+     // Product View Page
     productView: async(req,res) => {
         const id = req.params.id
         const product = await productModel.findOne({_id:id})
         const relatedProduct = await productModel.find({category:product.category,delete:{$ne:true}})
         res.render('user/product-view',{login:req.session.login, product, relatedProduct })
+        },
+
+
+    //User Profile
+// =================
+    myProfile: async(req,res) => {
+        const id = req.session.userId
+        const user = await userModel.findOne({_id:id})
+        console.log(user);
+        res.render('user/myProfile',{user})
     },
 
+
     // Edit and Update user 
+    // =====================
     editUser: async (req,res) =>{
         const {name,email}= req.body
         const id = req.session.userId
-        const updateUser = await userModel.findByIdAndUpdate({_id:id}, {$set:{name,email}})
+        const updateUser = await userModel.findByIdAndUpdate({_id:id}, {$set:{name:name,email:email}})
         updateUser.save()
         .then(()=>{
-            res.redirect('/productView')
+            res.redirect('/myProfile')
         })
+    },
+
+    // Shoping Cart
+    shopingCart:  async(req,res) => {
+        const ownerId = req.session.userId
+        const cartItems = await cartModel.findOne({owner:ownerId}).
+        populate('items').
+        exec((err,product) => {
+            if (err){
+                 return console.log(err);
+            }
+            console.log(product);
+            res.render('user/shoping-cart',{login:req.session.login , product})
+        })
+  
+    } ,
+
+    // Add To Cart
+    addToCart : async(req,res) => {
+        const productId = req.params.id 
+        console.log(req.session.userId);
+        const user = await cartModel.findOne({owner: req.session.userId})
+        const product = await productModel.findOne({_id:productId})
+        if (!user) {
+        const addToCart = await cartModel({
+            owner:req.session.userId,
+            items:[ product._id ]
+         
+        })
+        addToCart.save()
+        .then(()=>{
+            res.redirect('/user/productView')
+        })
+    }else {
+        const addToCart = await cartModel.findOneAndUpdate({owner:req.session.userId},
+            {$push:{items:productId}},{upsert:true})
+        addToCart.save()
+        .then(()=>{
+            res.redirect('/user/productView')
+        })
+    }   
     },
 
     // User Logout

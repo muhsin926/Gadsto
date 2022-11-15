@@ -109,20 +109,21 @@ module.exports = {
         const id = req.params.id
         const image = req.file
         const { category, name, description, price, stock } = req.body
+        if (image){
+            const productImage = await productModel.findByIdAndUpdate({_id:id},{$set:{image:image.filename}})
+        }
         const product = await productModel.findByIdAndUpdate({ _id: id },{$set:{
                     category,
                     name,
                     description,
                     price,
                     stock,
-                    image: image.filename
                 }
             })
         await product.save()
             .then(() => {
                 res.redirect('/admin/product-manage')
             })
-
     },
 
 

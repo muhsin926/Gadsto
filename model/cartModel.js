@@ -5,14 +5,29 @@ const cartSchema = new mongoose.Schema ({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    totalPrice: {
+    items: [{
+        product:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Products",
+        },
+        quantity:{
+            type: Number,
+            default: 1
+        },
+        totalPrice: {
+            type: Number,
+            default:0
+        },
+        date:{
+            type: Date,
+            default: Date.now
+        }
+        
+    }],
+    cartTotal: {
         type: Number,
         default: 0
-    },
-    items: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Products"
-    }]
+    }
 })
 
 const cart = mongoose.model("Shoping-Cart",cartSchema)

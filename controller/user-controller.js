@@ -7,13 +7,13 @@ const cartModel = require('../model/cartModel')
 module.exports = {
 
     // User Landing Page
-    home: async(req, res) => {
-        const viewProduct = await productModel.find({delete:{$ne:true}})
-        const allBanner = await bannerModel.find ({delete:{$ne:true}})
+    home: async (req, res) => {
+        const viewProduct = await productModel.find({ delete: { $ne: true } })
+        const allBanner = await bannerModel.find({ delete: { $ne: true } })
         if (req.session.login) {
-            res.render('user/index', { login: req.session.login ,viewProduct, allBanner})
+            res.render('user/index', { login: req.session.login, viewProduct, allBanner })
         } else {
-            res.render('user/index', { login: req.session.login ,viewProduct, allBanner})
+            res.render('user/index', { login: req.session.login, viewProduct, allBanner })
         }
     },
 
@@ -23,7 +23,7 @@ module.exports = {
     },
 
     // User Submit Signup
-    dosignup: async (req,res) => {
+    dosignup: async (req, res) => {
         if (!req.session.login) {
             const { name, email, password } = req.body;
             const user = await userModel.findOne({ email });
@@ -80,76 +80,94 @@ module.exports = {
     },
 
 
-     // Product View Page
-    productView: async(req,res) => {
+    // Product View Page
+    productView: async (req, res) => {
         const id = req.params.id
-        const product = await productModel.findOne({_id:id})
-        const relatedProduct = await productModel.find({category:product.category,delete:{$ne:true}})
-        res.render('user/product-view',{login:req.session.login, product, relatedProduct })
-        },
+        const product = await productModel.findOne({ _id: id })
+        const relatedProduct = await productModel.find({ category: product.category, delete: { $ne: true } })
+        res.render('user/product-view', { login: req.session.login, product, relatedProduct })
+    },
 
 
     //User Profile
-// =================
-    myProfile: async(req,res) => {
+    // =================
+    myProfile: async (req, res) => {
         const id = req.session.userId
-        const user = await userModel.findOne({_id:id})
+        const user = await userModel.findOne({ _id: id })
         console.log(user);
-        res.render('user/myProfile',{user})
+        res.render('user/myProfile', { user })
     },
 
 
     // Edit and Update user 
     // =====================
-    editUser: async (req,res) =>{
-        const {name,email}= req.body
+    editUser: async (req, res) => {
+        const { name, email } = req.body
         const id = req.session.userId
-        const updateUser = await userModel.findByIdAndUpdate({_id:id}, {$set:{name:name,email:email}})
+        const updateUser = await userModel.findByIdAndUpdate({ _id: id }, { $set: { name: name, email: email } })
         updateUser.save()
-        .then(()=>{
-            res.redirect('/myProfile')
-        })
+            .then(() => {
+                res.redirect('/myProfile')
+            })
     },
 
     // Shoping Cart
-    shopingCart:  async(req,res) => {
+    shopingCart: async (req, res) => {
         const ownerId = req.session.userId
-        const cartItems = await cartModel.findOne({owner:ownerId}).
-        populate('items').
-        exec((err,product) => {
-            if (err){
-                 return console.log(err);
-            }
-            console.log(product);
-            res.render('user/shoping-cart',{login:req.session.login , product})
-        })
-  
-    } ,
+        const cartItems = await cartModel.findOne({ owner: ownerId }).
+            populate('items.product').
+            exec((err, allCart) => {
+                if (err) {
+                    return console.log(err);
+                }
+                res.render('user/shoping-cart', { login: req.session.login, allCart })
+            })
+
+    },
 
     // Add To Cart
-    addToCart : async(req,res) => {
-        const productId = req.params.id 
+    addToCart: async (req, res) => {
+        const productId = req.params.id
         console.log(req.session.userId);
-        const user = await cartModel.findOne({owner: req.session.userId})
-        const product = await productModel.findOne({_id:productId})
+        const user = await cartModel.findOne({ owner: req.session.userId })
+        const product = await productModel.findOne({ _id: productId })
+        const cartTotal = product.price
         if (!user) {
-        const addToCart = await cartModel({
-            owner:req.session.userId,
-            items:[ product._id ]
-         
-        })
-        addToCart.save()
-        .then(()=>{
-            res.redirect('/user/productView')
-        })
-    }else {
-        const addToCart = await cartModel.findOneAndUpdate({owner:req.session.userId},
-            {$push:{items:productId}},{upsert:true})
-        addToCart.save()
-        .then(()=>{
-            res.redirect('/user/productView')
-        })
-    }   
+            const addToCart = await cartModel({
+                owner: req.session.userId,
+                items: [{ product: productId, totalPrice: product.price }],
+                cartTotal: cartTotal
+            })
+            addToCart.save()
+                .then(() => {
+                    res.redirect('/user/productView')
+                })
+        } else {
+            const addToCart = await cartModel.findOneAndUpdate({ owner: req.session.userId },
+                { $push: { items: { product: productId, totalPrice: product.price } }, $inc:{cartTotal: cartTotal}})
+            addToCart.save()
+                .then(() => {
+                    res.redirect('/user/productView')
+                })
+        }
+    },
+
+    changeProductQuantity: async (req, res) => {
+        const { cartId, productId, count } = req.params
+        const product = await productModel.findOne({_id:productId})
+        if (count == 1) var productPrice = product.price;
+        else{ var productPrice = -product.price }
+        const cart = await cartModel.findOneAndUpdate({ _id: cartId, 'items.product': productId },
+            { $inc: { 'items.$.quantity': count, 'items.$.totalPrice': productPrice, cartTotal: productPrice }})
+            .then(() => {
+                res.redirect('/shoping-cart')
+            })
+
+    },
+
+    // Place Order 
+    placeOrder: (req,res) =>{
+        res.render('user/place-order' ,{login: req.session.login})
     },
 
     // User Logout

@@ -13,13 +13,26 @@ router.get('/myProfile', userSession.userSession, userController.myProfile)
 router.get('/productView/:id', userController.productView)
 router.get('/shoping-cart', userSession.userSession, userController.shopingCart)
 router.get('/change-product-quantity/:cartId/:productId/:count', userController.changeProductQuantity)
-router.get('/place-order', userController.placeOrder)
+router.get('/checkout', userSession.userSession, userController.checkout)
+router.get('/shoping-cart-delete-product/:productId', userController.deleteCartProduct)
+router.get('/wishList',userSession.userSession, userController.wishList)
+router.get('/addToWishlist/:productId',userSession.userSession, userController.addToWishlist)
+router.get('/remove-from-wishlist/:porductId', userController.removeWishlist)
+
 
 // post routes
 router.post('/signup',userController.dosignup)
 router.post('/login',userController.dologin)
 router.post('/editUser',userController.editUser)
-router.post('/addToCart/:id',userController.addToCart)
+router.post('/addToCart/:id',userSession.userSession, userController.addToCart)
+
+router
+    .route('/address')
+    .post(userController.newAddress)
+
+router
+    .route('/shoping-cart/')
+    .get(userSession.userSession, userController.shopingCart)
 
 
 

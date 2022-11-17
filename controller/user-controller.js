@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const productModel = require('../model/productModel')
 const bannerModel = require('../model/bannerModel')
 const cartModel = require('../model/cartModel')
+const addressModel = require('../model/addressModel')
+const wishListModel = require('../model/wishListModel')
 
 module.exports = {
 
@@ -140,25 +142,25 @@ module.exports = {
             })
             addToCart.save()
                 .then(() => {
-                    res.redirect('/user/productView')
+                    res.redirect('/productView/' + productId)
                 })
         } else {
             const addToCart = await cartModel.findOneAndUpdate({ owner: req.session.userId },
-                { $push: { items: { product: productId, totalPrice: product.price } }, $inc:{cartTotal: cartTotal}})
+                { $push: { items: { product: productId, totalPrice: product.price } }, $inc: { cartTotal: cartTotal } })
             addToCart.save()
                 .then(() => {
-                    res.redirect('/user/productView')
+                    res.redirect('/productView/' + productId)
                 })
         }
     },
 
     changeProductQuantity: async (req, res) => {
         const { cartId, productId, count } = req.params
-        const product = await productModel.findOne({_id:productId})
+        const product = await productModel.findOne({ _id: productId })
         if (count == 1) var productPrice = product.price;
-        else{ var productPrice = -product.price }
+        else { var productPrice = -product.price }
         const cart = await cartModel.findOneAndUpdate({ _id: cartId, 'items.product': productId },
-            { $inc: { 'items.$.quantity': count, 'items.$.totalPrice': productPrice, cartTotal: productPrice }})
+            { $inc: { 'items.$.quantity': count, 'items.$.totalPrice': productPrice, cartTotal: productPrice } })
             .then(() => {
                 res.redirect('/shoping-cart')
             })
@@ -166,8 +168,121 @@ module.exports = {
     },
 
     // Place Order 
-    placeOrder: (req,res) =>{
-        res.render('user/place-order' ,{login: req.session.login})
+    checkout: async (req, res) => {
+        const userId = req.session.userId
+        const addresses = await addressModel.findOne({ user: userId })
+        let address
+        if (addresses) {
+            address = addresses.address;
+        } else {
+            address = []
+        }
+
+        const cartItems = await cartModel.findOne({ owner: userId })
+        console.log(cartItems);
+        res.render('user/checkout', { login: req.session.login, address, cartItems })
+
+    },
+
+    //new Address
+    newAddress: async (req, res) => {
+        const userId = req.session.userId
+        const existAddress = await addressModel.findOne({ user: userId })
+        if (existAddress) {
+            await addressModel.findOneAndUpdate({ user: userId },
+                {
+                    $push: {
+                        address: [req.body]
+                    }
+                }).then(() => {
+                    res.redirect('/checkout')
+                })
+        } else {
+            const addAddress = await addressModel({
+                user: userId,
+                address: [req.body]
+            })
+            addAddress.save()
+                .then(() => {
+                    res.redirect('/checkout')
+                })
+        }
+
+    },
+
+    //Delete Product From Cart
+    deleteCartProduct: async (req, res) => {
+        console.log('ddelte')
+        const userId = req.session.userId
+        const productId = req.params.productId
+        const deleteProduct = await cartModel.findOneAndUpdate({ owner: userId },
+            {
+                $pull:
+                {
+                    items:
+                        { product: productId }
+                }
+            })
+        deleteProduct.save()
+            .then(() => {
+                res.redirect('/shoping-cart')
+            })
+
+    },
+
+    // Render Wish List
+    wishList: async (req, res) => {
+        const userId = req.session.userId
+        const allwishLists = await wishListModel.findOne({ owner: userId })
+            .populate('products.product')
+            .exec((err, wishLists) => {
+                if (err) {
+                    console.log(err)
+                }
+                const products = wishLists.products
+                console.log(products);
+                res.render('user/wishList', { login: req.session.userId, products })
+            })
+
+    },
+
+    //Add To Wish List
+    addToWishlist: async (req, res) => {
+        const productId = req.params.productId
+        const userId = req.session.userId
+        const existWishList = await wishListModel.findOne({ owner: userId })
+        if (existWishList) {
+            await wishListModel.findOneAndUpdate({ owner: userId },
+                {
+                    $push:
+                    {
+                        products: [{
+                            product: productId
+                        }]
+                    }
+                })
+            res.redirect('/')
+        } else {
+            const newWishList = await wishListModel({
+                owner: userId,
+                products: [{ product: productId }]
+            })
+            newWishList.save()
+            res.redirect('/')
+        }
+
+    },
+
+    //Remove Product From Wihslist
+    removeWishlist: async (req, res) => {
+        const productId = req.params.porductId
+        const userId = req.session.userId
+       const remove = await wishListModel.findOneAndUpdate({ owner: userId },
+            { $pull: { products: { product: productId } } })
+            remove.save()
+            .then(()=>{
+                res.redirect('/wishList')
+            })
     },
 
     // User Logout

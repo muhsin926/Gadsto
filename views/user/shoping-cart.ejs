@@ -33,9 +33,11 @@
                                 <% for ( cart of allCart.items) { %>
                                     <tr class="table_row">
                                         <td class="column-1">
-                                            <div class="how-itemcart1">
-                                                <img src="/images/<%= cart.product.image %>" alt="IMG">
-                                            </div>
+                                            <a  href="/shoping-cart-delete-product/<%= cart.product._id  %> ">
+                                                <div class="how-itemcart1">
+                                                    <img src="/images/<%= cart.product.image %>" alt="IMG">
+                                                </div>
+                                            </a>
                                         </td>
                                         <td class="column-2">
                                             <%= cart.product.name %>
@@ -66,7 +68,7 @@
                                             </div>
                                         </td>
                                         <td class="column-5">
-                                            <%= cart.totalPrice %>
+                                            ₹<%= cart.totalPrice %>
                                         </td>
 
 
@@ -98,27 +100,27 @@
                         </h4>
 
                         <div class="d-flex justify-content-between p-b-13">
-                            <div class="size-208">
+                            <div class="">
                                 <span class="stext-110 cl2">
                                     Subtotal:
                                 </span>
                             </div>
 
-                            <div class="size-209">
+                            <div class="">
                                 <span class="mtext-110 cl2">
-                                    <%= allCart.cartTotal %>
+                                    ₹<%= allCart.cartTotal %>
                                 </span>
                             </div>
                         </div>
 
-                        <div class="flex-t bor12 p-b-13">
-                            <div class="size-208">
+                        <div class="d-flex justify-content-between flex-t bor12 p-b-13">
+                            <div class="">
                                 <span class="stext-110 cl2">
                                     Delivery Charge:
                                 </span>
                             </div>
 
-                            <div class="size-209">
+                            <div class="">
                                 <span class="mtext-110 cl2 text-success">
                                     FREE
                                 </span>
@@ -128,22 +130,22 @@
 
 
 
-                        <div class="flex-w flex-t p-t-27 p-b-33">
-                            <div class="size-208">
+                        <div class="d-flex justify-content-between flex-w flex-t p-t-27 p-b-33">
+                            <div>
                                 <span class="mtext-101 cl2">
                                     Total:
                                 </span>
                             </div>
 
-                            <div class="size-209 p-t-1">
+                            <div class=" p-t-1">
                                 <span class="mtext-110 cl2">
-                                    <%= allCart.cartTotal %>
+                                    ₹<%= allCart.cartTotal %>
                                 </span>
                             </div>
                         </div>
-                        <a href="/place-order"
+                        <a href="/checkout"
                             class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                            Proceed to Checkou
+                            Proceed to Checkout
                         </a>
                     </div>
                 </div>

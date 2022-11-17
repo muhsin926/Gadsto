@@ -47,6 +47,9 @@ app.use(session({
 // Main routes
 app.use('/', userRouter)
 app.use('/admin', adminRouter)
+app.use('*',(req,res)=>{
+  res.send('Page Not Found')
+})
 
 
 //server create

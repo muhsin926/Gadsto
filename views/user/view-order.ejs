@@ -45,7 +45,7 @@
       <nav class="sidebar  sidebar-offcanvas mt-5 pt-4" id="sidebar">
         <ul class="nav ">
           <li class="nav-item pb-2">
-            <a class="nav-link" href="#profile">
+            <a class="nav-link" href="/myProfile">
             <i class="icon-head menu-icon"></i>
               <span class="menu-title">Personal Information</span>
             </a>
@@ -102,41 +102,15 @@
             <span class="material-symbols-outlined user-icon" style="font-size: 50px;">
               account_box
             </span>
-            <h2 class="greet ms-5">Hello, <%= user.name %>
+            <h2 class="greet ms-5">Hello, <%= userName %>
             </h2>
           </div>
 
           <div class=" p-5 user-info col rounded ">
-            <form action="/editUser" method="post">
-            <div class="d-flex justify-content-between">
-              <h4> Personal Information</h4>
-              <button class="btn border text-white "
-                style="background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104)); "
-                type="submit">Update</button>
-
-            </div>
-
-            <hr>
-            <br>
+           <div>
             
-              <div class="row">
-
-                <div class="form-group">
-                  <label for="">Name</label>
-                  <input type="text" class="form-control" value="<%= user.name %>" id="email" placeholder="Enter email"
-                    name="name">
-                </div>
-                <div class="col">
-                  <label for="">Email</label>
-                  <input type="email" class="form-control" value="<%= user.email %>" placeholder="email" name="email">
-                </div>
-                <div class="col">
-                  <label for="">Mobile</label>
-                  <input type="number" class="form-control" placeholder="Mobile Number" name="mob">
-                </div>
-              </div>
-            </form><br>
-            <a class="a-tag" href="">Change your password</a>
+           </div>
+            
           </div>
 
 

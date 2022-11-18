@@ -5,6 +5,7 @@ const bannerModel = require('../model/bannerModel')
 const cartModel = require('../model/cartModel')
 const addressModel = require('../model/addressModel')
 const wishListModel = require('../model/wishListModel')
+const orderModel = require('../model/orderSchema')
 
 module.exports = {
 
@@ -96,7 +97,7 @@ module.exports = {
     myProfile: async (req, res) => {
         const id = req.session.userId
         const user = await userModel.findOne({ _id: id })
-        console.log(user);
+        req.session.userName = user.name
         res.render('user/myProfile', { user })
     },
 
@@ -106,7 +107,8 @@ module.exports = {
     editUser: async (req, res) => {
         const { name, email } = req.body
         const id = req.session.userId
-        const updateUser = await userModel.findByIdAndUpdate({ _id: id }, { $set: { name: name, email: email } })
+        const updateUser = await userModel.findByIdAndUpdate({ _id: id },
+            { $set: { name: name, email: email } })
         updateUser.save()
             .then(() => {
                 res.redirect('/myProfile')
@@ -145,12 +147,27 @@ module.exports = {
                     res.redirect('/productView/' + productId)
                 })
         } else {
-            const addToCart = await cartModel.findOneAndUpdate({ owner: req.session.userId },
-                { $push: { items: { product: productId, totalPrice: product.price } }, $inc: { cartTotal: cartTotal } })
-            addToCart.save()
-                .then(() => {
-                    res.redirect('/productView/' + productId)
-                })
+            const existProduct = await cartModel.findOne({ owner: req.session.userId, 'items.product': productId })
+            if (existProduct != null) {
+                await cartModel.findOneAndUpdate({ owner: req.session.userId, 'items.product': productId },
+                    {
+                        $inc: {
+                            'items.$.quantity': 1,
+                            'items.$.totalPrice': product.price,
+                            cartTotal: cartTotal
+                        }
+                    })
+                    .then(() => {
+                        res.redirect('/productView/' + productId)
+                    })
+            } else {
+                const addToCart = await cartModel.findOneAndUpdate({ owner: req.session.userId },
+                    { $push: { items: { product: productId, totalPrice: product.price } }, $inc: { cartTotal: cartTotal } })
+                addToCart.save()
+                    .then(() => {
+                        res.redirect('/productView/' + productId)
+                    })
+            }
         }
     },
 
@@ -215,13 +232,16 @@ module.exports = {
         console.log('ddelte')
         const userId = req.session.userId
         const productId = req.params.productId
+        const product = await productModel.findOne({ _id: productId })
+        const cartTotal = product.price
         const deleteProduct = await cartModel.findOneAndUpdate({ owner: userId },
             {
                 $pull:
                 {
                     items:
                         { product: productId }
-                }
+                }, $inc:
+                    { cartTotal: -cartTotal }
             })
         deleteProduct.save()
             .then(() => {
@@ -240,7 +260,6 @@ module.exports = {
                     console.log(err)
                 }
                 const products = wishLists.products
-                console.log(products);
                 res.render('user/wishList', { login: req.session.userId, products })
             })
 
@@ -277,14 +296,38 @@ module.exports = {
     removeWishlist: async (req, res) => {
         const productId = req.params.porductId
         const userId = req.session.userId
-       const remove = await wishListModel.findOneAndUpdate({ owner: userId },
+        const remove = await wishListModel.findOneAndUpdate({ owner: userId },
             { $pull: { products: { product: productId } } })
-            remove.save()
-            .then(()=>{
+        remove.save()
+            .then(() => {
                 res.redirect('/wishList')
             })
     },
 
+    // Oreder Conform
+    orderConform: async (req, res) => {
+        const userId = req.session.userId
+        const addressId = req.params.addressId
+        const cart = await cartModel.findOne({ owner: userId })
+        const products = cart.items
+        const grandTotal = cart.cartTotal
+        const addOrder = await orderModel({
+            userId, products,
+            shipping: addressId,
+            grandTotal,
+        })
+        addOrder.save()
+            .then(async () => {
+                await cartModel.findOneAndDelete({ owner: userId })
+                res.render('user/order-success', { login: req.session.login })
+            })
+    },
+
+    //Orders View
+    orderView: (req,res)=>{
+        const userName = req.session.userName
+        res.render('user/view-order',{userName})
+    },
     // User Logout
     logoutUser: (req, res) => {
         req.session.destroy()

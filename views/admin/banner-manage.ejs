@@ -1,99 +1,94 @@
 <%- include('./layouts/header.ejs') -%>
-<%- include('./layouts/skins.ejs') -%>
-<%- include("./layouts/sidebar.ejs") -%>
-<div class="main-panel">
-    <div class="content-wrapper">
-      <div class="row">
-        <div class="text-end">
-        <button onclick="showNewBannerForm()"  class="btn btn-primary mb-3">Add Banner</button></div>
-
-        <form id="newBanner" class="forms-sample" action="/admin/newBanner" method="post"
-        enctype="multipart/form-data" style="display:none;">
-        <div class="form-group">
-            <label class="">Category</label>
-            <div class="">
-                <select class="form-control" name="category">
-                    <% categories.forEach((data)=> { %>
-                        <option>
-                            <%= data.category %>
-                        </option>
-                        <% }) %>
-                </select>
+  <%- include('./layouts/skins.ejs') -%>
+    <%- include("./layouts/sidebar.ejs") -%>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="text-end">
+              <button onclick="showNewBannerForm()" class="btn btn-primary mb-3">Add Banner</button>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputEmail3">Banner Title</label>
-            <input type="text" name="title" class="form-control" id="exampleInputEmail3"
-                placeholder="Title">
 
-        </div>
-        <div class="form-group">
-            <label for="exampleTextarea1">Banner Text</label>
-            <input type="text" name="text" class="form-control" id="exampleInputEmail3"
-                placeholder="Text">
-        </div>
-
-        <div class="form-group">
-            <label>File upload</label>
-            <input type="file" name="image" class="form-control file-upload-info"
-                placeholder="Upload Image">
-        </div>
-
-
-        <button type="submit" class="btn btn-primary ">Submit</button>
-       
-    </form>
-    
-
-        <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title ">All Banners</h4>
-                    <div class="table-responsive">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th>Image</th>
-                            <th>Category</th>
-                            <th>Title</th>
-                            <th>Text</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <% allBanner.forEach((data)=> { %>
-                            <tr>
-                              <td>
-                                <img src="/images/<%= data.imageUrl %>" alt="">
-                              </td>
-                              <td>
-                                <%= data.category %>
-                              </td>
-                              <td>
-                                <%= data.title %>
-                              </td>
-                              <td >
-                                <%= data.text %>
-                              </td>
-                              <td>
-                            
-                               <a href="/admin/editBanner/<%= data._id %>"><button  class="btn border">Edit</button></a>
-                             
-                                </td>
-                                <td>
-                             
-                              <button onclick="deleteBanner('<%= data._id %>')" type="submit" class="btn btn-danger">Delete</button>
-                              </td>
-                            </tr>
-                            <% }) %>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+            <form id="newBanner" class="forms-sample" action="/admin/newBanner" method="post"
+              enctype="multipart/form-data" style="display:none;">
+              <div class="form-group">
+                <label class="">Category</label>
+                <div class="">
+                  <select class="form-control" name="category">
+                    <% categories.forEach((data)=> { %>
+                      <option>
+                        <%= data.category %>
+                      </option>
+                      <% }) %>
+                  </select>
                 </div>
               </div>
-              <%- include('./layouts/footer.ejs') -%>
+              <div class="form-group">
+                <label for="exampleInputEmail3">Banner Title</label>
+                <input type="text" name="title" class="form-control" id="exampleInputEmail3" placeholder="Title">
+
+              </div>
+              <div class="form-group">
+                <label for="exampleTextarea1">Banner Text</label>
+                <input type="text" name="text" class="form-control" id="exampleInputEmail3" placeholder="Text">
+              </div>
+
+              <div class="form-group">
+                <label>File upload</label>
+                <input type="file" name="image" class="form-control file-upload-info" placeholder="Upload Image">
+              </div>
+              <button type="submit" class="btn btn-primary ">Submit</button>
+            </form>
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="row">
+                  <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title ">All Banners</h4>
+                        <div class="table-responsive">
+                          <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th>Image</th>
+                                <th>Category</th>
+                                <th>Title</th>
+                                <th>Text</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% allBanner.forEach((data)=> { %>
+                                <tr>
+                                  <td>
+                                    <img src="/images/<%= data.imageUrl %>" alt="">
+                                  </td>
+                                  <td>
+                                    <%= data.category %>
+                                  </td>
+                                  <td>
+                                    <%= data.title %>
+                                  </td>
+                                  <td>
+                                    <%= data.text %>
+                                  </td>
+                                  <td>
+
+                                    <a href="/admin/editBanner/<%= data._id %>"><button
+                                        class="btn border">Edit</button></a>
+
+                                  </td>
+                                  <td>
+
+                                    <button onclick="deleteBanner('<%= data._id %>')" type="submit"
+                                      class="btn btn-danger">Delete</button>
+                                  </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <%- include('./layouts/footer.ejs') -%>

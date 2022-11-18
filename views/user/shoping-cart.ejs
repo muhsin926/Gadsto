@@ -14,6 +14,7 @@
         </div>
     </div>
 
+    <% if(allCart){ %> 
 
     <!-- Shoping Cart -->
     <form class="bg0 p-t-45 p-b-85">
@@ -55,7 +56,7 @@
                                                     </div>
                                                 </a>
 
-                                                <input class="mtext-104 cl3 txt-center num-product" type="number"
+                                                <input class="mtext-104 cl3 txt-center num-product" readonly type="number"
                                                     name="num-product1" value="<%= cart.quantity %>">
 
                                                 <a
@@ -152,6 +153,13 @@
             </div>
         </div>
     </form>
+    <% }else{ %> 
+        <div  class="mb-5 d-flex justify-content-center align-items-center flex-column">
+          <img src="/user/images/cart empty.png" alt="">
+            <h5 class=" pb-3 text-center">Your cart is empty <br>Please add few products</h5>
+            <a class="mb-5 btn btn-primary" href="/">Back To Home</a>
+        </div>
+        <% } %> 
     <script>
         function changeQuantity(cartId, prodcutId, count) {
 

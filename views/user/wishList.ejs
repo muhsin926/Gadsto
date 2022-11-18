@@ -13,41 +13,50 @@
         </div>
     </div>
 
-    <div class="mt-5 container">
-        <h4>Wish List</h4>
-        <% for ( wishList of products) { %>
-            <div class="my-5 row border p-4 d-flex align-items-center justify-content-center text-center">
-                <div class=" col-12 col-md-2">
-                    <img class="how-itemcart1" src="/images/<%= wishList.product.image %> " alt="">
-                </div>
-                <div class="col-12 col-md-2">
-                    <p>
-                        <%= wishList.product.name %>
-                    </p>
-                </div>
-                <div class="col-12 col-md-3">
-                    <p>
-                        <%= wishList.product.description %>
-                    </p>
-                </div>
-                <div class="col-12 col-md-2">
-                    <p>
-                        <%= wishList.product.price %>
-                    </p>
-                </div>
-                <div class="col-12 col-md-2">
-                    <form action="/addToCart/<%= wishList.product._id %>" method="post">
-                        <button type="submit" class="btn border">Add To Cart</button>
-                    </form>
+  
+
+        <div class="mt-5 container">
+            <h4>Wish List</h4>
+            <% for ( wishList of products) { %>
+                <div class="my-5 row border p-4 d-flex align-items-center justify-content-center text-center">
+                    <div class=" col-12 col-md-2">
+                        <img class="how-itemcart1" src="/images/<%= wishList.product.image %> " alt="">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <p>
+                            <%= wishList.product.name %>
+                        </p>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <p>
+                            <%= wishList.product.description %>
+                        </p>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <p>
+                            <%= wishList.product.price %>
+                        </p>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <form action="/addToCart/<%= wishList.product._id %>" method="post">
+                            <button type="submit" class="btn border">Add To Cart</button>
+                        </form>
+
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <a href="/remove-from-wishlist/<%= wishList.product._id %> ">
+                            <button class="btn border">Remove</button>
+                        </a>
+                    </div>
 
                 </div>
-                <div class="col-12 col-md-1">
-                    <a href="/remove-from-wishlist/<%= wishList.product._id %> ">
-                        <button class="btn border">Remove</button>
-                    </a>
-                </div>
+                <% } %>
+        </div>
+        
 
-            </div>
-            <% } %>
-    </div>
-    <%- include ('./layouts/footer.ejs') %>
+            <!-- <div style="height: 100vh;" class=" d-flex justify-content-center align-items-center flex-column">
+                <h1>Wish List is Empty </h1>
+            </div> -->
+
+          
+                <%- include ('./layouts/footer.ejs') %>

@@ -1,4 +1,5 @@
 const express = require('express')
+const { adminDologin } = require('../controller/admin-controller')
 const router = express.Router()
 const adminController = require('../controller/admin-controller')
 const authControl = require('../middileware/sessionControl')
@@ -10,6 +11,7 @@ router.get('/user-manage', authControl.sessionControl, adminController.userManag
 router.get('/product-manage', authControl.sessionControl, adminController.productManage)
 router.get('/category-manage', authControl.sessionControl, adminController.categoryMange)
 router.get('/banner-manage', authControl.sessionControl, adminController.bannerManage)
+router.get('/order-manage',authControl.sessionControl,adminController.orderManage)
 router.get('/adminLogout', adminController.adminLogout)
 
 

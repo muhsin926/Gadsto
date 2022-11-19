@@ -18,8 +18,9 @@ router.get('/shoping-cart-delete-product/:productId', userController.deleteCartP
 router.get('/wishList',userSession.userSession, userController.wishList)
 router.get('/addToWishlist/:productId',userSession.userSession, userController.addToWishlist)
 router.get('/remove-from-wishlist/:porductId', userController.removeWishlist)
-router.get('/order-conform/:addressId', userController.orderConform)
+router.post('/order-conform/:addressId', userController.orderConform)
 router.get('/order-view',userController.orderView)
+router.get('/pageNotFound',userController.pageNotFound)
 // post routes
 router.post('/signup',userController.dosignup)
 router.post('/login',userController.dologin)

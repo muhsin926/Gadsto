@@ -31,36 +31,36 @@
                                     <h5>Delivery Address</h5>
                                 </div>
 
-                                
 
-                                    <div class="col-6">
-                                        <p>
-                                            <%= address[0].fullName %>
-                                        </p>
-                                        <p>
-                                            <%= address[0].Phone %>
-                                        </p>
-                                        <p>
-                                            <%= address[0].pincode %>
-                                        </p>
-                                        <p>
-                                            <%= address[0].addressLine %>
-                                        </p>
-                                        <p>
-                                            <%= address[0].landMark %>
-                                        </p>
-                                        <p>
-                                            <%= address[0].city %>
-                                        </p>
-                                        <p>
-                                            <%= address[0].state %>
-                                        </p>
-                                    </div>
-                                    <div class="col-2">
-                                        <a href="#">Change</a>
-                                    </div>
 
-                                   
+                                <div class="col-6">
+                                    <p>
+                                        <%= address[0].fullName %>
+                                    </p>
+                                    <p>
+                                        <%= address[0].Phone %>
+                                    </p>
+                                    <p>
+                                        <%= address[0].pincode %>
+                                    </p>
+                                    <p>
+                                        <%= address[0].addressLine %>
+                                    </p>
+                                    <p>
+                                        <%= address[0].landMark %>
+                                    </p>
+                                    <p>
+                                        <%= address[0].city %>
+                                    </p>
+                                    <p>
+                                        <%= address[0].state %>
+                                    </p>
+                                </div>
+                                <div class="col-2">
+                                    <a href="#">Change</a>
+                                </div>
+
+
                             </div>
                         </div>
 
@@ -191,7 +191,7 @@
 
                             <div class="">
                                 <span class="mtext-110 cl2">
-                                    ₹<%= cartItems.cartTotal %> 
+                                    ₹<%= cartItems.cartTotal %>
                                 </span>
                             </div>
                         </div>
@@ -222,29 +222,33 @@
 
                             <div class="p-t-1">
                                 <span class="mtext-110 cl2">
-                                    ₹<%= cartItems.cartTotal %> 
+                                    ₹<%= cartItems.cartTotal %>
                                 </span>
                             </div>
-                           
+
 
                         </div>
-                        <div class="mt-4 form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Cash on Delivery
-                            </label>
-                        </div>
-                        <div class="form-check mb-5">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
-                                checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                UPI Payment
-                            </label>
-                        </div>
-                        <a onclick="orderSuccess()" href="/order-conform/<%= address[0]._id %>"
-                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                            PAY NOW
-                        </a>
+                        <form action="/order-conform/<%= address[0]._id %>" method="post">
+                            <div class="mt-4 form-check">
+                                <input class="form-check-input" type="radio" value="cod" name="payment"
+                                    id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Cash on Delivery
+                                </label>
+                            </div>
+                            <div class="form-check mb-5">
+                                <input class="form-check-input" type="radio" value="upi" name="payment"
+                                    id="flexRadioDefault2" checked>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    UPI Payment
+                                </label>
+                            </div>
+                            <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                                PAY NOW
+                            </button>
+
+
+                        </form>
                     </div>
                 </div>
             </div>

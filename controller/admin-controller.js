@@ -212,6 +212,11 @@ module.exports = {
         })
     },
 
+    //Order Management
+    orderManage: async(req,res)=>{
+        res.render('admin/order-manage')
+    },
+
     //Admin Logout
     adminLogout: (req,res) => {
         req.session.destroy()

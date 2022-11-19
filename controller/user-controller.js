@@ -86,9 +86,18 @@ module.exports = {
     // Product View Page
     productView: async (req, res) => {
         const id = req.params.id
+        
         const product = await productModel.findOne({ _id: id })
-        const relatedProduct = await productModel.find({ category: product.category, delete: { $ne: true } })
+        if (product){
+            const relatedProduct = await productModel.find({ category: product.category, delete: { $ne: true } })
         res.render('user/product-view', { login: req.session.login, product, relatedProduct })
+        }else{
+            res.redirect('/login')
+        }
+        
+        
+        
+       
     },
 
 
@@ -194,10 +203,12 @@ module.exports = {
         } else {
             address = []
         }
-
         const cartItems = await cartModel.findOne({ owner: userId })
-        console.log(cartItems);
+        if (cartItems){
         res.render('user/checkout', { login: req.session.login, address, cartItems })
+        }else{
+            res.redirect('/login')
+        }
 
     },
 
@@ -258,6 +269,7 @@ module.exports = {
             .exec((err, wishLists) => {
                 if (err) {
                     console.log(err)
+                    res.redirect('/')
                 }
                 const products = wishLists.products
                 res.render('user/wishList', { login: req.session.userId, products })
@@ -306,6 +318,7 @@ module.exports = {
 
     // Oreder Conform
     orderConform: async (req, res) => {
+        const paymentMethod = (req.body);
         const userId = req.session.userId
         const addressId = req.params.addressId
         const cart = await cartModel.findOne({ owner: userId })
@@ -315,6 +328,7 @@ module.exports = {
             userId, products,
             shipping: addressId,
             grandTotal,
+            paymentMethod
         })
         addOrder.save()
             .then(async () => {
@@ -324,9 +338,22 @@ module.exports = {
     },
 
     //Orders View
-    orderView: (req,res)=>{
+    orderView: async(req,res)=>{
         const userName = req.session.userName
-        res.render('user/view-order',{userName})
+          const userId = req.session.userId
+        const orders = await orderModel.findOne({userId:userId}).populate('products.product').exec((err,product)=>{
+            if (err){
+                console.log(err)
+            }else{
+                console.log(product);
+                res.render('user/view-order',{userName})
+            }
+        })
+
+    },
+
+    pageNotFound: (req,res)=>{
+        res.render('pageNotFound',{login:req.session.login})
     },
     // User Logout
     logoutUser: (req, res) => {

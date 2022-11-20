@@ -195,6 +195,10 @@ module.exports = {
 
     // Place Order 
     checkout: async (req, res) => {
+        let index = Number(req.body.index)       
+        if(!index){
+            index=0
+        }
         const userId = req.session.userId
         const addresses = await addressModel.findOne({ user: userId })
         let address
@@ -205,7 +209,8 @@ module.exports = {
         }
         const cartItems = await cartModel.findOne({ owner: userId })
         if (cartItems){
-        res.render('user/checkout', { login: req.session.login, address, cartItems })
+           
+        res.render('user/checkout', { login: req.session.login, address,index, cartItems })
         }else{
             res.redirect('/login')
         }
@@ -317,16 +322,17 @@ module.exports = {
     },
 
     // Oreder Conform
-    orderConform: async (req, res) => {
-        const paymentMethod = (req.body);
+    orderConfirm: async (req, res) => {
+        const paymentMethod = req.body.payment;
         const userId = req.session.userId
-        const addressId = req.params.addressId
+        const address = req.params.address
+        console.log(address.fullName);
         const cart = await cartModel.findOne({ owner: userId })
         const products = cart.items
         const grandTotal = cart.cartTotal
         const addOrder = await orderModel({
             userId, products,
-            shipping: addressId,
+            fullName: address.fullName, 
             grandTotal,
             paymentMethod
         })
@@ -341,12 +347,13 @@ module.exports = {
     orderView: async(req,res)=>{
         const userName = req.session.userName
           const userId = req.session.userId
-        const orders = await orderModel.findOne({userId:userId}).populate('products.product').exec((err,product)=>{
+        
+        const orders = await orderModel.find({userId:userId}).populate('shipping.$*').exec((err,order)=>{
             if (err){
                 console.log(err)
             }else{
-                console.log(product);
-                res.render('user/view-order',{userName})
+                console.log(order);
+                res.render('user/view-order',{userName,order})
             }
         })
 
@@ -355,6 +362,64 @@ module.exports = {
     pageNotFound: (req,res)=>{
         res.render('pageNotFound',{login:req.session.login})
     },
+
+    //Address Manage
+    addressManage: async(req,res) => {
+        const userName = req.session.userName
+        const userId = req.session.userId
+        const getAllAddresses = await addressModel.findOne({userId})
+        const addresses = getAllAddresses.address
+        
+        res.render('user/address-manage', {userName, addresses})
+    },
+
+     //new Address
+     addAddress: async (req, res) => {
+        const userId = req.session.userId
+        const existAddress = await addressModel.findOne({ user: userId })
+        if (existAddress) {
+            await addressModel.findOneAndUpdate({ user: userId },
+                {
+                    $push: {
+                        address: [req.body]
+                    }
+                }).then(() => {
+                    res.redirect('/address-manage')
+                })
+        } else {
+            const addAddress = await addressModel({
+                user: userId,
+                address: [req.body]
+            })
+            addAddress.save()
+                .then(() => {
+                    res.redirect('/address-manage')
+                })
+        }
+
+    },
+
+    // Delete Address
+    deleteAddress: async(req,res)=>{
+        const userId = req.session.userId
+        const id = req.params.id
+        await addressModel.updateOne({user:userId}, { $pull: { address: { _id: id }}})
+        res.redirect('/address-manage')
+        
+    },
+
+    // Edit Address
+    editAddress: async(req,res)=>{
+        const userName = req.session.userName
+        const userId = req.session.userId
+        const indexof = req.params.indexof
+        const addresses = await addressModel.findOne({user:userId})
+        const index = addresses.indexof
+        const  address = await addressModel.findOne({'address.[index]':_id})
+       
+        res.render('user/edit-address',{address,userName})
+    },
+
     // User Logout
     logoutUser: (req, res) => {
         req.session.destroy()

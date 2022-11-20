@@ -3,6 +3,7 @@ const userModel = require('../model/signupModel')
 const productModel = require('../model/productModel')
 const categoryModel = require('../model/categoryModel')
 const bannerModel = require('../model/bannerModel')
+const orderModerl = require('../model/orderSchema')
 const bcrypt = require('bcrypt')
 const session = require("express-session")
 
@@ -214,7 +215,9 @@ module.exports = {
 
     //Order Management
     orderManage: async(req,res)=>{
-        res.render('admin/order-manage')
+        const getAllOrders = await orderModerl.find({}).populate('userId')
+        console.log(getAllOrders);
+        res.render('admin/order-manage',{getAllOrders})
     },
 
     //Admin Logout

@@ -16,7 +16,7 @@
                               <thead>
                                 <tr>
                                   <th>Order ID</th>
-                                  <th>User Name</th>
+                                  <th>custommer</th>
                                   <th>Items</th>
                                   <th>Amount</th>
                                   <th>Payment Method</th>
@@ -26,16 +26,26 @@
                                 </tr>
                               </thead>
                               <tbody>
+                               <% for (let orders of getAllOrders) {%> 
                                 <tr data-toggle="collapse" data-target="#collapseExample">
-                                    <td>#06y9ycvsf6asdf9</td>
-                                    <td>MUhsin</td>
-                                    <td>3</td>
-                                    <td>5999</td>
+                                    <td><%=orders._id %> </td>
+                                    <td><%=orders.userId.name %> </td>
+                                    <td></td>
+                                    <td ><%=orders.grandTotal %> </td>
                                     <td>cod</td>
-                                    <td>conform</td>
-                                    <td>12/5/2022</td>
+                                    <td>
+                                      <select class="form-select text-primary"  aria-label="Default select example">
+                                        <option class="" value="1">conform</option>
+                                        <option value="2">packked</option>
+                                        <option value="3">shipping</option>
+                                        <option value="3">delivered</option>
+                                        
+                                      </select>
+                                    </td>
+                                    <td><%=orders.date %> </td>
                                     
                                 </tr>
+                                <% } %> 
                 
                                
                               </tbody>
@@ -52,17 +62,5 @@
                 </div>
                     </div>
                   </div>
-                  <!-- <p>
-                    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                      Link with href
-                    </a>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="" aria-controls="colleExample">
-                      Button with data-target
-                    </button>
-                  </p>
-                  <div class="collapse" id="collapseExample">
-                    <div class="card card-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                    </div>
-                  </div> -->
+                 
                   <%- include('./layouts/footer.ejs') -%>

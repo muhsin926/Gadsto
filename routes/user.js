@@ -18,14 +18,19 @@ router.get('/shoping-cart-delete-product/:productId', userController.deleteCartP
 router.get('/wishList',userSession.userSession, userController.wishList)
 router.get('/addToWishlist/:productId',userSession.userSession, userController.addToWishlist)
 router.get('/remove-from-wishlist/:porductId', userController.removeWishlist)
-router.post('/order-conform/:addressId', userController.orderConform)
+router.post('/order-conform/:address', userController.orderConfirm)
 router.get('/order-view',userController.orderView)
 router.get('/pageNotFound',userController.pageNotFound)
+router.get('/address-manage',userSession.userSession, userController.addressManage)
+router.get('/delelte-address/:id',userController.deleteAddress)
+router.get('/edit-address/:indexof',userController.editAddress)
 // post routes
 router.post('/signup',userController.dosignup)
 router.post('/login',userController.dologin)
 router.post('/editUser',userController.editUser)
 router.post('/addToCart/:id',userSession.userSession, userController.addToCart)
+router.post('/add-address',userController.addAddress)
+router.post('/change-address',userController.checkout)
 
 router
     .route('/address')

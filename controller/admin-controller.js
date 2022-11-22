@@ -39,8 +39,8 @@ module.exports = {
         res.render('admin/user-management', { allUsers },)
     },
 
-     //block User
-     blockUser: async (req, res) => {
+    //block User
+    blockUser: async (req, res) => {
         const id = req.params.id;
         await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "Blocked" } })
             .then(() => {
@@ -95,14 +95,14 @@ module.exports = {
 
     },
 
-     //Edit Product
-     editProduct: async (req, res) => {
+    //Edit Product
+    editProduct: async (req, res) => {
         const id = req.params.id
         const categories = await categoryModel.find({ delete: { $ne: true } })
         const product = await productModel.findOne({ _id: id })
         if (product) {
-            res.render('admin/editproduct', { product , categories })
-        } 
+            res.render('admin/editproduct', { product, categories })
+        }
     },
 
     //update product
@@ -110,17 +110,18 @@ module.exports = {
         const id = req.params.id
         const image = req.file
         const { category, name, description, price, stock } = req.body
-        if (image){
-            const productImage = await productModel.findByIdAndUpdate({_id:id},{$set:{image:image.filename}})
+        if (image) {
+            const productImage = await productModel.findByIdAndUpdate({ _id: id }, { $set: { image: image.filename } })
         }
-        const product = await productModel.findByIdAndUpdate({ _id: id },{$set:{
-                    category,
-                    name,
-                    description,
-                    price,
-                    stock,
-                }
-            })
+        const product = await productModel.findByIdAndUpdate({ _id: id }, {
+            $set: {
+                category,
+                name,
+                description,
+                price,
+                stock,
+            }
+        })
         await product.save()
             .then(() => {
                 res.redirect('/admin/product-manage')
@@ -131,17 +132,29 @@ module.exports = {
     //category Management
     categoryMange: async (req, res) => {
         const categories = await categoryModel.find({ delete: { $ne: true } })
-        res.render('admin/category', { categories })
+        res.render('admin/category', { categories, exist:req.session.category })
+        
     },
 
     //new Category
     addCategory: async (req, res) => {
-        const { category } = req.body
-        const newCategory = await categoryModel({ category })
-        await newCategory.save()
-            .then(() => {
-                res.redirect('/admin/category-manage')
-            })
+        let addCategory = req.body.category
+        let category    =  addCategory[0].toUpperCase()
+        addCategory     = addCategory.slice(1)
+        category        = category+addCategory.toLowerCase()
+        const exist = await categoryModel.findOne({ category: category,delete:{$ne:true} })
+       
+        if (exist) {
+            req.session.category=true
+            res.redirect('/admin/category-manage' )
+        } else {
+            const newCategory = await categoryModel({ category })
+            await newCategory.save()
+                .then(() => {
+                    req.session.category = false
+                    res.redirect('/admin/category-manage')
+                })
+        }
 
     },
 
@@ -156,72 +169,74 @@ module.exports = {
     },
 
     //Banner Management
-    bannerManage: async(req,res) => {
-        const allBanner = await bannerModel.find( {delete:{$ne:true}} )
-        const categories = await categoryModel.find( {delete:{$ne:true}} )
-        res.render('admin/banner-manage', {allBanner,categories} )
+    bannerManage: async (req, res) => {
+        const allBanner = await bannerModel.find({ delete: { $ne: true } })
+        const categories = await categoryModel.find({ delete: { $ne: true } })
+        res.render('admin/banner-manage', { allBanner, categories })
     },
 
     //Create a new banner
-    newBanner: async (req,res) =>{
-        const {category,title,text} = req.body
+    newBanner: async (req, res) => {
+        const { category, title, text } = req.body
         const image = req.file
         const newBanner = await bannerModel({
             category,
             title,
             text,
-            imageUrl:image.filename
+            imageUrl: image.filename
         })
         await newBanner.save()
-        .then(()=>{
-            res.redirect('/admin/banner-manage')
-        })
+            .then(() => {
+                res.redirect('/admin/banner-manage')
+            })
     },
 
     // Delete Banner 
-    deleteBanner: async (req,res) => {
+    deleteBanner: async (req, res) => {
         const id = req.params.id
-        const deleteBanner = await bannerModel.findOneAndUpdate({_id:id},{$set: {delete:true} })
+        const deleteBanner = await bannerModel.findOneAndUpdate({ _id: id }, { $set: { delete: true } })
         deleteBanner.save()
-        .then(()=>{
-            res.redirect('/admin/banner-manage')
-        })
+            .then(() => {
+                res.redirect('/admin/banner-manage')
+            })
     },
 
     // Edit Banner
-    editBanner: async (req,res) => {
+    editBanner: async (req, res) => {
         const id = req.params.id
-        const banner = await bannerModel.findOne({_id:id})
-        const categories = await categoryModel.find( {delete:{$ne:true}} )
-        res.render('admin/editBanner', {banner, categories})
+        const banner = await bannerModel.findOne({ _id: id })
+        const categories = await categoryModel.find({ delete: { $ne: true } })
+        res.render('admin/editBanner', { banner, categories })
     },
 
     // Update Banner
-    updateBanner: async (req,res) => {
-        const id = req.params.id 
-        const { category,title,text} = req.body
+    updateBanner: async (req, res) => {
+        const id = req.params.id
+        const { category, title, text } = req.body
         const image = req.file
-        const banner = await bannerModel.findByIdAndUpdate({_id:id},{$set:{
+        const banner = await bannerModel.findByIdAndUpdate({ _id: id }, {
+            $set: {
                 category,
                 title,
                 text,
-                imageUrl:image.filename
-        }});
+                imageUrl: image.filename
+            }
+        });
         banner.save()
-        .then(()=>{
-            res.redirect('/admin/banner-manage', )
-        })
+            .then(() => {
+                res.redirect('/admin/banner-manage',)
+            })
     },
 
     //Order Management
-    orderManage: async(req,res)=>{
+    orderManage: async (req, res) => {
         const getAllOrders = await orderModerl.find({}).populate('userId')
         console.log(getAllOrders);
-        res.render('admin/order-manage',{getAllOrders})
+        res.render('admin/order-manage', { getAllOrders })
     },
 
     //Admin Logout
-    adminLogout: (req,res) => {
+    adminLogout: (req, res) => {
         req.session.destroy()
         res.redirect('/admin')
     }

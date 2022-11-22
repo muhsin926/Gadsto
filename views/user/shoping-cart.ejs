@@ -34,7 +34,7 @@
                                 <% for ( cart of allCart.items) { %>
                                     <tr class="table_row">
                                         <td class="column-1">
-                                            <a  href="/shoping-cart-delete-product/<%= cart.product._id  %> ">
+                                            <a  href="#" onclick="deleteProduct('<%= cart.product._id  %>')">
                                                 <div class="how-itemcart1">
                                                     <img src="/images/<%= cart.product.image %>" alt="IMG">
                                                 </div>
@@ -49,7 +49,7 @@
                                         <td class="column-4">
                                             <div class="wrap-num-product flex-w m-l-auto m-r-0">
                                                 <a
-                                                    href="/change-product-quantity/<%= allCart._id %>/<%= cart.product._id %>/-1">
+                                                    href="#">
                                                     <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
                                                         onclick="changeQuantity('<%= allCart._id %>','<%= cart.product._id %>','-1')">
                                                         <i class="fs-16 zmdi zmdi-minus"></i>
@@ -60,7 +60,7 @@
                                                     name="num-product1" value="<%= cart.quantity %>">
 
                                                 <a
-                                                    href="/change-product-quantity/<%= allCart._id %>/<%= cart.product._id %>/1">
+                                                    href="#">
                                                     <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
                                                         onclick="changeQuantity('<%= allCart._id %>','<%= cart.product._id %>','1')">
                                                         <i class="fs-16 zmdi zmdi-plus"></i>
@@ -144,7 +144,7 @@
                                 </span>
                             </div>
                         </div>
-                        <a href="/checkout"
+                        <a href="/checkout" 
                             class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                             Proceed to Checkout
                         </a>
@@ -161,21 +161,22 @@
         </div>
         <% } %> 
     <script>
-        function changeQuantity(cartId, prodcutId, count) {
-
-            $.ajax({
-
-                url: '/change-product-quantity',
-                data: {
-                    cartId: cartId,
-                    porductId: productId,
-                    count: count
-                },
-                method: 'POST',
-                success: (response) => {
-                    alert(response)
-                }
-            })
+        function changeQuantity(cartId, proId, count) {
+           
+            axios.get(`/change-product-quantity/${cartId}/${proId}/${count}`)
+            .then(e =>{
+            window.location.reload()
+			
+           
+        })
         }
+
+        function deleteProduct(proId){
+            axios.get(`/shoping-cart-delete-product/${proId}`)
+            .then((e =>{
+                window.locaton.reload()
+            }))
+        }
+
     </script>
     <%- include ('./layouts/footer.ejs') %>

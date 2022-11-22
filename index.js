@@ -5,6 +5,7 @@ const session =require('express-session')
 const fielUpload = require('express-fileupload')
 const multer = require('multer')
 const multerStorage = require('./middileware/multer')
+const cors = require('cors')
 const userRouter = require('./routes/user')
 const adminRouter = require('./routes/admin')
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 app.set('view engine','ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended:true}))
+app.use(cors())
 
 // Cash controller
 app.use( (req,res,next) =>{

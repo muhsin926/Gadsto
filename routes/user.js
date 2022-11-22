@@ -11,14 +11,13 @@ router.get('/login',userController.login)
 router.get('/logoutUser',userController.logoutUser)
 router.get('/myProfile', userSession.userSession, userController.myProfile)
 router.get('/productView/:id', userController.productView)
-router.get('/shoping-cart', userSession.userSession, userController.shopingCart)
 router.get('/change-product-quantity/:cartId/:productId/:count', userController.changeProductQuantity)
 router.get('/checkout', userSession.userSession, userController.checkout)
 router.get('/shoping-cart-delete-product/:productId', userController.deleteCartProduct)
 router.get('/wishList',userSession.userSession, userController.wishList)
 router.get('/addToWishlist/:productId',userSession.userSession, userController.addToWishlist)
 router.get('/remove-from-wishlist/:porductId', userController.removeWishlist)
-router.post('/order-conform/:address', userController.orderConfirm)
+router.post('/order-conform/:index', userController.orderConfirm)
 router.get('/order-view',userController.orderView)
 router.get('/pageNotFound',userController.pageNotFound)
 router.get('/address-manage',userSession.userSession, userController.addressManage)
@@ -39,6 +38,7 @@ router
 router
     .route('/shoping-cart/')
     .get(userSession.userSession, userController.shopingCart)
+    
 
 
 

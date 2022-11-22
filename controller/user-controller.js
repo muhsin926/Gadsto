@@ -6,6 +6,7 @@ const cartModel = require('../model/cartModel')
 const addressModel = require('../model/addressModel')
 const wishListModel = require('../model/wishListModel')
 const orderModel = require('../model/orderSchema')
+const Razorpay = require('razorpay')
 
 module.exports = {
 
@@ -141,7 +142,7 @@ module.exports = {
     // Add To Cart
     addToCart: async (req, res) => {
         const productId = req.params.id
-        console.log(req.session.userId);
+
         const user = await cartModel.findOne({ owner: req.session.userId })
         const product = await productModel.findOne({ _id: productId })
         const cartTotal = product.price
@@ -245,7 +246,7 @@ module.exports = {
 
     //Delete Product From Cart
     deleteCartProduct: async (req, res) => {
-        console.log('ddelte')
+       
         const userId = req.session.userId
         const productId = req.params.productId
         const product = await productModel.findOne({ _id: productId })
@@ -325,22 +326,38 @@ module.exports = {
     orderConfirm: async (req, res) => {
         const paymentMethod = req.body.payment;
         const userId = req.session.userId
-        const address = req.params.address
-        console.log(address.fullName);
+        const indexof = req.params.index
+        const addresses = await addressModel.findOne({ user: userId })
+        const address = addresses.address[indexof]
         const cart = await cartModel.findOne({ owner: userId })
         const products = cart.items
         const grandTotal = cart.cartTotal
         const addOrder = await orderModel({
             userId, products,
-            fullName: address.fullName, 
+            address,
             grandTotal,
             paymentMethod
         })
-        addOrder.save()
-            .then(async () => {
-                await cartModel.findOneAndDelete({ owner: userId })
+        addOrder.save()            
+        await cartModel.findOneAndDelete({ owner: userId })
+        if (paymentMethod === 'cod'){
                 res.render('user/order-success', { login: req.session.login })
-            })
+        }else{
+            var instance = new Razorpay({
+                key_id: 'rzp_test_ot382G21y8f1J7',
+                key_secret: 'QegvCVlutW7TdMqKKFVLQt1I',
+              });
+              const options = {
+                amount : addOrder.grandTotal*100,
+                currency : 'INR',
+                reciept : addOrder._id
+              }
+              instance.orders.create(options, (err,order)=>{
+                console.log("new order"+order)
+                res.json(order)
+              })
+        }
+        
     },
 
     //Orders View
@@ -348,14 +365,19 @@ module.exports = {
         const userName = req.session.userName
           const userId = req.session.userId
         
-        const orders = await orderModel.find({userId:userId}).populate('shipping.$*').exec((err,order)=>{
+        const Orders = await orderModel.find({userId:userId}).populate('products.product').exec((err,allOrders)=>{
             if (err){
                 console.log(err)
-            }else{
-                console.log(order);
-                res.render('user/view-order',{userName,order})
             }
+            
+                res.render('user/view-order',{userName,allOrders})
+            
         })
+          
+             
+              
+            
+       
 
     },
 

@@ -99,15 +99,15 @@
         </nav>
         <div id="profile" class=" content d-flex flex-column align-items-center">
 
-          <div class="profile col-12  rounded ">
+          <div class="profile col-12 border rounded ">
             <span class="material-symbols-outlined user-icon" style="font-size: 50px;">
               account_box
             </span>
             <h2 class="greet ms-5">Hello, <%= userName %>
             </h2>
           </div>
-          <% order.forEach((orders)=>{ %>
-            <div class=" p-3 user-info col rounded ">
+          <% allOrders.forEach((orders)=>{ %>
+            <div class=" p-3 user-info col border rounded ">
 
 
               <div class="row ">
@@ -180,7 +180,7 @@
                     <div class="collapse multi-collapse" id="multiCollapseExample1">
                       <div class="card card-body">
                         <h6>payment method</h6>
-                        <p>cash on delvery</p>
+                        <p></p>
                       </div>
                     </div>
                   </div>
@@ -188,8 +188,7 @@
                     <div class="collapse multi-collapse" id="multiCollapseExample2">
                       <div class="card card-body">
                         <h6>Billing Address</h6>
-                        <p><%=orders.shipping.fullName  %> 
-                          <% console.log(orders.shipping) %> 
+                        <p>Muhammed Muhsin
 
                           679305
 
@@ -198,7 +197,7 @@
                           GHS kodumunda
                           Pattambi
                           Kerala</p>
-                      </div>
+                      </div>            
                     </div>
                   </div>
                 </div>

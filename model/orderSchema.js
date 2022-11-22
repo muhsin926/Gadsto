@@ -19,52 +19,52 @@ const orderSchema = new mongoose.Schema({
             required: true
         },
     }],
+    address: {
+        fullName: {
+            type: String,
+           
+        },
+        phone: {
+            type: Number,
 
-    fullName: {
+        },
+        pincode: {
+            type: Number,
+
+        },
+        addressLine: {
+            type: String,
+
+        },
+        landMark: {
+            type: String,
+
+        },
+        city: {
+            type: String,
+
+        },
+        state: {
+            type: String,
+
+        },
+    },
+    status: {
+        type: String,
+        default: 'Order Confirmed'
+    },
+    grandTotal: {
         type: String,
         required: true
     },
-    phone: {
-        type: Number,
-       
-    },
-    pincode: {
-        type: Number,
-       
-    },
-    addressLine: {
-        type: String,
-       
-    },
-    landMark: {
-        type: String,
-       
-    },
-    city: {
-        type: String,
-       
-    },
-    state: {
-        type: String,
-       
-    },
-
-    status: {
-    type: String,
-    default: 'Order Confirmed'
-},
-    grandTotal: {
-    type: String,
-    required: true
-},
     paymentMethod: {
-    type: String,
-    required: true
-},
+        type: String,
+        required: true
+    },
     date: {
-    type: Date,
-    default: Date.now
-}
+        type: Date,
+        default: Date.now
+    }
 })
 
 const wishList = mongoose.model("Order", orderSchema)

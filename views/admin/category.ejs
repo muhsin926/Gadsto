@@ -11,6 +11,9 @@
                   aria-label="Recipient's username" aria-describedby="basic-addon2">
                 <button type="submit" class="input-group-text btn btn-success" id="basic-addon2">Add Category</button>
               </div>
+              <% if (exist){ %> 
+                <p class="text-danger m-2">Category already exists</p>
+                <% } %> 
             </form>
             <div class="col-12 grid-margin stretch-card">
               <div class="card">

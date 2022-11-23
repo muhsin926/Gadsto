@@ -57,7 +57,7 @@
                                                 </a>
 
                                                 <input class="mtext-104 cl3 txt-center num-product" readonly type="number"
-                                                    name="num-product1" value="<%= cart.quantity %>">
+                                                  id="qty"  name="num-product1" value="<%= cart.quantity %>">
 
                                                 <a
                                                     href="#">
@@ -162,11 +162,11 @@
         <% } %> 
     <script>
         function changeQuantity(cartId, proId, count) {
-           
+           let qty = document.querySelector('#qty')
             axios.get(`/change-product-quantity/${cartId}/${proId}/${count}`)
-            .then(e =>{
-            window.location.reload()
-			
+            .then(() =>{
+            qty.value =parseInt( qty.value) +parseInt(count); 
+            
            
         })
         }

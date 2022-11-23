@@ -64,7 +64,12 @@ const orderSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    payment: {
+        type: String,
+        default: "unpaid"
     }
+
 })
 
 const wishList = mongoose.model("Order", orderSchema)

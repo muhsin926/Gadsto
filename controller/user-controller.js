@@ -324,9 +324,10 @@ module.exports = {
 
     // Oreder Conform
     orderConfirm: async (req, res) => {
-        const paymentMethod = req.body.payment;
+        console.log(req.body)
+        const paymentMethod = req.body.paymentMethod;
         const userId = req.session.userId
-        const indexof = req.params.index
+        const indexof =parseInt( req.body.index)
         const addresses = await addressModel.findOne({ user: userId })
         const address = addresses.address[indexof]
         const cart = await cartModel.findOne({ owner: userId })
@@ -339,9 +340,10 @@ module.exports = {
             paymentMethod
         })
         addOrder.save()            
-        await cartModel.findOneAndDelete({ owner: userId })
-        if (paymentMethod === 'cod'){
-                res.render('user/order-success', { login: req.session.login })
+        // await cartModel.findOneAndDelete({ owner: userId })
+        if (paymentMethod === 'COD'){
+            res.json({payment: 'COD'})
+                // res.render('user/order-success', { login: req.session.login })
         }else{
             var instance = new Razorpay({
                 key_id: 'rzp_test_ot382G21y8f1J7',
@@ -350,11 +352,16 @@ module.exports = {
               const options = {
                 amount : addOrder.grandTotal*100,
                 currency : 'INR',
-                reciept : addOrder._id
+                reciept : ""+addOrder._id
               }
               instance.orders.create(options, (err,order)=>{
-                console.log("new order"+order)
+                if (err){
+                    console.log(err)
+                }else{
+
+                console.log("new order",order)
                 res.json(order)
+                }
               })
         }
         
@@ -440,6 +447,21 @@ module.exports = {
         const  address = await addressModel.findOne({'address.[index]':_id})
        
         res.render('user/edit-address',{address,userName})
+    },
+
+    //payment verification
+    paymentVerification : (req,res)=>{
+        console.log(req.body)
+        const crypto = require('crypto')
+        let hmac = crypto.createHmac('sha256', 'QegvCVlutW7TdMqKKFVLQt1I')
+        console.log(req.body.order.data.id);
+        hmac.update(req.body.payment. razorpay_order_id + '|' + req.body.payment.razorpay_payment_id);
+        hmac = hmac.digest('hex')
+        if (hmac ==  req.body.payment. razorpay_signature ){
+            response ={'valid':'true'}
+            res.json(response)
+        }
+        
     },
 
     // User Logout

@@ -31,7 +31,7 @@ router.post('/addToCart/:id',userSession.userSession, userController.addToCart)
 router.post('/add-address',userController.addAddress)
 router.post('/change-address',userController.checkout)
 router.post('/verity-payment',userController.paymentVerification)
-
+router.get('/order-success',userController.orderSuccess)
 router
     .route('/address')
     .post(userController.newAddress)
@@ -40,7 +40,9 @@ router
     .route('/shoping-cart/')
     .get(userSession.userSession, userController.shopingCart)
     
-
+router
+    .route('/check-coupen')
+    .post(userController.checkCoupen)
 
 
 module.exports=router;

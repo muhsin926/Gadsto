@@ -6,6 +6,7 @@ const cartModel = require('../model/cartModel')
 const addressModel = require('../model/addressModel')
 const wishListModel = require('../model/wishListModel')
 const orderModel = require('../model/orderSchema')
+const coupenModel = require('../model/coupenModel')
 const Razorpay = require('razorpay')
 
 module.exports = {
@@ -86,19 +87,14 @@ module.exports = {
 
     // Product View Page
     productView: async (req, res) => {
-        const id = req.params.id
-        
-        const product = await productModel.findOne({ _id: id })
-        if (product){
+        try {
+            const id = req.params.id
+            const product = await productModel.findOne({ _id: id })
             const relatedProduct = await productModel.find({ category: product.category, delete: { $ne: true } })
-        res.render('user/product-view', { login: req.session.login, product, relatedProduct })
-        }else{
+            res.render('user/product-view', { login: req.session.login, product, relatedProduct })
+        } catch {
             res.redirect('/login')
         }
-        
-        
-        
-       
     },
 
 
@@ -134,7 +130,9 @@ module.exports = {
                 if (err) {
                     return console.log(err);
                 }
-                res.render('user/shoping-cart', { login: req.session.login, allCart })
+               
+                let coupenDiscount =0
+                res.render('user/shoping-cart', { login: req.session.login, allCart, coupenDiscount })
             })
 
     },
@@ -196,9 +194,9 @@ module.exports = {
 
     // Place Order 
     checkout: async (req, res) => {
-        let index = Number(req.body.index)       
-        if(!index){
-            index=0
+        let index = Number(req.body.index)
+        if (!index) {
+            index = 0
         }
         const userId = req.session.userId
         const addresses = await addressModel.findOne({ user: userId })
@@ -209,10 +207,10 @@ module.exports = {
             address = []
         }
         const cartItems = await cartModel.findOne({ owner: userId })
-        if (cartItems){
-           
-        res.render('user/checkout', { login: req.session.login, address,index, cartItems })
-        }else{
+        if (cartItems) {
+
+            res.render('user/checkout', { login: req.session.login, address, index, cartItems })
+        } else {
             res.redirect('/login')
         }
 
@@ -246,7 +244,7 @@ module.exports = {
 
     //Delete Product From Cart
     deleteCartProduct: async (req, res) => {
-       
+
         const userId = req.session.userId
         const productId = req.params.productId
         const product = await productModel.findOne({ _id: productId })
@@ -327,7 +325,7 @@ module.exports = {
         console.log(req.body)
         const paymentMethod = req.body.paymentMethod;
         const userId = req.session.userId
-        const indexof =parseInt( req.body.index)
+        const indexof = parseInt(req.body.index)
         const addresses = await addressModel.findOne({ user: userId })
         const address = addresses.address[indexof]
         const cart = await cartModel.findOne({ owner: userId })
@@ -339,71 +337,72 @@ module.exports = {
             grandTotal,
             paymentMethod
         })
-        addOrder.save()            
+        addOrder.save()
         // await cartModel.findOneAndDelete({ owner: userId })
-        if (paymentMethod === 'COD'){
-            res.json({payment: 'COD'})
-                // res.render('user/order-success', { login: req.session.login })
-        }else{
+        if (paymentMethod === 'COD') {
+            await cartModel.findOneAndDelete({ owner: userId })
+            res.json({ payment: 'COD' })
+
+        } else {
             var instance = new Razorpay({
                 key_id: 'rzp_test_ot382G21y8f1J7',
                 key_secret: 'QegvCVlutW7TdMqKKFVLQt1I',
-              });
-              const options = {
-                amount : addOrder.grandTotal*100,
-                currency : 'INR',
-                reciept : ""+addOrder._id
-              }
-              instance.orders.create(options, (err,order)=>{
-                if (err){
-                    console.log(err)
-                }else{
+            });
+            const options = {
+                amount: addOrder.grandTotal * 100,
+                currency: 'INR',
+                reciept: addOrder._id
+            }
+            instance.orders.create(options, (err, order) => {
+                if (err) {
+                    console.log("error come orders" + err)
+                } else {
 
-                console.log("new order",order)
-                res.json(order)
+                    console.log("new order", order)
+                    res.json(order)
                 }
-              })
+            })
         }
-        
+
     },
 
     //Orders View
-    orderView: async(req,res)=>{
+    orderView: async (req, res) => {
         const userName = req.session.userName
-          const userId = req.session.userId
-        
-        const Orders = await orderModel.find({userId:userId}).populate('products.product').exec((err,allOrders)=>{
-            if (err){
+        const userId = req.session.userId
+
+        const Orders = await orderModel.find({ userId: userId }).populate('products.product').exec((err, allOrders) => {
+            if (err) {
                 console.log(err)
             }
-            
-                res.render('user/view-order',{userName,allOrders})
-            
+
+            res.render('user/view-order', { userName, allOrders })
+
         })
-          
-             
-              
-            
-       
+
+
+
+
+
 
     },
 
-    pageNotFound: (req,res)=>{
-        res.render('pageNotFound',{login:req.session.login})
+    pageNotFound: (req, res) => {
+        res.render('pageNotFound', { login: req.session.login })
     },
 
     //Address Manage
-    addressManage: async(req,res) => {
+    addressManage: async (req, res) => {
         const userName = req.session.userName
         const userId = req.session.userId
-        const getAllAddresses = await addressModel.findOne({userId})
+        const getAllAddresses = await addressModel.findOne({ userId })
         const addresses = getAllAddresses.address
-        
-        res.render('user/address-manage', {userName, addresses})
+
+        res.render('user/address-manage', { userName, addresses })
     },
 
-     //new Address
-     addAddress: async (req, res) => {
+    //new Address
+    addAddress: async (req, res) => {
         const userId = req.session.userId
         const existAddress = await addressModel.findOne({ user: userId })
         if (existAddress) {
@@ -429,39 +428,64 @@ module.exports = {
     },
 
     // Delete Address
-    deleteAddress: async(req,res)=>{
+    deleteAddress: async (req, res) => {
         const userId = req.session.userId
         const id = req.params.id
-        await addressModel.updateOne({user:userId}, { $pull: { address: { _id: id }}})
+        await addressModel.updateOne({ user: userId }, { $pull: { address: { _id: id } } })
         res.redirect('/address-manage')
-        
+
     },
 
     // Edit Address
-    editAddress: async(req,res)=>{
+    editAddress: async (req, res) => {
         const userName = req.session.userName
         const userId = req.session.userId
         const indexof = req.params.indexof
-        const addresses = await addressModel.findOne({user:userId})
+        const addresses = await addressModel.findOne({ user: userId })
         const index = addresses.indexof
-        const  address = await addressModel.findOne({'address.[index]':_id})
-       
-        res.render('user/edit-address',{address,userName})
+        const address = await addressModel.findOne({ 'address.[index]': _id })
+
+        res.render('user/edit-address', { address, userName })
     },
 
     //payment verification
-    paymentVerification : (req,res)=>{
+    paymentVerification: async (req, res) => {
+        const userId = req.session.userId
         console.log(req.body)
         const crypto = require('crypto')
         let hmac = crypto.createHmac('sha256', 'QegvCVlutW7TdMqKKFVLQt1I')
-        console.log(req.body.order.data.id);
-        hmac.update(req.body.payment. razorpay_order_id + '|' + req.body.payment.razorpay_payment_id);
+
+        hmac.update(req.body.payment.razorpay_order_id + '|' + req.body.payment.razorpay_payment_id);
         hmac = hmac.digest('hex')
-        if (hmac ==  req.body.payment. razorpay_signature ){
-            response ={'valid':'true'}
+        if (hmac == req.body.payment.razorpay_signature) {
+            await cartModel.findOneAndDelete({ owner: userId })
+            response = { valid: true }
             res.json(response)
         }
-        
+
+    },
+
+    orderSuccess: (req, res) => {
+        res.render('user/order-success', { login: req.session.login })
+    },
+
+    // Check Coupen 
+    checkCoupen: async (req, res) => {
+        try {
+            const userId = req.session.userId
+            const clientCode = req.body.code
+            const cartTotal = req.body.cartTotal
+            const confirmCode = await coupenModel.findOne({ code: clientCode })
+            console.log(confirmCode + 'ashfgashdf');
+            if (confirmCode) {
+                discountCoupen = cartTotal * confirmCode.discount / 100
+                await cartModel.findOneAndUpdate({owner:userId},{$inc:{cartTotal:-discountCoupen}})
+                res.json(discountCoupen)
+
+            }
+        }catch{
+            console.log('catch working')
+        }
     },
 
     // User Logout

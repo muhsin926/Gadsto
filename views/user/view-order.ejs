@@ -107,108 +107,115 @@
             </h2>
           </div>
           <% allOrders.forEach((orders)=>{ %>
-            <div class=" p-3 user-info col border rounded ">
+            <% console.log('dsfasdfasdf'+allOrders) %>
+              <div class=" p-3 user-info col border rounded ">
 
 
-              <div class="row ">
-                <div class="p-3 d-flex justify-content-between">
-                  <p class="" type="button" data-toggle="collapse" aria-expanded="false"
-                    aria-controls="multiCollapseExample1 multiCollapseExample2">Order ID: <%=orders._id %> </p>
-                  <h6 ><%=orders.status  %> </h6>
-                  <div>
-                  <h6>Expected Date</h6>
-                  <!-- <p><%=orders.date  %> </p> -->
+                <div class="row ">
+                  <div class="p-3 d-flex justify-content-between">
+                    <p class="" type="button" data-toggle="collapse" aria-expanded="false"
+                      aria-controls="multiCollapseExample1 multiCollapseExample2">Order ID: <%=orders._id %>
+                    </p>
+                    <h6>
+                      <%=orders.status %>
+                    </h6>
+                    <div>
+                      <h6>Expected Date</h6>
+                      <!-- <p><%=orders.date  %> </p> -->
+                    </div>
+
+                    <a class="" data-toggle="collapse" data-target=".multi-collapse" href="#" role="button"
+                      aria-expanded="false" aria-controls="multiCollapseExample">View Order Details</a>
+
                   </div>
-                  <a class="" data-toggle="collapse" data-target=".multi-collapse" href="#multiCollapseExample1"
-                    role="button" aria-expanded="false" aria-controls="multiCollapseExample">View Order Details</a>
-
-                </div>
-                <div class="">
-                  <div class="collapse multi-collapse" id="multiCollapseExample1">
-                    <% orders.products.forEach((product)=>{ %>
-                      <div class="  row d-flex border justify-content-center align-items-center p-2 my-2 ">
-                        <div class="col-3">
-                          <img style="width: 60px;" src="/images/<%=product.product.image %> " alt="">
+                  <div class="">
+                    <div class="collapse multi-collapse">
+                      <% orders.products.forEach((product)=>{ %>
+                        <div class="  row d-flex border justify-content-center align-items-center p-2 my-2 ">
+                          <div class="col-3">
+                            <img style="width: 60px;" src="/images/<%=product.product.image %> " alt="">
+                          </div>
+                          <div class="col-4">
+                            <p>
+                              <%=product.product.name %>
+                            </p>
+                          </div>
+                          <div class="col-2">
+                            <p>
+                              <%= product.quantity %>
+                            </p>
+                          </div>
+                          <div class="col-3">
+                            <p>
+                              <%= product.totalPrice %>
+                            </p>
+                          </div>
                         </div>
-                        <div class="col-4">
+                        <% }) %>
+                          <div class=" container card my-3 px-5 py-5 border">
+                            <div class="row ">
+                              <div class="col">
+                                Subtotal
+                              </div>
+                              <div class="col text-end">
+                                <%=orders.grandTotal %>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                Delivery Charge
+                              </div>
+                              <div class="col font-italic text-success text-end">
+                                FREE
+                              </div>
+                              <hr class="mt-3" style="border-top: 1px dashed black;">
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                Total
+                              </div>
+                              <div class="col font-weight-bold text-end">
+                                <%=orders.grandTotal %>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="collapse multi-collapse" id="multiCollapseExample1">
+                        <div class="card card-body">
+                          <h5>Payment Method</h5>
                           <p>
-                            <%=product.product.name %>
-                          </p>
-                        </div>
-                        <div class="col-2">
-                          <p>
-                            <%= product.quantity %>
-                          </p>
-                        </div>
-                        <div class="col-3">
-                          <p>
-                            <%= product.totalPrice %>
+                            <%= orders.paymentMethod %>
                           </p>
                         </div>
                       </div>
-                      <% }) %>
-                        <div class=" container card my-3 px-5 py-5 border">
-                          <div class="row ">
-                            <div class="col">
-                              subtotal
-                            </div>
-                            <div class="col text-end">
-                              <%=orders.grandTotal  %> 
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col">
-                              delivery charge
-                            </div>
-                            <div class="col text-end">
-                              free
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col">
-                              total
-                            </div>
-                            <div class="col text-end">
-                              <%=orders.grandTotal  %> 
-                            </div>
-                          </div>
+                    </div>
+                    <div class="col">
+                      <div class="collapse multi-collapse" id="multiCollapseExample2">
+                        <div class="card card-body">
+                          <h5 >Billing Address</h5>
+                          <p>
+                            <%= orders.address.fullName %>,
+                              <%= orders.address.phone %> <br>
+                                <%= orders.address.addrssLine %>
+                                  <%= orders.address.city %>
+                                    <%= orders.address.state %>-
+                                      <%= orders.address.pincode %>
+                          </p>
                         </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <div class="collapse multi-collapse" id="multiCollapseExample1">
-                      <div class="card card-body">
-                        <h6>payment method</h6>
-                        <p></p>
                       </div>
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="collapse multi-collapse" id="multiCollapseExample2">
-                      <div class="card card-body">
-                        <h6>Billing Address</h6>
-                        <p>Muhammed Muhsin
-
-                          679305
-
-                          Home no.345
-
-                          GHS kodumunda
-                          Pattambi
-                          Kerala</p>
-                      </div>            
-                    </div>
-                  </div>
                 </div>
+
+
+
               </div>
-              
-
-
-            </div>
-            <% }) %>
+              <% }) %>
         </div>
-        
+
         <!-- partial -->
       </div>
       <!-- main-panel ends -->

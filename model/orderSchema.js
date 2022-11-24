@@ -72,5 +72,5 @@ const orderSchema = new mongoose.Schema({
 
 })
 
-const wishList = mongoose.model("Order", orderSchema)
-module.exports = wishList
+const orders = mongoose.model("Orders", orderSchema)
+module.exports = orders

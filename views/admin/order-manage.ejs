@@ -19,29 +19,30 @@
                                   <th>custommer</th>
                                   <th>Items</th>
                                   <th>Amount</th>
-                                  <th>Payment Method</th>
                                   <th>Status</th>
+                                  <th>Payment Method</th>
+                                  <th>Payment</th>
                                   <th>Date</th>
-                                  <th></th>
+                                  <th>Delivery Date</th>
                                 </tr>
                               </thead>
                               <tbody>
-                               <% for (let orders of getAllOrders) {%> 
+                               <% for (let orders of getAllOrders) {%>
                                 <tr data-toggle="collapse" data-target="#collapseExample">
                                     <td><%=orders._id %> </td>
                                     <td><%=orders.userId.name %> </td>
-                                    <td></td>
+                                    <td><%=orders.products.length  %> </td>
                                     <td ><%=orders.grandTotal %> </td>
-                                    <td>cod</td>
                                     <td>
                                       <select class="form-select text-primary"  aria-label="Default select example">
                                         <option class="" value="1">conform</option>
                                         <option value="2">packked</option>
                                         <option value="3">shipping</option>
-                                        <option value="3">delivered</option>
-                                        
+                                        <option value="3">delivered</option> 
                                       </select>
                                     </td>
+                                    <td><%= orders.paymentMethod  %> </td>
+                                    <td><%= orders.payment %></td>
                                     <td><%=orders.date %> </td>
                                     
                                 </tr>

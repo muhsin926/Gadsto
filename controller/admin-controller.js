@@ -4,6 +4,7 @@ const productModel = require('../model/productModel')
 const categoryModel = require('../model/categoryModel')
 const bannerModel = require('../model/bannerModel')
 const orderModerl = require('../model/orderSchema')
+const coupenModel = require('../model/coupenModel')
 const bcrypt = require('bcrypt')
 const session = require("express-session")
 
@@ -233,6 +234,20 @@ module.exports = {
         const getAllOrders = await orderModerl.find({}).populate('userId')
         console.log(getAllOrders);
         res.render('admin/order-manage', { getAllOrders })
+    },
+
+    // Coupen Management
+    coupenManage: async (req,res)=>{
+        const coupens = await coupenModel.find({})
+        res.render('admin/coupen-manage', {coupens})
+    },
+
+    // Add Coupen
+    addCoupen: async(req,res) => {
+        const coupen = req.body
+        console.log(coupen);
+        await new coupenModel(coupen).save()
+        res.redirect('/admin/coupen-manage')
     },
 
     //Admin Logout

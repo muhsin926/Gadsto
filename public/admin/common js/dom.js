@@ -1,4 +1,4 @@
-const { listeners } = require("../../../model/productModel")
+
 
 function showNewBannerForm(){
     const form = document.getElementById('newBanner')

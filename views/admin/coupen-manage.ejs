@@ -1,0 +1,88 @@
+<%- include('./layouts/header.ejs') -%>
+    <%- include('./layouts/skins.ejs') -%>
+        <%- include('./layouts/sidebar.ejs') -%>
+
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+
+                        <div class="input-group mb-3 d-flex justify-content-end">
+
+                            <button class="btn btn-primary" type="button" data-toggle="collapse"
+                                data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                Add Coupen
+                            </button>
+                        </div>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                <form class=" p-5" action="/admin/coupen-manage" method="post">
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="form7Example3">Coupen Name</label>
+                                        <input type="text" name="name" id="form7Example3" class="form-control" />
+
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="form7Example1">Coupen Code</label>
+                                                <input type="text" name="code" id="form7Example1"
+                                                    class="form-control" />
+
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="form7Example2">Discount</label>
+                                                <input type="number" name="discount" id="form7Example2"
+                                                    class="form-control" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary float-right ">Save coupen</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-12 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">All Coupen</h4>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Coupen Name</th>
+                                                                <th>Coupen Code</th>
+                                                                <th>Discount</th>
+                                                                <th>Delete</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% coupens.forEach((coupen)=>{ %> 
+                                                            <tr>
+                                                                <td>
+                                                                  <%= coupen.name %> 
+                                                                </td>
+                                                                <td>
+                                                                    <%= coupen.code %> 
+                                                                </td>
+                                                                <td>
+                                                                    <%= coupen.discount %> 
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn">delete</button>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %> 
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%- include('./layouts/footer.ejs') -%>

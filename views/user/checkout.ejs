@@ -262,10 +262,10 @@
                             </label>
                         </div>
                         <div class="form-check mb-5">
-                            <input class="form-check-input" type="radio" value="upi" name="payment"
+                            <input class="form-check-input" type="radio" value="Razorpay" name="payment"
                                 id="flexRadioDefault2" checked>
                             <label class="form-check-label" for="flexRadioDefault2">
-                                UPI Payment
+                                Razorpay
                             </label>
                         </div>
                         <button type="submit" onclick="placeOrder('<%= index %>')"
@@ -301,13 +301,13 @@
                 
                 var options = {
 
-                    "key": "rzp_test_ot382G21y8f1J7", // Enter the Key ID generated from the Dashboard
-                    "amount":order.data.amount , // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "key": "rzp_test_ot382G21y8f1J7",
+                    "amount":order.data.amount , 
                     "currency": "INR",
                     "name": "Gadsto",
                     "description": "Test Transaction",
                     "image": "https://example.com/your_logo",
-                    "order_id": order.data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "order_id": order.data.id,
                     "handler": function (response) {
                         verifyPayment(response, order)
                       

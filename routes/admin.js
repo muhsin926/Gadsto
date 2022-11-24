@@ -37,4 +37,11 @@ router
     .route('/editBanner/:id')
     .get(authControl.sessionControl, adminController.editBanner)
     
+router
+    .route('/coupen-manage')
+    .get(authControl.sessionControl, adminController.coupenManage)
+    .post(adminController.addCoupen)
+
+
+
 module.exports = router

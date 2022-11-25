@@ -44,5 +44,9 @@ router
     .route('/check-coupen')
     .post(userController.checkCoupen)
 
+router
+    .route('/wishlist/:proId')
+    .post(userController.wishToCart)
+
 
 module.exports=router;

@@ -18,6 +18,10 @@ const orderSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        status: {
+            type: String,
+            default: 'Order Confirmed'
+        },
     }],
     address: {
         fullName: {
@@ -49,10 +53,7 @@ const orderSchema = new mongoose.Schema({
 
         },
     },
-    status: {
-        type: String,
-        default: 'Order Confirmed'
-    },
+
     grandTotal: {
         type: String,
         required: true

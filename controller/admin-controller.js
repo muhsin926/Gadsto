@@ -7,6 +7,7 @@ const orderModerl = require('../model/orderSchema')
 const coupenModel = require('../model/coupenModel')
 const bcrypt = require('bcrypt')
 const session = require("express-session")
+const moment = require('moment')
 
 module.exports = {
 
@@ -19,6 +20,7 @@ module.exports = {
 
     // Admin Submit Login
     adminDologin: async (req, res) => {
+        try{
         const { email, password } = req.body;
         const admin = await userModel.findOne({ $and: [{ email: email }, { type: 'admin' }] })
         if (admin) {
@@ -32,46 +34,70 @@ module.exports = {
         } else {
             res.redirect('/admin')
         }
+    }catch{
+        res.json('Something wrong, please try again')
+    }
     },
 
     // User Manage
     userManage: async (req, res) => {
+        try{
         allUsers = await userModel.find({ type: { $ne: 'admin' } })
         res.render('admin/user-management', { allUsers },)
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //block User
     blockUser: async (req, res) => {
+        try{
         const id = req.params.id;
         await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "Blocked" } })
             .then(() => {
                 res.redirect('/admin/user-manage')
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Unblock User
     unBlockUser: async (req, res) => {
+        try{
         const id = req.params.id
         await userModel.findByIdAndUpdate({ _id: id }, { $set: { type: "User" } })
             .then(() => {
                 res.redirect('/admin/user-manage')
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //Products Management
     productManage: async (req, res) => {
+        try{
         allProducts = await productModel.find({ delete: { $ne: true } })
         res.render('admin/product-manage', { allProducts })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Render Add Product Page 
     createProduct: async (req, res) => {
+        try{
         const categories = await categoryModel.find({ delete: { $ne: true } })
         res.render('admin/addproduct', { categories })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Add Product
     addProdcut: async (req, res) => {
+        try{
         const { category, name, description, price, stock } = (req.body)
         const image = (req.file);
         const newProduct = productModel({
@@ -84,30 +110,41 @@ module.exports = {
         })
         await newProduct.save()
         res.redirect('/admin/product-manage')
+    }catch{
+        res.json('Something wrong, please try again')
+    }
     },
 
     //Delete product
     deleteProduct: async (req, res) => {
+        try{
         const id = req.params.id;
         await productModel.findByIdAndUpdate({ _id: id }, { $set: { delete: true } })
             .then(() => {
                 res.redirect('/admin/product-manage')
             })
-
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //Edit Product
     editProduct: async (req, res) => {
+        try{
         const id = req.params.id
         const categories = await categoryModel.find({ delete: { $ne: true } })
         const product = await productModel.findOne({ _id: id })
         if (product) {
             res.render('admin/editproduct', { product, categories })
         }
+    }catch{
+        res.redirect('/admin-login')
+    }
     },
 
     //update product
     updateProduct: async (req, res) => {
+        try{
         const id = req.params.id
         const image = req.file
         const { category, name, description, price, stock } = req.body
@@ -127,18 +164,25 @@ module.exports = {
             .then(() => {
                 res.redirect('/admin/product-manage')
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
 
     //category Management
     categoryMange: async (req, res) => {
+        try{
         const categories = await categoryModel.find({ delete: { $ne: true } })
         res.render('admin/category', { categories, exist:req.session.category })
-        
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //new Category
     addCategory: async (req, res) => {
+        try{
         let addCategory = req.body.category
         let category    =  addCategory[0].toUpperCase()
         addCategory     = addCategory.slice(1)
@@ -156,28 +200,40 @@ module.exports = {
                     res.redirect('/admin/category-manage')
                 })
         }
+    }catch{
+        res.json('Something wrong, please try again')
+    }
 
     },
 
     //delete category
     deleteCategory: async (req, res) => {
+        try{
         const id = req.params.id
         const deleteCategory = await categoryModel.findByIdAndUpdate({ _id: id }, { $set: { delete: true } })
         await deleteCategory.save()
             .then(() => {
                 res.redirect('/admin/category-manage')
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //Banner Management
     bannerManage: async (req, res) => {
+        try{
         const allBanner = await bannerModel.find({ delete: { $ne: true } })
         const categories = await categoryModel.find({ delete: { $ne: true } })
         res.render('admin/banner-manage', { allBanner, categories })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //Create a new banner
     newBanner: async (req, res) => {
+        try{
         const { category, title, text } = req.body
         const image = req.file
         const newBanner = await bannerModel({
@@ -190,28 +246,40 @@ module.exports = {
             .then(() => {
                 res.redirect('/admin/banner-manage')
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Delete Banner 
     deleteBanner: async (req, res) => {
+        try{
         const id = req.params.id
         const deleteBanner = await bannerModel.findOneAndUpdate({ _id: id }, { $set: { delete: true } })
         deleteBanner.save()
             .then(() => {
                 res.redirect('/admin/banner-manage')
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Edit Banner
     editBanner: async (req, res) => {
+        try{
         const id = req.params.id
         const banner = await bannerModel.findOne({ _id: id })
         const categories = await categoryModel.find({ delete: { $ne: true } })
         res.render('admin/editBanner', { banner, categories })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Update Banner
     updateBanner: async (req, res) => {
+        try{
         const id = req.params.id
         const { category, title, text } = req.body
         const image = req.file
@@ -227,27 +295,41 @@ module.exports = {
             .then(() => {
                 res.redirect('/admin/banner-manage',)
             })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //Order Management
     orderManage: async (req, res) => {
-        const getAllOrders = await orderModerl.find({}).populate('userId')
-        console.log(getAllOrders);
-        res.render('admin/order-manage', { getAllOrders })
+        try{
+        const getAllOrders = await orderModerl.find({}).populate('userId').populate('products.product')
+        res.render('admin/order-manage', { getAllOrders, moment })
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Coupen Management
     coupenManage: async (req,res)=>{
+        try{
         const coupens = await coupenModel.find({})
         res.render('admin/coupen-manage', {coupens})
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     // Add Coupen
     addCoupen: async(req,res) => {
+        try{
         const coupen = req.body
         console.log(coupen);
         await new coupenModel(coupen).save()
         res.redirect('/admin/coupen-manage')
+        }catch{
+            res.json('Something wrong, please try again')
+        }
     },
 
     //Admin Logout

@@ -4,64 +4,81 @@
 
       <div class="main-panel">
         <div class="content-wrapper">
-            <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <p class="card-title">Advanced Table</p>
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="table-responsive">
-                            <table id="" class="display expandable-table" style="width:100%">
-                              <thead>
-                                <tr>
-                                  <th>Order ID</th>
-                                  <th>custommer</th>
-                                  <th>Items</th>
-                                  <th>Amount</th>
-                                  <th>Status</th>
-                                  <th>Payment Method</th>
-                                  <th>Payment</th>
-                                  <th>Date</th>
-                                  <th>Delivery Date</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                               <% for (let orders of getAllOrders) {%>
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Advanced Table</p>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table id="" class="display expandable-table" style="width:100%">
+                          <thead>
+                            <tr>
+                              <th>custommer</th>
+                              <th>Product</th>
+                              <th>quantity</th>
+                              <th>Amount</th>
+                              <th>Payment Method</th>
+                              <th>Payment</th>
+                              <th>Date</th>
+                              <th>Order Status</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <%  for (let orders of getAllOrders){ %>
+                             <% for (let prod of orders.products){ %> 
                                 <tr data-toggle="collapse" data-target="#collapseExample">
-                                    <td><%=orders._id %> </td>
-                                    <td><%=orders.userId.name %> </td>
-                                    <td><%=orders.products.length  %> </td>
-                                    <td ><%=orders.grandTotal %> </td>
-                                    <td>
-                                      <select class="form-select text-primary"  aria-label="Default select example">
-                                        <option class="" value="1">conform</option>
-                                        <option value="2">packked</option>
-                                        <option value="3">shipping</option>
-                                        <option value="3">delivered</option> 
-                                      </select>
-                                    </td>
-                                    <td><%= orders.paymentMethod  %> </td>
-                                    <td><%= orders.payment %></td>
-                                    <td><%=orders.date %> </td>
-                                    
+                                  <td>
+                                    <%=orders.userId.name %>
+                                  </td>
+                                  <td>
+                                    <%= prod.product.name%>
+                                  </td>
+                                  <td>
+                                    <%= prod.quantity%>
+                                  </td>
+                                  <td>
+                                    <%= prod.totalPrice %>
+                                  </td>
+                                  <td>
+                                    <%= orders.paymentMethod %>
+                                  </td>
+                                  <td>
+                                    <%= orders.payment %>
+                                  </td>
+                                  <td>
+                                    <%= moment(orders.date).format('LL') %>
+                                  </td>
+                                  <td>
+                                    <% if (prod.status == 'Order Confirme'){ %>
+                                    <button type="button" class="btn btn-inverse-secondary btn-fw">Secondary</button>
+                                    <% }else if(prod.status == 'Packed'){ %> 
+                                      <% }else if(prod.status == 'Shipped'){ %> 
+                                        <% }else if(prod.status == 'Delvered'){ %> 
+                                          <% }else{ %> 
+                                            <% } %> 
+                                  </td>
+
                                 </tr>
-                                <% } %> 
-                
-                               
-                              </tbody>
-                              
-                          </table>
-                          </div>
-                        </div>
-                      </div>
+                                <% } %>
+                                  <% } %>
+
+
+                          </tbody>
+
+                        </table>
                       </div>
                     </div>
-    
-                    
                   </div>
                 </div>
-                    </div>
-                  </div>
-                 
-                  <%- include('./layouts/footer.ejs') -%>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('./layouts/footer.ejs') -%>

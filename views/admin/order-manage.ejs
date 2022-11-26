@@ -23,12 +23,13 @@
                               <th>Payment</th>
                               <th>Date</th>
                               <th>Order Status</th>
+                              <th>Print</th>
 
                             </tr>
                           </thead>
                           <tbody>
-                            <%  for (let orders of getAllOrders){ %>
-                             <% for (let prod of orders.products){ %> 
+                            <% for (let orders of getAllOrders){ %>
+                              <% orders.products.forEach((prod,index)=>{%>
                                 <tr data-toggle="collapse" data-target="#collapseExample">
                                   <td>
                                     <%=orders.userId.name %>
@@ -52,17 +53,33 @@
                                     <%= moment(orders.date).format('LL') %>
                                   </td>
                                   <td>
-                                    <% if (prod.status == 'Order Confirme'){ %>
-                                    <button type="button" class="btn btn-inverse-secondary btn-fw">Secondary</button>
-                                    <% }else if(prod.status == 'Packed'){ %> 
-                                      <% }else if(prod.status == 'Shipped'){ %> 
-                                        <% }else if(prod.status == 'Delvered'){ %> 
-                                          <% }else{ %> 
-                                            <% } %> 
+                                    <% if (prod.status=='Order Confirmed' ){ %>
+                                      <button type="button"
+                                        onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                                        class="btn btn-inverse-secondary btn-fw">Order Confirm</button>
+                                      <% }else if(prod.status=='Packed' ){ %>
+                                        <button type="button"
+                                          onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                                          class="btn btn-inverse-primary btn-fw">Packed</button>
+                                        <% }else if(prod.status=='Shipping' ){ %>
+                                          <button type="button"
+                                            onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                                            class="btn btn-inverse-info btn-fw">Shippping</button>
+                                          <% }else if(prod.status=='Delivered' ){ %>
+                                            <button type="button"
+                                              onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                                              class="btn btn-inverse-success btn-fw">Delivered</button>
+                                            <% }else{ %>
+                                              <button type="button"
+                                                class="btn btn-inverse-danger btn-fw">Canceled</button>
+                                              <% } %>
                                   </td>
+                                  <td><a href="/admin/invoice/<%= orders._id %>"><button type="button" class="btn btn-outline-warning btn-icon-text">
+                                      <i class="ti-printer btn-icon-append"></i>
+                                    </button></a></td>
 
                                 </tr>
-                                <% } %>
+                                <% }) %>
                                   <% } %>
 
 
@@ -80,5 +97,15 @@
           </div>
         </div>
       </div>
+      <script>
+        function changeStatus(status, orderId, proId) {
+          axios.post('/admin/order-manage', { status, orderId, proId })
+            .then(() => {
+
+              console.log('evidim')
+              window.location.reload()
+            })
+        }
+      </script>
 
       <%- include('./layouts/footer.ejs') -%>

@@ -3,6 +3,7 @@ const { adminDologin } = require('../controller/admin-controller')
 const router = express.Router()
 const adminController = require('../controller/admin-controller')
 const authControl = require('../middileware/sessionControl')
+const { route } = require('./user')
 // const app = express();
 
 // get routes
@@ -11,7 +12,6 @@ router.get('/user-manage', authControl.sessionControl, adminController.userManag
 router.get('/product-manage', authControl.sessionControl, adminController.productManage)
 router.get('/category-manage', authControl.sessionControl, adminController.categoryMange)
 router.get('/banner-manage', authControl.sessionControl, adminController.bannerManage)
-router.get('/order-manage',authControl.sessionControl,adminController.orderManage)
 router.get('/adminLogout', adminController.adminLogout)
 
 
@@ -36,12 +36,20 @@ router
 router
     .route('/editBanner/:id')
     .get(authControl.sessionControl, adminController.editBanner)
+
+router
+    .route('/order-manage')
+    .get(authControl.sessionControl,adminController.orderManage)
+    .post(adminController.changeStatus)
     
 router
     .route('/coupen-manage')
     .get(authControl.sessionControl, adminController.coupenManage)
     .post(adminController.addCoupen)
 
+router
+    .route('/invoice/:orderId')
+    .get(adminController.printBill)
 
 
 module.exports = router

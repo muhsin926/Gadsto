@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const userController = require('../controller/user-controller')
 const userSession = require('../middileware/sessionControl')
+const authControll = require('../controller/auth-controll')
 
 
 // Get routes
@@ -24,7 +25,7 @@ router.get('/address-manage',userSession.userSession, userController.addressMana
 router.get('/delelte-address/:id',userController.deleteAddress)
 router.get('/edit-address/:indexof',userController.editAddress)
 // post routes
-router.post('/signup',userController.dosignup)
+router.post('/signup',authControll.dosignup)
 router.post('/login',userController.dologin)
 router.post('/editUser',userController.editUser)
 router.post('/addToCart/:id',userSession.userSession, userController.addToCart)
@@ -47,6 +48,11 @@ router
 router
     .route('/wishlist/:proId')
     .post(userController.wishToCart)
+
+router
+    .route('/otp')
+    .post(authControll.veryfy)
+    .get(authControll.resendOTP)
 
 
 module.exports=router;

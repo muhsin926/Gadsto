@@ -44,3 +44,9 @@
 a{
     text-decoration: none;
 }
+
+.addToCart{
+    background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104));
+    color: #fff;
+
+}

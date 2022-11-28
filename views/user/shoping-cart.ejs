@@ -78,18 +78,6 @@
 
                                 </table>
                             </div>
-
-                            <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-                                <div class="flex-w flex-m m-r-20 m-tb-5">
-                                    <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5"
-                                        id="codeInput" type="text" name="coupon" placeholder="Coupon Code">
-
-                                    <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5 "
-                                        onclick="getcoupen('<%= allCart.cartTotal %>','<%= allCart._id %>')">
-                                        Apply coupon
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -128,19 +116,7 @@
                                 </div>
                             </div>
 
-                            <div id="coupenDiv" style="visibility: hidden;" class="d-flex justify-content-between flex-t bor12 p-b-13">
-                                <div class="">
-                                    <span class="stext-110 cl2">
-                                        Coupen Offer:
-                                    </span>
-                                </div>
-
-                                <div class="">
-                                    <input readonly style="width: 42px;" id="discountInput"  class=" mtext-110 cl2 text-success"
-                                        value="<%= coupenDiscount %>" >
-                                  
-                                </div>
-                            </div>
+                        
 
 
                             <div class="d-flex justify-content-between flex-w flex-t p-t-27 p-b-33">
@@ -200,12 +176,6 @@
                         axios.post('/check-coupen', {code,cartTotal,cartId})
                         .then((response)=>{
                             alert('success')
-                            const coupenDiv = document.querySelector('#coupenDiv')
-                            if (coupenDiv.style.visibility == 'visible'){
-                                coupenDiv.style.visibility = 'hidden'
-                            }else{
-                                coupenDiv.style.visibility = 'visible'
-                            }
                             console.log( response.data);
                            
                            const codeInput = document.querySelector('#discountInput')

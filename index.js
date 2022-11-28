@@ -6,6 +6,7 @@ const fielUpload = require('express-fileupload')
 const multer = require('multer')
 const multerStorage = require('./middileware/multer')
 const cors = require('cors')
+const nodemailer = require('nodemailer')
 const userRouter = require('./routes/user')
 const adminRouter = require('./routes/admin')
 const app = express();

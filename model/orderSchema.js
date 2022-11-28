@@ -69,7 +69,8 @@ const orderSchema = new mongoose.Schema({
     payment: {
         type: String,
         default: "unpaid"
-    }
+    },
+  
 
 })
 

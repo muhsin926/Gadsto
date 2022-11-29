@@ -161,10 +161,17 @@
         const button = document.getElementById('download-button');
 
         function generatePDF() {
+            const opt = {
+                margin:1,
+                filename: 'invoice.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {scale:2},
+                jsPDF:{format:'A4'}
+            }
             // Choose the element that your content will be rendered to.
             const element = document.getElementById('invoice');
             // Choose the element and save the PDF for your user.
-            html2pdf().from(element).save();
+            html2pdf().set(opt).from(element).save();
         }
 
         button.addEventListener('click', generatePDF);

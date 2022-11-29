@@ -7,7 +7,6 @@ const authControll = require('../controller/auth-controll')
 
 // Get routes
 router.get('/', userController.home)
-router.get('/signup',userController.signup)
 router.get('/login',userController.login)
 router.get('/logoutUser',userController.logoutUser)
 router.get('/myProfile', userSession.userSession, userController.myProfile)
@@ -25,7 +24,7 @@ router.get('/address-manage',userSession.userSession, userController.addressMana
 router.get('/delelte-address/:id',userController.deleteAddress)
 router.get('/edit-address/:indexof',userController.editAddress)
 // post routes
-router.post('/signup',authControll.dosignup)
+
 router.post('/login',userController.dologin)
 router.post('/editUser',userController.editUser)
 router.post('/addToCart/:id',userSession.userSession, userController.addToCart)
@@ -33,6 +32,12 @@ router.post('/add-address',userController.addAddress)
 router.post('/change-address',userController.checkout)
 router.post('/verity-payment',userController.paymentVerification)
 router.get('/order-success',userController.orderSuccess)
+
+router
+    .route('/signup')
+    .get(userController.signup)
+    .post(authControll.dosignup)
+
 router
     .route('/address')
     .post(userController.newAddress)

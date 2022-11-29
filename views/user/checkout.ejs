@@ -217,7 +217,7 @@
         </div>
       </div>
 
-      <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+      <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50" id="bill">
         <div
           class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm"
         >
@@ -272,7 +272,6 @@
             </style>
             <div class="row">
               <span class="mtext-101 cl2 col-6">
-                
                 <input
                   type="text"
                   class="border p-3"
@@ -354,6 +353,8 @@
       .then((response) => {
         if (response.data.apply) {
           Swal.fire("Success", "applayed coupen offer!", "success");
+          location.reload();
+          // $("#bill").load("bill > *");
         } else if (response.data.exist) {
           Swal.fire({
             icon: "error",

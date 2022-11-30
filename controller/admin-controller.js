@@ -11,9 +11,13 @@ const moment = require("moment");
 
 module.exports = {
   // Admin Login Page
-  login: (req, res) => {
+  login: async(req, res) => {
     if (req.session.adminLogin) {
-      res.render("admin/index");
+      const totalOrder = await orderModerl.find({}).countDocuments()
+      const totalProduct = await productModel.find({}).countDocuments()
+      const totalCategory = await categoryModel.find({}).countDocuments()
+      const totalUser = await userModel.find({}).countDocuments()
+      res.render("admin/index",{totalCategory,totalOrder,totalProduct,totalUser});
     } else {
       res.render("admin/login");
     }
@@ -30,9 +34,9 @@ module.exports = {
         const isMatch = await bcrypt.compare(password, admin.password);
         if (isMatch) {
           req.session.adminLogin = true;
-          res.render("admin/index");
+          res.redirect("/admin");
         } else {
-          res.redirect("/");
+          res.redirect("/admin");
         }
       } else {
         res.redirect("/admin");

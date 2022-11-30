@@ -8952,7 +8952,7 @@ button::-moz-focus-inner,
   color: #000;
 }
 .page:hover{
-  background-color: gray;
+  background-color:  rgb(221, 221, 221);
 }
 .focus{
   background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104));

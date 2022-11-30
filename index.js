@@ -40,7 +40,7 @@ app.use('/', userRouter)
 
 // Page Not Found 404
 app.use('*',(req,res)=>{
-  res.redirect('/pageNotFound')
+  res.render('pageNotFound')
 })
 
 

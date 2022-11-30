@@ -10,7 +10,7 @@
     <span class="stext-109 cl4"> Shoping Cart </span>
   </div>
 </div>
-
+<% if (products.length != 0){ %> 
 <div class="mt-5 container">
   <h4>Wish List</h4>
   <% for ( wishList of products) { %>
@@ -37,33 +37,49 @@
       <button
         type="submit"
         class="btn border addToCart"
-        onclick="addToCart('<%= wishList.product._id %>')">
+        onclick="addToCart('<%= wishList.product._id %>')"
+      >
         Add To Cart
       </button>
     </div>
     <div class="col-12 col-md-1">
-      <a href="/remove-from-wishlist/<%= wishList.product._id %> ">
-        <button class="btn border">Remove</button>
+      <a>
+        <button
+          class="btn border"
+          onclick="removeWish('<%= wishList.product._id %>','<%= wishList.product.name %>')"
+        >
+          Remove
+        </button>
       </a>
     </div>
   </div>
   <% } %>
 </div>
+<% }else{ %> 
 
-<!-- <div style="height: 100vh;" class=" d-flex justify-content-center align-items-center flex-column">
-                <h1>Wish List is Empty </h1>
-            </div> -->
+<div style="height: 100vh;" class=" d-flex justify-content-center align-items-center flex-column">
+  <img style="height: 100vh; object-fit: cover;" src="/images/wishlist.jpg" alt="">
+                
+            </div>
+            <% } %> 
 <script>
   function addToCart(productId) {
-    axios.post(`/wishlist/${productId}`)
-    .then((proName)=>{
-        console.log(proName);
-        Swal.fire(
-        proName.data,
-        'is add to cart!',
-        'success'
-      )
-    })
+    axios.post(`/wishlist?productId=${productId}`).then((proName) => {
+      Swal.fire(proName.data, "is add to cart!", "success");
+    });
+  }
+
+  function removeWish(productId, proName) {
+    axios.delete(`/wishlist?porductId=${productId}`).then(() => {
+      Swal.fire({
+        icon: "success",
+        title: proName,
+        text: "is remove to wishList!",
+        showConfirmButton: false,
+        timer: 1900,
+      });
+      location.reload();
+    });
   }
 </script>
 

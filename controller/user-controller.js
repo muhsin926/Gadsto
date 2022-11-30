@@ -39,7 +39,6 @@ module.exports = {
   dosignup: async (req, res) => {
     try {
       if (!req.session.login) {
-        
         const user = await userModel.findOne({ email });
         req.session.uniqueErr = false;
         if (user) {
@@ -134,7 +133,7 @@ module.exports = {
       const user = await userModel.findOne({ _id: id });
       req.session.userName = user.name;
       res.render("user/myProfile", { user });
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       res.json("Something wrong, please try again");
     }
@@ -193,9 +192,9 @@ module.exports = {
       if (!user) {
         const addToCart = await cartModel({
           owner: req.session.userId,
-          items: [{ product: productId, totalPrice: product.price}],
+          items: [{ product: productId, totalPrice: product.price }],
           cartTotal: cartTotal,
-          subTotal: product.price
+          subTotal: product.price,
         });
         addToCart.save().then(() => {
           res.redirect("/productView/");
@@ -226,9 +225,9 @@ module.exports = {
             { owner: req.session.userId },
             {
               $push: {
-                items: { product: productId, totalPrice: product.price},
+                items: { product: productId, totalPrice: product.price },
               },
-              $inc: { cartTotal: cartTotal,subTotal: product.price },
+              $inc: { cartTotal: cartTotal, subTotal: product.price },
             }
           );
           addToCart.save().then(() => {
@@ -243,7 +242,7 @@ module.exports = {
 
   changeProductQuantity: async (req, res) => {
     try {
-      const { cartId, productId, count } = req.params;
+      const { cartId, productId, count } = req.query;
       const product = await productModel.findOne({ _id: productId });
       if (count == 1) var productPrice = product.price;
       else {
@@ -261,7 +260,7 @@ module.exports = {
           }
         )
         .then(() => {
-          res.redirect("/shoping-cart");
+          res.json()
         });
     } catch {
       res.json("Something wrong, please try again");
@@ -334,8 +333,9 @@ module.exports = {
   //Delete Product From Cart
   deleteCartProduct: async (req, res) => {
     try {
+      console.log(req.query)
       const userId = req.session.userId;
-      const productId = req.params.productId;
+      const productId = req.query.productId;
       const product = await productModel.findOne({ _id: productId });
       const cartTotal = product.price;
       const deleteProduct = await cartModel.findOneAndUpdate(
@@ -348,7 +348,7 @@ module.exports = {
         }
       );
       deleteProduct.save().then(() => {
-        res.redirect("/shoping-cart");
+        res.json('success')
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -378,7 +378,7 @@ module.exports = {
   //Add To Cart From Wishlist
   wishToCart: async (req, res) => {
     try {
-      const productId = req.params.proId;
+      const productId = req.query.productId;
       const user = await cartModel.findOne({ owner: req.session.userId });
       const product = await productModel.findOne({ _id: productId });
       const cartTotal = product.price;
@@ -488,14 +488,15 @@ module.exports = {
   //Remove Product From Wihslist
   removeWishlist: async (req, res) => {
     try {
-      const productId = req.params.porductId;
+      console.log("vannu")
+      const productId = req.query.porductId;
       const userId = req.session.userId;
       const remove = await wishListModel.findOneAndUpdate(
         { owner: userId },
         { $pull: { products: { product: productId } } }
       );
       remove.save().then(() => {
-        res.redirect("/wishList");
+        res.json()
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -513,16 +514,18 @@ module.exports = {
       const cart = await cartModel.findOne({ owner: userId });
       const products = cart.items;
       const grandTotal = cart.cartTotal;
-      const addOrder = await orderModel({
-        userId,
-        products,
-        address,
-        grandTotal,
-        paymentMethod,
-      });
-      addOrder.save();
+      console.log(grandTotal)
+      let addOrder;
       // await cartModel.findOneAndDelete({ owner: userId })
       if (paymentMethod === "COD") {
+          addOrder = await orderModel({
+          userId,
+          products,
+          address,
+          grandTotal,
+          paymentMethod,
+        });
+        addOrder.save();
         await cartModel.findOneAndDelete({ owner: userId });
         res.json({ payment: "COD" });
       } else {
@@ -531,10 +534,10 @@ module.exports = {
           key_secret: "QegvCVlutW7TdMqKKFVLQt1I",
         });
         const options = {
-          amount: addOrder.grandTotal * 100,
+          amount: grandTotal * 100,
           currency: "INR",
-          reciept: addOrder._id,
         };
+        console.log(grandTotal)
         instance.orders.create(options, (err, order) => {
           if (err) {
             console.log("error come orders" + err);
@@ -544,7 +547,8 @@ module.exports = {
           }
         });
       }
-    } catch {
+    } catch(err) {
+      console.log(err)
       res.json("Something wrong, please try again");
     }
   },
@@ -652,8 +656,13 @@ module.exports = {
   //payment verification
   paymentVerification: async (req, res) => {
     try {
+      const index = parseInt(req.body.index);
       const userId = req.session.userId;
-      console.log(req.body);
+      const addresses = await addressModel.findOne({ user: userId });
+      const address = addresses.address[index];
+      const cart = await cartModel.findOne({ owner: userId });
+      const products = cart.items;
+      const grandTotal = cart.cartTotal;
       const crypto = require("crypto");
       let hmac = crypto.createHmac("sha256", "QegvCVlutW7TdMqKKFVLQt1I");
       hmac.update(
@@ -663,6 +672,15 @@ module.exports = {
       );
       hmac = hmac.digest("hex");
       if (hmac == req.body.payment.razorpay_signature) {
+        const addOrder = await orderModel({
+          userId,
+          products,
+          address,
+          grandTotal,
+          paymentMethod : "Razorpay",
+          payment: "paid"
+        });
+        addOrder.save();
         await cartModel.findOneAndDelete({ owner: userId });
         response = { valid: true };
         res.json(response);
@@ -684,31 +702,61 @@ module.exports = {
       const cartTotal = req.body.cartTotal;
       const confirmCode = await coupenModel.findOne({ code: clientCode });
       if (confirmCode) {
-        const existOffer = await cartModel.findOne({owner:userId,})
-        if (!existOffer.offer.coupenId){
-        discountCoupen = Math.round(cartTotal * confirmCode.discount/ 100) 
-        const cart = await cartModel.findOneAndUpdate(
-          { owner: userId },
-          {
-            $set: {
-              offer:{coupenId: confirmCode._id,
-              discount : discountCoupen},
-             
+        const existOffer = await cartModel.findOne({ owner: userId });
+        if (!existOffer.offer.coupenId) {
+          discountCoupen = Math.round((cartTotal * confirmCode.discount) / 100);
+          const cart = await cartModel.findOneAndUpdate(
+            { owner: userId },
+            {
+              $set: {
+                offer: { coupenId: confirmCode._id, discount: discountCoupen },
+              },
+              $inc: { cartTotal: -discountCoupen },
             },
-            $inc: { cartTotal: -discountCoupen },
-          },{multi : true}
-        );
-        res.json({apply:true});
-        }else{
-          res.json({exist : true})
+            { multi: true }
+          );
+          res.json({ apply: true });
+        } else {
+          res.json({ exist: true });
         }
-      }else{
-        res.json({apply : false})
+      } else {
+        res.json({ apply: false });
       }
     } catch {
       console.log("catch working");
     }
   },
+
+  // Shop View
+  shop: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const perPage = 4;
+      const countAllProduct = await productModel
+        .find({ delete: { $ne: true } })
+        .countDocuments();
+      const pageNum = Math.ceil(countAllProduct / 4);
+      allProduct = await productModel
+        .find({ delete: { $ne: true } })
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+      res.render("user/shop", {
+        login: req.session.login,
+        allProduct,
+        pageNum,
+        page,
+      });
+    } catch (err) {
+      console.log(err);
+      res.json("something wrong");
+    }
+  },
+
+  // Contact
+  contact: (req,res)=>{
+    res.render('user/contact',{login:req.session.login})
+  },
+
 
   // User Logout
   logoutUser: (req, res) => {

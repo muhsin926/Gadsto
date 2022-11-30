@@ -1,111 +1,116 @@
-<%- include('./layouts/header.ejs') -%>
-  <%- include('./layouts/skins.ejs') -%>
-    <%- include('./layouts/sidebar.ejs') -%>
+<%- include('./layouts/header.ejs') -%> <%- include('./layouts/skins.ejs') -%>
+<%- include('./layouts/sidebar.ejs') -%>
 
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-md-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title">Advanced Table</p>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="table-responsive">
-                        <table id="" class="display expandable-table" style="width:100%">
-                          <thead>
-                            <tr>
-                              <th>custommer</th>
-                              <th>Product</th>
-                              <th>quantity</th>
-                              <th>Amount</th>
-                              <th>Payment Method</th>
-                              <th>Payment</th>
-                              <th>Date</th>
-                              <th>Order Status</th>
-                              <th>Print</th>
-
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <% for (let orders of getAllOrders){ %>
-                              <% orders.products.forEach((prod,index)=>{%>
-                                <tr data-toggle="collapse" data-target="#collapseExample">
-                                  <td>
-                                    <%=orders.userId.name %>
-                                  </td>
-                                  <td>
-                                    <%= prod.product.name%>
-                                  </td>
-                                  <td>
-                                    <%= prod.quantity%>
-                                  </td>
-                                  <td>
-                                    <%= prod.totalPrice %>
-                                  </td>
-                                  <td>
-                                    <%= orders.paymentMethod %>
-                                  </td>
-                                  <td>
-                                    <%= orders.payment %>
-                                  </td>
-                                  <td>
-                                    <%= moment(orders.date).format('LL') %>
-                                  </td>
-                                  <td>
-                                    <% if (prod.status=='Order Confirmed' ){ %>
-                                      <button type="button"
-                                        onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
-                                        class="btn btn-inverse-secondary btn-fw">Order Confirm</button>
-                                      <% }else if(prod.status=='Packed' ){ %>
-                                        <button type="button"
-                                          onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
-                                          class="btn btn-inverse-primary btn-fw">Packed</button>
-                                        <% }else if(prod.status=='Shipping' ){ %>
-                                          <button type="button"
-                                            onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
-                                            class="btn btn-inverse-info btn-fw">Shippping</button>
-                                          <% }else if(prod.status=='Delivered' ){ %>
-                                            <button type="button"
-                                              onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
-                                              class="btn btn-inverse-success btn-fw">Delivered</button>
-                                            <% }else{ %>
-                                              <button type="button"
-                                                class="btn btn-inverse-danger btn-fw">Canceled</button>
-                                              <% } %>
-                                  </td>
-                                  <td><a href="/admin/invoice/<%= orders._id %>"><button type="button" class="btn btn-outline-warning btn-icon-text">
-                                      <i class="ti-printer btn-icon-append"></i>
-                                    </button></a></td>
-
-                                </tr>
-                                <% }) %>
-                                  <% } %>
-
-
-                          </tbody>
-
-                        </table>
-                      </div>
-                    </div>
-                  </div>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-title">Advanced Table</p>
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    id=""
+                    class="display expandable-table"
+                    style="width: 100%"
+                  >
+                    <thead>
+                      <tr>
+                        <th>custommer</th>
+                        <th>Product</th>
+                        <th>quantity</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Payment</th>
+                        <th>Date</th>
+                        <th>Order Status</th>
+                        <th>Print</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (let orders of getAllOrders){ %> <%
+                      orders.products.forEach((prod,index)=>{%>
+                      <tr data-toggle="collapse" data-target="#collapseExample">
+                        <td><%=orders.userId.name %></td>
+                        <td><%= prod.product.name%></td>
+                        <td><%= prod.quantity%></td>
+                        <td><%= prod.totalPrice %></td>
+                        <td><%= orders.paymentMethod %></td>
+                        <td><%= orders.payment %></td>
+                        <td><%= moment(orders.date).format('LL') %></td>
+                        <td>
+                          <% if (prod.status=='Order Confirmed' ){ %>
+                          <button
+                            type="button"
+                            onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                            class="btn btn-inverse-secondary btn-fw"
+                          >
+                            Order Confirm
+                          </button>
+                          <% }else if(prod.status=='Packed' ){ %>
+                          <button
+                            type="button"
+                            onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                            class="btn btn-inverse-primary btn-fw"
+                          >
+                            Packed
+                          </button>
+                          <% }else if(prod.status=='Shipping' ){ %>
+                          <button
+                            type="button"
+                            onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                            class="btn btn-inverse-info btn-fw"
+                          >
+                            Shippping
+                          </button>
+                          <% }else if(prod.status=='Delivered' ){ %>
+                          <button
+                            type="button"
+                            onclick="changeStatus('<%= prod.status %>','<%= orders._id %>','<%= prod.product._id%>')"
+                            class="btn btn-inverse-success btn-fw"
+                          >
+                            Delivered
+                          </button>
+                          <% }else{ %>
+                          <button
+                            type="button"
+                            class="btn btn-inverse-danger btn-fw"
+                          >
+                            Canceled
+                          </button>
+                          <% } %>
+                        </td>
+                        <td>
+                          <a href="/admin/invoice/<%= orders._id %>"
+                            ><button
+                              type="button"
+                              class="btn btn-outline-warning btn-icon-text"
+                            >
+                              <i class="ti-printer btn-icon-append"></i></button
+                          ></a>
+                        </td>
+                      </tr>
+                      <% }) %> <% } %>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
       </div>
-      <script>
-        function changeStatus(status, orderId, proId) {
-          axios.post('/admin/order-manage', { status, orderId, proId })
-            .then(() => {
+    </div>
+  </div>
+</div>
+<script>
+  function changeStatus(status, orderId, proId) {
+    axios.post("/admin/order-manage", { status, orderId, proId }).then(() => {
+      console.log("evidim");
+      window.location.reload();
+    });
+  }
+</script>
 
-              console.log('evidim')
-              window.location.reload()
-            })
-        }
-      </script>
-
-      <%- include('./layouts/footer.ejs') -%>
+<%- include('./layouts/footer.ejs') -%>

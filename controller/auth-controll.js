@@ -45,7 +45,7 @@ module.exports = {
           res.redirect("/signup");
         }
       } else {
-        res.redirect("/");
+        res.redirect("/signup");
       }
 
       var mailOptions = {
@@ -86,6 +86,7 @@ module.exports = {
 
   // Rsend OTP
   resendOTP: (req, res) => {
+    const email = req.query.email;
     var mailOptions = {
       to: email,
       subject: "Otp for registration is: ",

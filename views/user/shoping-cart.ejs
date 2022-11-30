@@ -12,13 +12,12 @@
                 Shoping Cart
             </span>
         </div>
-    </div>
-
-    <% if(allCart){ %>
+    </div>  
+    <% if(allCart.items.length !=0){ %>
 
         <!-- Shoping Cart -->
         <form class="bg0 p-t-45 p-b-85">
-            <div class="container">
+            <div id="allElements" class="container">
                 <div class="row">
                     <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                         <div class="m-l-25 m-r--38 m-lr-0-xl">
@@ -48,12 +47,19 @@
                                             </td>
                                             <td class="column-4">
                                                 <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                                    <% if(cart.quantity != 1){ %> 
                                                     <a href="#">
                                                         <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
                                                             onclick="changeQuantity('<%= allCart._id %>','<%= cart.product._id %>','-1')">
                                                             <i class="fs-16 zmdi zmdi-minus"></i>
                                                         </div>
                                                     </a>
+                                                    <% }else{ %> 
+                                                        <div style="visibility: hidden;" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
+                                                        onclick="changeQuantity('<%= allCart._id %>','<%= cart.product._id %>','-1')">
+                                                        <i class="fs-16 zmdi zmdi-minus"></i>
+                                                    </div>
+                                                    <% } %> 
 
                                                     <input class="mtext-104 cl3 txt-center num-product" readonly
                                                         type="number" id="qty" name="num-product1"
@@ -151,19 +157,17 @@
                 <script>
                     function changeQuantity(cartId, proId, count) {
                         let qty = document.querySelector('#qty')
-                        axios.get(`/change-product-quantity/${cartId}/${proId}/${count}`)
+                        axios.patch(`/shoping-cart?cartId=${cartId}&productId=${proId}&count=${count}`)
                             .then(() => {
-                                qty.value = parseInt(qty.value) + parseInt(count);
-
-
+                               location.reload()
                             })
                     }
 
                     function deleteProduct(proId) {
-                        axios.get(`/shoping-cart-delete-product/${proId}`)
-                            .then((e => {
-                                window.locaton.reload()
-                            }))
+                        axios.delete(`/shoping-cart?productId=${proId}`)
+                            .then(() => {
+                                location.reload()
+                            })
                     }
 
                 </script>

@@ -7,13 +7,10 @@ const authControll = require('../controller/auth-controll')
 
 // Get routes
 router.get('/', userController.home)
-router.get('/login',userController.login)
 router.get('/logoutUser',userController.logoutUser)
 router.get('/myProfile', userSession.userSession, userController.myProfile)
 router.get('/productView/:id', userController.productView)
-router.get('/change-product-quantity/:cartId/:productId/:count', userController.changeProductQuantity)
 router.get('/checkout', userSession.userSession, userController.checkout)
-router.get('/shoping-cart-delete-product/:productId', userController.deleteCartProduct)
 router.get('/wishList',userSession.userSession, userController.wishList)
 router.get('/addToWishlist/:productId',userSession.userSession, userController.addToWishlist)
 router.get('/remove-from-wishlist/:porductId', userController.removeWishlist)
@@ -25,7 +22,7 @@ router.get('/delelte-address/:id',userController.deleteAddress)
 router.get('/edit-address/:indexof',userController.editAddress)
 // post routes
 
-router.post('/login',userController.dologin)
+
 router.post('/editUser',userController.editUser)
 router.post('/addToCart/:id',userSession.userSession, userController.addToCart)
 router.post('/add-address',userController.addAddress)
@@ -39,25 +36,42 @@ router
     .post(authControll.dosignup)
 
 router
-    .route('/address')
+    .route('/login')
+    .get(userController.login)
+    .post(userController.dologin)
+
+router
+    .route('/address-manage')
     .post(userController.newAddress)
 
 router
     .route('/shoping-cart/')
-    .get(userSession.userSession, userController.shopingCart)
+    .get(userSession.userSession, userController.shopingCart )
+    .patch( userController.changeProductQuantity )
+    .delete( userController.deleteCartProduct )
     
 router
     .route('/check-coupen')
     .post(userController.checkCoupen)
 
 router
-    .route('/wishlist/:proId')
+    .route('/wishlist')
+    .get(userSession.userSession, userController.wishList)
     .post(userController.wishToCart)
+    .delete( userController.removeWishlist )
 
 router
     .route('/otp')
     .post(authControll.veryfy)
     .get(authControll.resendOTP)
 
+router
+    .route('/shop')
+    .get(userController.shop )
 
+router
+    .route('/contact')
+    .get(userController.contact)
+
+    
 module.exports=router;

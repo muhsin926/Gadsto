@@ -50,3 +50,24 @@ a{
     color: #fff;
 
 }
+.atag{
+    text-decoration: none;
+  }
+  .page {
+    height: 40px;
+    width: 40px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    border-radius: 5px;
+    color: #000;
+  }
+  .page:hover{
+    background-color: rgb(221, 221, 221);
+  }
+  .focus{
+    background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104));
+    color: #fff;
+  }

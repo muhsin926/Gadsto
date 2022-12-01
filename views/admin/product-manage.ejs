@@ -29,8 +29,7 @@
                   <% allProducts.forEach((data)=> { %>
                   <tr>
                     <td>
-                      <img src="../images/<%= data.image %>" alt="" /> <%=
-                      data.category %>
+                      <img src="../images/<%= data.image %>" alt="" />
                     </td>
                     <td><%= data.category %></td>
                     <td><%= data.name %></td>
@@ -39,7 +38,7 @@
                     <td><%= data.price %></td>
                     <td>
                       <form
-                        action="/admin/editProduct/<%= data._id %>"
+                        action="/admin/edit-product?proId=<%= data._id %>"
                         method="post"
                       >
                         <button type="submit" class="btn border">Edit</button>

@@ -9,24 +9,20 @@
 <div class="main-panel">
   <div class="content-wrapper">
     <div class="row">
-      <div class="col-md-12 grid-margin">
-        <div class="row">
-          <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-            <h3 class="font-weight-bold">Welcome Admin</h3>
-            <h6 class="font-weight-normal mb-0">
-              All systems are running smoothly! You have
-              <span class="text-primary">3 unread alerts!</span>
-            </h6>
-          </div>
-        </div>
+      <div class="container text-center  ">
+      <div class=" ms-5 d-flex justify-content-center flex-column align-items-center col-11 mb-4 report">
+        <h3 class="font-weight-bold">Welcome Admin</h3>
+        <h6 class="font-weight-normal mb-0">
+          All systems are running smoothly! You have
+          <span class="text-primary">3 unread alerts!</span>
+        </h6>
       </div>
     </div>
-    <div class="row">
       <div
         class="col-md-4 mb-4 d-flex justify-content-center align-items-center"
       >
-        <div class="card card-tale" style="width: 15rem; height: 10rem">
-          <div class="card-body text-center">
+        <div class=" " >
+          <div class="card-body report text-center">
             <p class="mb-4">Total Order</p>
             <p class="fs-30 mb-2"><%= totalOrder %> </p>
             <p>1 year (2022)</p>
@@ -36,8 +32,8 @@
       <div
         class="col-md-4 mb-4 d-flex justify-content-center align-items-center"
       >
-        <div class="card card-dark-blue" style="width: 15rem; height: 10rem">
-          <div class="card-body text-center">
+        <div class=" " >
+          <div class="card-body report text-center">
             <p class="mb-4">Total User</p>
             <p class="fs-30 mb-2"><%= totalUser %> </p>
             <p>All signed user</p>
@@ -48,8 +44,8 @@
       <div
         class="col-md-4 mb-4  d-flex justify-content-center align-items-center"
       >
-        <div class="card card-light-blue" style="width: 15rem; height: 10rem">
-          <div class="card-body text-center">
+        <div class="" >
+          <div class="card-body report text-center">
             <p class="mb-4">Toatl Product</p>
             <p class="fs-30 mb-2"><%= totalProduct %> </p>
             <p>All valid product</p>
@@ -62,8 +58,8 @@
       <div
         class="col-md-4 mb-4 d-flex justify-content-center align-items-center"
       >
-        <div class="card card-tale" style="width: 15rem; height: 10rem">
-          <div class="card-body text-center">
+        <div>
+          <div class="card-body report text-center">
             <p class="mb-4">Out Of Stock</p>
             <p class="fs-30 mb-2">0 Product</p>
             <p></p>
@@ -73,8 +69,8 @@
       <div
         class="col-md-4 mb-4 d-flex justify-content-center align-items-center"
       >
-        <div class="card card-dark-blue" style="width: 15rem; height: 10rem">
-          <div class="card-body text-center">
+        <div>
+          <div class="card-body report text-center">
             <p class="mb-4">Total Category</p>
             <p class="fs-30 mb-2"><%=totalCategory %> </p>
             <p>All category</p>
@@ -85,13 +81,81 @@
       <div
         class="col-md-4 mb-4  d-flex justify-content-center align-items-center"
       >
-        <div class="card card-light-blue" style="width: 15rem; height: 10rem">
-          <div class="card-body text-center">
+        <div>
+          <div class="card-body report text-center">
             <p class="mb-4">Number of Meetings</p>
             <p class="fs-30 mb-2">34040</p>
             <p>2.00% (30 days)</p>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-9 ">
+        <div class="report">
+          <div class="card-body ">
+            <h4 class="card-title mt-3 mb-4">Recent Orders</h4>
+            
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr >
+                    <th>
+                      Order ID
+                    </th>
+                    <th>
+                      Date
+                    </th>
+                    <th>
+                      Amount
+                    </th>
+                    <th>
+                      Payment Method
+                    </th>
+                    <th>
+                      Paymnet Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% recentOrders.forEach((order)=>{ %> 
+                  <tr >
+                    <td class="py-4">
+                      <%= order._id  %> 
+                    </td>
+                    <td>
+                      <%= moment(order.date).format('LL') %> 
+                    </td>
+                    <td>
+                      <%= order.grandTotal %> 
+                    </td>
+                    <td>
+                     <%= order.paymentMethod %> 
+                    </td>
+                    <td>
+                      <%= order.products[0].status %> 
+                    </td>
+                  </tr>
+                  <% }) %> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3  report">
+        <div class="ms-3 mt-4"><h6>New Users</h6></div>
+        <% newUser.forEach((user)=>{ %>
+          <div class="m-4 d-flex flex-column">
+            <div>
+              <i class="mdi mdi-check-all text-success"></i>
+          <span><%= user.name %> </span>
+          </div>
+          <p><%= moment(user.name).format('LL') %></p> 
+        </div>
+          <% }) %>  
       </div>
     </div>
 

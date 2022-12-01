@@ -8716,7 +8716,7 @@ body {
   line-height: 1.5;
   color: #1F1F1F;
   text-align: left;
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(219, 219, 219);
 }
 
 
@@ -8957,6 +8957,14 @@ button::-moz-focus-inner,
 .focus{
   background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104));
   color: #fff;
+}
+.report{
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  min-width: 15rem; 
+  min-height: 10rem;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 7px 15px 0 rgba(0,0,0,0.2);
 }
 
 input[type="radio"],

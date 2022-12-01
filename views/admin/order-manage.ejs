@@ -12,7 +12,7 @@
               <div class="col-12">
                 <div class="table-responsive">
                   <table
-                    id=""
+                    
                     class="display expandable-table"
                     style="width: 100%"
                   >
@@ -32,7 +32,7 @@
                     <tbody>
                       <% for (let orders of getAllOrders){ %> <%
                       orders.products.forEach((prod,index)=>{%>
-                      <tr data-toggle="collapse" data-target="#collapseExample">
+                      <tr>
                         <td><%=orders.userId.name %></td>
                         <td><%= prod.product.name%></td>
                         <td><%= prod.quantity%></td>

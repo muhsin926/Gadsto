@@ -4,34 +4,48 @@ const router = express.Router()
 const adminController = require('../controller/admin-controller')
 const authControl = require('../middileware/sessionControl')
 const { route } = require('./user')
-// const app = express();
 
-// get routes
-router.get('/', adminController.login)
-router.get('/user-manage', authControl.sessionControl, adminController.userManage)
-router.get('/product-manage', authControl.sessionControl, adminController.productManage)
-router.get('/category-manage', authControl.sessionControl, adminController.categoryMange)
-router.get('/banner-manage', authControl.sessionControl, adminController.bannerManage)
-router.get('/adminLogout', adminController.adminLogout)
-
-
-// post routes
-router.post('/admin-login', adminController.adminDologin)
-router.post('/deleteProduct/:id', adminController.deleteProduct)
-router.post('/blockUser/:id', adminController.blockUser)
-router.post('/unBlockUser/:id', adminController.unBlockUser)
-router.post('/editProduct/:id', adminController.editProduct)
-router.post('/updateProduct/:id', adminController.updateProduct)
-router.post('/addCategory', adminController.addCategory)
-router.post('/deleteCategory/:id', adminController.deleteCategory)
-router.post('/newBanner', adminController.newBanner)
-router.post('/deleteBanner/:id', adminController.deleteBanner)
 
 // Router Chain
+
+router
+    .route('/')
+    .get(adminController.login)
+
+router
+    .route('/user-manage')
+    .get(authControl.sessionControl, adminController.userManage)
+    .post(adminController.blockUser)
+    .patch(adminController.unBlockUser)
+
 router
     .route('/addProduct')
     .get(authControl.sessionControl, adminController.createProduct)
     .post(adminController.addProdcut)
+    
+    router
+    .route('/product-manage')
+    .get(authControl.sessionControl, adminController.productManage)
+    .post(adminController.editProduct)
+    .delete( adminController.deleteProduct)
+
+router
+    .route('edit-product')
+    .get(adminController.editProduct)
+    .post(adminController.updateProduct)
+
+
+router
+    .route('/category-manage')
+    .get( authControl.sessionControl, adminController.categoryMange)
+    .post(adminController.addCategory)
+    .delete(adminController.deleteCategory)
+
+router
+    .route('/banner-manage')
+    .get(authControl.sessionControl, adminController.bannerManage)
+    .post(adminController.newBanner)
+    .delete(adminController.deleteBanner)
 
 router
     .route('/editBanner/:id')
@@ -50,6 +64,15 @@ router
 router
     .route('/invoice/:orderId')
     .get(adminController.printBill)
+
+router
+    .route('/sales-report')
+    .get(adminController.salesReport)
+
+router
+    .route('/admin-session')
+    .get(adminController.adminLogout)
+    .post(adminController.adminDologin)
 
 
 module.exports = router

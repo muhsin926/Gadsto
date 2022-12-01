@@ -33,7 +33,7 @@
                     <td>
                       <% if(data.type=="User" ) { %>
                       <form
-                        action="/admin/blockUser/<%= data._id %>"
+                        action="/admin/user-manage?id=<%= data._id %>"
                         method="post"
                       >
                         <button type="submit" class="btn border border-danger">
@@ -41,15 +41,10 @@
                         </button>
                       </form>
                       <% }else { %>
-
-                      <form
-                        action="/admin/unBlockUser/<%= data._id %>"
-                        method="post"
-                      >
-                        <button type="submit" class="btn border border-success">
+                        <button onclick="unblock('<%= data._id %>')" type="submit" class="btn border border-success">
                           Unblock
                         </button>
-                      </form>
+            
                       <% } %>
                     </td>
                   </tr>
@@ -74,6 +69,14 @@
         <% } %> 
       </section>
 
+      <script>
+        function unblock(id){
+          axios.patch(`/admin/user-manage?id=${id}`)
+          .then(()=>{
+            location.reload()
+          })
+        }
+      </script>
       <%- include('./layouts/footer.ejs') -%>
     </div>
   </div>

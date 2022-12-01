@@ -3,7 +3,7 @@ const userModel = require("../model/signupModel");
 const productModel = require("../model/productModel");
 const categoryModel = require("../model/categoryModel");
 const bannerModel = require("../model/bannerModel");
-const orderModerl = require("../model/orderSchema");
+const orderModel = require("../model/orderSchema");
 const coupenModel = require("../model/coupenModel");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
@@ -13,11 +13,13 @@ module.exports = {
   // Admin Login Page
   login: async(req, res) => {
     if (req.session.adminLogin) {
-      const totalOrder = await orderModerl.find({}).countDocuments()
+      const totalOrder = await orderModel.find({}).countDocuments()
       const totalProduct = await productModel.find({}).countDocuments()
       const totalCategory = await categoryModel.find({}).countDocuments()
       const totalUser = await userModel.find({}).countDocuments()
-      res.render("admin/index",{totalCategory,totalOrder,totalProduct,totalUser});
+      const recentOrders = await orderModel.find({}).sort({date:-1})
+      const newUser = await userModel.find({}).sort({date:-1}).limit(4)
+      res.render("admin/index",{totalCategory,totalOrder,totalProduct,totalUser,recentOrders,moment,newUser});
     } else {
       res.render("admin/login");
     }
@@ -73,7 +75,7 @@ module.exports = {
   //block User
   blockUser: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.id;
       await userModel
         .findByIdAndUpdate({ _id: id }, { $set: { type: "Blocked" } })
         .then(() => {
@@ -87,7 +89,7 @@ module.exports = {
   // Unblock User
   unBlockUser: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.id;
       await userModel
         .findByIdAndUpdate({ _id: id }, { $set: { type: "User" } })
         .then(() => {
@@ -150,7 +152,7 @@ module.exports = {
   //Delete product
   deleteProduct: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.proId;
       await productModel
         .findByIdAndUpdate({ _id: id }, { $set: { delete: true } })
         .then(() => {
@@ -164,7 +166,7 @@ module.exports = {
   //Edit Product
   editProduct: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.proId;
       const categories = await categoryModel.find({ delete: { $ne: true } });
       const product = await productModel.findOne({ _id: id });
       if (product) {
@@ -178,7 +180,7 @@ module.exports = {
   //update product
   updateProduct: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.id;
       const image = req.file;
       const { category, name, description, price, stock } = req.body;
       if (image) {
@@ -247,13 +249,14 @@ module.exports = {
   //delete category
   deleteCategory: async (req, res) => {
     try {
-      const id = req.params.id;
+      console.log('vannu');
+      const id = req.query.catId;
       const deleteCategory = await categoryModel.findByIdAndUpdate(
         { _id: id },
         { $set: { delete: true } }
       );
       await deleteCategory.save().then(() => {
-        res.redirect("/admin/category-manage");
+        res.json('success')
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -293,13 +296,13 @@ module.exports = {
   // Delete Banner
   deleteBanner: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.id;
       const deleteBanner = await bannerModel.findOneAndUpdate(
         { _id: id },
         { $set: { delete: true } }
       );
       deleteBanner.save().then(() => {
-        res.redirect("/admin/banner-manage");
+        res.json('success')
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -346,7 +349,7 @@ module.exports = {
   //Order Management
   orderManage: async (req, res) => {
     try {
-      const getAllOrders = await orderModerl
+      const getAllOrders = await orderModel
         .find({})
         .populate("userId")
         .populate("products.product");
@@ -384,28 +387,28 @@ module.exports = {
     const { status, orderId, proId } = req.body;
     console.log(req.body);
     if (status == "Order Confirmed") {
-      await orderModerl.findOneAndUpdate(
+      await orderModel.findOneAndUpdate(
         { _id: orderId, "products.product": proId },
         {
           $set: { "products.$.status": "Packed" },
         }
       );
     } else if (status == "Packed") {
-      await orderModerl.findOneAndUpdate(
+      await orderModel.findOneAndUpdate(
         { _id: orderId, "products.product": proId },
         {
           $set: { "products.$.status": "Shipping" },
         }
       );
     } else if (status == "Shipping") {
-      await orderModerl.findOneAndUpdate(
+      await orderModel.findOneAndUpdate(
         { _id: orderId, "products.product": proId },
         {
           $set: { "products.$.status": "Delivered" },
         }
       );
     } else {
-      await orderModerl.findOneAndUpdate(
+      await orderModel.findOneAndUpdate(
         { _id: orderId, "products.product": proId },
         {
           $set: { "products.$.status": "Canceled" },
@@ -419,13 +422,21 @@ module.exports = {
   // Print Bill
   printBill: async (req, res) => {
     const orderId = req.params.orderId;
-    const order = await orderModerl
+    const order = await orderModel
       .findOne({ _id: orderId })
       .populate("products.product")
       .populate("userId");
     const products = order.products;
     const address = order.address;
     res.render("admin/bill", { order, products, moment });
+  },
+
+  salesReport: async(req,res)=>{
+    
+      let orders = await orderModel.find({})
+    
+    const filterOrder = await orderModel.find({})
+    res.render('admin/sales-report',{orders})
   },
 
   //Admin Logout

@@ -13,13 +13,21 @@ const Razorpay = require("razorpay");
 module.exports = {
   // User Landing Page
   home: async (req, res) => {
+    try{
+    const userId = req.session.userId;
     const viewProduct = await productModel.find({ delete: { $ne: true } });
     const allBanner = await bannerModel.find({ delete: { $ne: true } });
+    const wishList = await wishListModel.findOne({ owner: userId });
+    let wishPro;
+    if (wishList) {
+      wishPro = wishList.products;
+    }
     if (req.session.login) {
       res.render("user/index", {
         login: req.session.login,
         viewProduct,
         allBanner,
+        wishPro,
       });
     } else {
       res.render("user/index", {
@@ -28,6 +36,10 @@ module.exports = {
         allBanner,
       });
     }
+  }catch(err){
+    console.log(err);
+    res.json("Something Error, Please try again")
+  }
   },
 
   // User Signup
@@ -109,7 +121,7 @@ module.exports = {
   // Product View Page
   productView: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.query.proId;
       const product = await productModel.findOne({ _id: id });
       const relatedProduct = await productModel.find({
         category: product.category,
@@ -184,7 +196,7 @@ module.exports = {
   // Add To Cart
   addToCart: async (req, res) => {
     try {
-      const productId = req.params.id;
+      const productId = req.query.proId;
 
       const user = await cartModel.findOne({ owner: req.session.userId });
       const product = await productModel.findOne({ _id: productId });
@@ -260,7 +272,7 @@ module.exports = {
           }
         )
         .then(() => {
-          res.json()
+          res.json();
         });
     } catch {
       res.json("Something wrong, please try again");
@@ -270,7 +282,7 @@ module.exports = {
   // Place Order
   checkout: async (req, res) => {
     try {
-      let index = Number(req.body.index);
+      let index = Number(req.query.index);
       if (!index) {
         index = 0;
       }
@@ -333,7 +345,7 @@ module.exports = {
   //Delete Product From Cart
   deleteCartProduct: async (req, res) => {
     try {
-      console.log(req.query)
+      console.log(req.query);
       const userId = req.session.userId;
       const productId = req.query.productId;
       const product = await productModel.findOne({ _id: productId });
@@ -348,7 +360,7 @@ module.exports = {
         }
       );
       deleteProduct.save().then(() => {
-        res.json('success')
+        res.json("success");
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -361,7 +373,7 @@ module.exports = {
       const userId = req.session.userId;
       const allwishLists = await wishListModel
         .findOne({ owner: userId })
-        .populate("products.product")
+        .populate("products")
         .exec((err, wishLists) => {
           if (err) {
             console.log(err);
@@ -436,13 +448,13 @@ module.exports = {
   //Add To Wish List
   addToWishlist: async (req, res) => {
     try {
-      const productId = req.params.productId;
+      const productId = req.query.proId;
       const userId = req.session.userId;
       const existWishList = await wishListModel.findOne({ owner: userId });
       if (existWishList) {
         const existProduct = await wishListModel.findOne({
           owner: userId,
-          "products.product": productId,
+          products: productId,
         });
         console.log(existProduct);
         if (!existProduct) {
@@ -450,33 +462,16 @@ module.exports = {
             { owner: userId },
             {
               $push: {
-                products: [
-                  {
-                    product: productId,
-                  },
-                ],
+                products: [productId],
               },
             }
           );
-          res.json();
-        } else {
-          await wishListModel.findOneAndUpdate(
-            { owner: userId },
-            {
-              $pull: {
-                products: [
-                  {
-                    product: productId,
-                  },
-                ],
-              },
-            }
-          );
+          res.json("push");
         }
       } else {
         const newWishList = await wishListModel({
           owner: userId,
-          products: [{ product: productId }],
+          products: [productId],
         });
         newWishList.save();
       }
@@ -488,16 +483,15 @@ module.exports = {
   //Remove Product From Wihslist
   removeWishlist: async (req, res) => {
     try {
-      console.log("vannu")
-      const productId = req.query.porductId;
+      const productId = req.query.productId;
+      console.log(productId);
       const userId = req.session.userId;
-      const remove = await wishListModel.findOneAndUpdate(
+      await wishListModel.findOneAndUpdate(
         { owner: userId },
-        { $pull: { products: { product: productId } } }
+        { $pull: { products: productId } }
       );
-      remove.save().then(() => {
-        res.json()
-      });
+
+      res.json();
     } catch {
       res.json("Something wrong, please try again");
     }
@@ -506,19 +500,19 @@ module.exports = {
   // Oreder Conform
   orderConfirm: async (req, res) => {
     try {
-      const paymentMethod = req.body.paymentMethod;
+      const paymentMethod = req.query.paymentMethod;
       const userId = req.session.userId;
-      const indexof = parseInt(req.body.index);
+      const indexof = parseInt(req.query.index);
       const addresses = await addressModel.findOne({ user: userId });
       const address = addresses.address[indexof];
       const cart = await cartModel.findOne({ owner: userId });
       const products = cart.items;
       const grandTotal = cart.cartTotal;
-      console.log(grandTotal)
+      console.log(grandTotal);
       let addOrder;
       // await cartModel.findOneAndDelete({ owner: userId })
       if (paymentMethod === "COD") {
-          addOrder = await orderModel({
+        addOrder = await orderModel({
           userId,
           products,
           address,
@@ -537,7 +531,6 @@ module.exports = {
           amount: grandTotal * 100,
           currency: "INR",
         };
-        console.log(grandTotal)
         instance.orders.create(options, (err, order) => {
           if (err) {
             console.log("error come orders" + err);
@@ -547,8 +540,8 @@ module.exports = {
           }
         });
       }
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       res.json("Something wrong, please try again");
     }
   },
@@ -632,7 +625,7 @@ module.exports = {
         { user: userId },
         { $pull: { address: { _id: id } } }
       );
-      res.redirect("/address-manage");
+      res.json("success");
     } catch {
       res.json("Something wrong, please try again");
     }
@@ -677,8 +670,8 @@ module.exports = {
           products,
           address,
           grandTotal,
-          paymentMethod : "Razorpay",
-          payment: "paid"
+          paymentMethod: "Razorpay",
+          payment: "paid",
         });
         addOrder.save();
         await cartModel.findOneAndDelete({ owner: userId });
@@ -730,6 +723,7 @@ module.exports = {
   // Shop View
   shop: async (req, res) => {
     try {
+      const userId = req.session.userId
       const page = parseInt(req.query.page) || 1;
       const perPage = 4;
       const countAllProduct = await productModel
@@ -740,11 +734,17 @@ module.exports = {
         .find({ delete: { $ne: true } })
         .skip((page - 1) * perPage)
         .limit(perPage);
+      const wishList = await wishListModel.findOne({ owner: userId });
+      let wishPro;
+      if (wishList) {
+        wishPro = wishList.products;
+      }
       res.render("user/shop", {
         login: req.session.login,
         allProduct,
         pageNum,
         page,
+        wishPro
       });
     } catch (err) {
       console.log(err);
@@ -753,10 +753,9 @@ module.exports = {
   },
 
   // Contact
-  contact: (req,res)=>{
-    res.render('user/contact',{login:req.session.login})
+  contact: (req, res) => {
+    res.render("user/contact", { login: req.session.login });
   },
-
 
   // User Logout
   logoutUser: (req, res) => {

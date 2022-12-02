@@ -20,24 +20,24 @@
     <div class="col-12 col-md-2">
       <img
         class="how-itemcart1"
-        src="/images/<%= wishList.product.image %> "
+        src="/images/<%= wishList.image %> "
         alt=""
       />
     </div>
     <div class="col-12 col-md-2">
-      <p><%= wishList.product.name %></p>
+      <p><%= wishList.name %></p>
     </div>
     <div class="col-12 col-md-3">
-      <p><%= wishList.product.description %></p>
+      <p><%= wishList.description %></p>
     </div>
     <div class="col-12 col-md-2">
-      <p><%= wishList.product.price %></p>
+      <p><%= wishList.price %></p>
     </div>
     <div class="col-12 col-md-2">
       <button
         type="submit"
         class="btn border addToCart"
-        onclick="addToCart('<%= wishList.product._id %>')"
+        onclick="addToCart('<%= wishList._id %>')"
       >
         Add To Cart
       </button>
@@ -46,7 +46,7 @@
       <a>
         <button
           class="btn border"
-          onclick="removeWish('<%= wishList.product._id %>','<%= wishList.product.name %>')"
+          onclick="removeWish('<%= wishList._id %>','<%= wishList.name %>')"
         >
           Remove
         </button>

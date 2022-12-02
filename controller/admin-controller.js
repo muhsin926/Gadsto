@@ -17,7 +17,7 @@ module.exports = {
       const totalProduct = await productModel.find({}).countDocuments()
       const totalCategory = await categoryModel.find({}).countDocuments()
       const totalUser = await userModel.find({}).countDocuments()
-      const recentOrders = await orderModel.find({}).sort({date:-1})
+      const recentOrders = await orderModel.find({}).sort({date:-1}).limit(10)
       const newUser = await userModel.find({}).sort({date:-1}).limit(4)
       res.render("admin/index",{totalCategory,totalOrder,totalProduct,totalUser,recentOrders,moment,newUser});
     } else {

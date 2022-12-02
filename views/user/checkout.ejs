@@ -43,7 +43,7 @@
             </div>
           </div>
           <div id="allAddress" style="display: none" class="p-3 mt-4 mb-4">
-            <form action="/change-address" method="post">
+            <form id="changeAddress">
               <% address.forEach((addresses,index)=>{ %>
               <div class="mt-4 p-4 border form-check">
                 <input
@@ -82,7 +82,7 @@
             <div class="mb-5card-header py-3">
               <h5 class="mtext-101 mb-0">Address details</h5>
             </div>
-            <form action="/address" method="post">
+            <form action="/checkout" method="post">
               <div class="row mb-4">
                 <div class="col">
                   <div class="form-outline">
@@ -276,7 +276,7 @@
                   type="text"
                   class="border p-3"
                   id="codeInput"
-                  placeholder="Applay coupen"
+                  placeholder="Apply coupen"
                   style="border-radius: 10px; height: 3rem; width: 12rem"
                 />
               </span>
@@ -289,7 +289,7 @@
                   style="border-radius: 10px; width: 75px; height: 3rem"
                   onclick="getcoupen('<%= cartItems.cartTotal %>','<%= cartItems._id %>')"
                 >
-                  Applay
+                  Apply
                 </button>
               </span>
             </div>
@@ -346,6 +346,13 @@
 </div>
 
 <script>
+  function submitForm(){
+ const change = document.querySelector('#changeAddress').submit()
+ axios.patch('/checkout')
+ .then(()=>{
+  location.reload()
+ })
+  }
   function getcoupen(cartTotal, cartId) {
     const code = document.querySelector("#codeInput").value;
     axios
@@ -383,7 +390,7 @@
       ? "COD"
       : "Razorpay";
 
-    axios.post("/order-conform", { index, paymentMethod }).then((response) => {
+    axios.get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`).then((response) => {
       if (response.data.payment) {
         alert("success cash on delivery");
         location.assign("/order-success");
@@ -418,7 +425,7 @@
         },
       };
       function verifyPayment(payment, order) {
-        axios.post("/verity-payment", { payment, order, index }).then((response) => {
+        axios.post("/payment-verify", { payment, order, index }).then((response) => {
           location.assign("/order-success");
         });
       }

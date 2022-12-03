@@ -1,438 +1,384 @@
 <%- include('./layouts/userHeader.ejs') %>
-<div class="container mt-5">
-  <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-45 p-lr-0-lg">
-    <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-      Home
-      <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-    </a>
+  <div class="container mt-5">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-45 p-lr-0-lg">
+      <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        Home
+        <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+      </a>
 
-    <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-      Shoping Cart
-      <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-    </a>
-    <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-      Place Order
-    </a>
+      <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        Shoping Cart
+        <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+      </a>
+      <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+        Place Order
+      </a>
+    </div>
   </div>
-</div>
 
-<!-- Shoping Cart -->
-<div class="bg0 p-t-45 p-b-85">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
-        <div class="m-l-25 m-r--38 m-lr-0-xl">
-          <div class="border wrap-table-shopping-cart">
-            <div class="m-4 row mb-4">
-              <div class="col-4">
-                <h5>Delivery Address</h5>
-              </div>
+  <!-- Shoping Cart -->
+  <div class="bg0 p-t-45 p-b-85">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+          <div class="m-l-25 m-r--38 m-lr-0-xl">
+            <div class="border wrap-table-shopping-cart">
+              <div class="m-4 row mb-4">
+                <div class="col-4">
+                  <h5>Delivery Address</h5>
+                </div>
 
-              <div class="col-6">
-                <p><%= address[index].fullName %></p>
-                <p><%= address[index].Phone %></p>
-                <p><%= address[index].pincode %></p>
-                <p><%= address[index].addressLine %></p>
-                <p><%= address[index].landMark %></p>
-                <p><%= address[index].city %></p>
-                <p><%= address[index].state %></p>
-              </div>
-              <div class="col-2">
-                <a onclick="showAllAddress()" href="#">Change</a>
+                <div class="col-6">
+                  <p>
+                    <%= address[index].fullName %>
+                  </p>
+                  <p>
+                    <%= address[index].Phone %>
+                  </p>
+                  <p>
+                    <%= address[index].pincode %>
+                  </p>
+                  <p>
+                    <%= address[index].addressLine %>
+                  </p>
+                  <p>
+                    <%= address[index].landMark %>
+                  </p>
+                  <p>
+                    <%= address[index].city %>
+                  </p>
+                  <p>
+                    <%= address[index].state %>
+                  </p>
+                </div>
+                <div class="col-2">
+                  <a onclick="showAllAddress()" href="#">Change</a>
+                </div>
               </div>
             </div>
-          </div>
-          <div id="allAddress" style="display: none" class="p-3 mt-4 mb-4">
-            <form id="changeAddress">
-              <% address.forEach((addresses,index)=>{ %>
-              <div class="mt-4 p-4 border form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  value="<%=index  %> "
-                  name="index"
-                  id="flexRadioDefault1"
-                />
-                <label for="">
-                  <%=addresses.fullName %> <%=addresses.phone %> <br />
-                  <%=addresses.addressLine %> , <%=addresses.landMark %> ,
-                  <%=addresses.city %>, <%=addresses.state %> ,
-                  <%=addresses.pincode %>
-                </label>
-              </div>
-              <% }) %>
+            <div id="allAddress" style="display: none" class="p-3 mt-4 mb-4">
+              <form id="changeAddress">
+                <% address.forEach((addresses,index)=>{ %>
+                  <div class="mt-4 p-4 border form-check">
+                    <input class="form-check-input" type="radio" value="<%=index  %> " name="index"
+                      id="flexRadioDefault1" />
+                    <label for="">
+                      <%=addresses.fullName %>
+                        <%=addresses.phone %> <br />
+                          <%=addresses.addressLine %> , <%=addresses.landMark %> ,
+                              <%=addresses.city %>, <%=addresses.state %> ,
+                                  <%=addresses.pincode %>
+                    </label>
+                  </div>
+                  <% }) %>
 
-              <button
-                type="submit"
-                class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-              >
-                Delivery here
-              </button>
-            </form>
-          </div>
-          <div class="p-3 mt-4 mb-4 border">
-            <a href="#">
-              <h6 class="" onclick="showAddressForm()">
-                <i class="fs-16 zmdi zmdi-plus mr-2" style="font-size: 1rem"></i
-                >Add New Address
-              </h6>
-            </a>
-          </div>
-          <div id="addressForm" class="p-5 border" style="display: none">
-            <div class="mb-5card-header py-3">
-              <h5 class="mtext-101 mb-0">Address details</h5>
+                    <button type="submit"
+                      class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                      Delivery here
+                    </button>
+              </form>
             </div>
-            <form action="/checkout" method="post">
-              <div class="row mb-4">
-                <div class="col">
-                  <div class="form-outline">
-                    <label class="form-label" for="form7Example1"
-                      >Full Name</label
-                    >
-                    <input
-                      type="text"
-                      name="fullName"
-                      id="form7Example1"
-                      class="form-control"
-                    />
+            <div class="p-3 mt-4 mb-4 border">
+              <a href="#">
+                <h6 class="" onclick="showAddressForm()">
+                  <i class="fs-16 zmdi zmdi-plus mr-2" style="font-size: 1rem"></i>Add New Address
+                </h6>
+              </a>
+            </div>
+            <div id="addressForm" class="p-5 border" style="display: none">
+              <div class="mb-5card-header py-3">
+                <h5 class="mtext-101 mb-0">Address details</h5>
+              </div>
+              <form action="/checkout" method="post">
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+                      <label class="form-label" for="form7Example1">Full Name</label>
+                      <input type="text" name="fullName" id="form7Example1" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <label class="form-label" for="form7Example2">Phone</label>
+                      <input type="number" name="phone" id="form7Example2" class="form-control" />
+                    </div>
                   </div>
                 </div>
-                <div class="col">
-                  <div class="form-outline">
-                    <label class="form-label" for="form7Example2">Phone</label>
-                    <input
-                      type="number"
-                      name="phone"
-                      id="form7Example2"
-                      class="form-control"
-                    />
+
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form7Example3">Picode</label>
+                  <input type="number" name="pincode" id="form7Example3" class="form-control" />
+                </div>
+
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form7Example4">Flat, House no., Building, Company, Apartment</label>
+                  <input type="text" name="addressLine" id="form7Example4" class="form-control" />
+                </div>
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form7Example5">Landmark</label>
+                  <input type="text" name="landMark" id="form7Example5" class="form-control" />
+                </div>
+
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+                      <label class="form-label" for="form7Example1">City</label>
+                      <input type="text" name="city" id="form7Example1" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <label class="form-label" for="form7Example2">State</label>
+                      <select name="state" id="state" class="form-control">
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Andaman and Nicobar Islands">
+                          Andaman and Nicobar Islands
+                        </option>
+                        <option value="Arunachal Pradesh">
+                          Arunachal Pradesh
+                        </option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Dadar and Nagar Haveli">
+                          Dadar and Nagar Haveli
+                        </option>
+                        <option value="Daman and Diu">Daman and Diu</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="Puducherry">Puducherry</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jammu and Kashmir">
+                          Jammu and Kashmir
+                        </option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Text input -->
-              <div class="form-outline mb-4">
-                <label class="form-label" for="form7Example3">Picode</label>
-                <input
-                  type="number"
-                  name="pincode"
-                  id="form7Example3"
-                  class="form-control"
-                />
-              </div>
-
-              <!-- Text input -->
-              <div class="form-outline mb-4">
-                <label class="form-label" for="form7Example4"
-                  >Flat, House no., Building, Company, Apartment</label
-                >
-                <input
-                  type="text"
-                  name="addressLine"
-                  id="form7Example4"
-                  class="form-control"
-                />
-              </div>
-
-              <!-- Email input -->
-              <div class="form-outline mb-4">
-                <label class="form-label" for="form7Example5">Landmark</label>
-                <input
-                  type="text"
-                  name="landMark"
-                  id="form7Example5"
-                  class="form-control"
-                />
-              </div>
-
-              <div class="row mb-4">
-                <div class="col">
-                  <div class="form-outline">
-                    <label class="form-label" for="form7Example1">City</label>
-                    <input
-                      type="text"
-                      name="city"
-                      id="form7Example1"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-outline">
-                    <label class="form-label" for="form7Example2">State</label>
-                    <select name="state" id="state" class="form-control">
-                      <option value="Andhra Pradesh">Andhra Pradesh</option>
-                      <option value="Andaman and Nicobar Islands">
-                        Andaman and Nicobar Islands
-                      </option>
-                      <option value="Arunachal Pradesh">
-                        Arunachal Pradesh
-                      </option>
-                      <option value="Assam">Assam</option>
-                      <option value="Bihar">Bihar</option>
-                      <option value="Chandigarh">Chandigarh</option>
-                      <option value="Chhattisgarh">Chhattisgarh</option>
-                      <option value="Dadar and Nagar Haveli">
-                        Dadar and Nagar Haveli
-                      </option>
-                      <option value="Daman and Diu">Daman and Diu</option>
-                      <option value="Delhi">Delhi</option>
-                      <option value="Lakshadweep">Lakshadweep</option>
-                      <option value="Puducherry">Puducherry</option>
-                      <option value="Goa">Goa</option>
-                      <option value="Gujarat">Gujarat</option>
-                      <option value="Haryana">Haryana</option>
-                      <option value="Himachal Pradesh">Himachal Pradesh</option>
-                      <option value="Jammu and Kashmir">
-                        Jammu and Kashmir
-                      </option>
-                      <option value="Jharkhand">Jharkhand</option>
-                      <option value="Karnataka">Karnataka</option>
-                      <option value="Kerala">Kerala</option>
-                      <option value="Madhya Pradesh">Madhya Pradesh</option>
-                      <option value="Maharashtra">Maharashtra</option>
-                      <option value="Manipur">Manipur</option>
-                      <option value="Meghalaya">Meghalaya</option>
-                      <option value="Mizoram">Mizoram</option>
-                      <option value="Nagaland">Nagaland</option>
-                      <option value="Odisha">Odisha</option>
-                      <option value="Punjab">Punjab</option>
-                      <option value="Rajasthan">Rajasthan</option>
-                      <option value="Sikkim">Sikkim</option>
-                      <option value="Tamil Nadu">Tamil Nadu</option>
-                      <option value="Telangana">Telangana</option>
-                      <option value="Tripura">Tripura</option>
-                      <option value="Uttar Pradesh">Uttar Pradesh</option>
-                      <option value="Uttarakhand">Uttarakhand</option>
-                      <option value="West Bengal">West Bengal</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary float-right">
-                Save Address
-              </button>
-            </form>
+                <button type="submit" class="btn btn-primary float-right">
+                  Save Address
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50" id="bill">
-        <div
-          class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm"
-        >
-          <h4 class="mtext-109 cl2 p-b-30">Cart Totals</h4>
+        <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50" id="bill">
+          <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+            <h4 class="mtext-109 cl2 p-b-30">Cart Totals</h4>
 
-          <div class="d-flex justify-content-between p-b-13">
-            <div class="">
-              <span class="stext-110 cl2"> Subtotal </span>
+            <div class="d-flex justify-content-between p-b-13">
+              <div class="">
+                <span class="stext-110 cl2"> Subtotal </span>
+              </div>
+
+              <div class="">
+                <span class="mtext-110 cl2"> ₹<%= cartItems.subTotal %> </span>
+              </div>
             </div>
 
-            <div class="">
-              <span class="mtext-110 cl2"> ₹<%= cartItems.subTotal %> </span>
+            <div class="d-flex justify-content-between flex-t p-b-13">
+              <div class="">
+                <span class="stext-110 cl2"> Delivery Charge </span>
+              </div>
+
+              <div class="">
+                <span class="mtext-110 cl2 text-success"> FREE </span>
+              </div>
             </div>
+
+            <div class="d-flex justify-content-between flex-t bor12 p-b-13">
+              <div class="">
+                <span class="stext-110 cl2"> Discount </span>
+              </div>
+
+              <div class="">
+                <span class="mtext-110 cl2 text-success">
+                  ₹<%= cartItems.offer.discount %>
+                </span>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between flex-w flex-t bor12 p-t-27 p-b-33">
+              <style>
+                #codeInput::placeholder {
+                  font-size: small;
+                }
+
+                #codeInput {
+                  font-size: small;
+                }
+
+                .apply:hover {
+                  background-color: #717fe0;
+                  color: #fff;
+                }
+              </style>
+              <div class="row">
+                <span class="mtext-101 cl2 col-6">
+                  <input type="text" class="border p-3" id="codeInput" placeholder="Apply coupen"
+                    style="border-radius: 10px; height: 3rem; width: 12rem" />
+                </span>
+              </div>
+
+              <div class="p-t-1">
+                <span class="mtext-110 cl2 col-6">
+                  <button class="btn border apply" style="border-radius: 10px; width: 75px; height: 3rem"
+                    onclick="getcoupen('<%= cartItems.cartTotal %>','<%= cartItems._id %>')">
+                    Apply
+                  </button>
+                </span>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between flex-w flex-t bor12 p-t-27 p-b-33">
+              <div class="">
+                <span class="mtext-101 cl2"> Total </span>
+              </div>
+
+              <div class="p-t-1">
+                <span class="mtext-110 cl2"> ₹<%= cartItems.cartTotal %> </span>
+              </div>
+            </div>
+
+            <div class="mt-4 form-check">
+              <input class="form-check-input" type="radio" value="cod" name="payment" id="cod" />
+              <label class="form-check-label" for="flexRadioDefault1">
+                Cash on Delivery
+              </label>
+            </div>
+
+            <div class="form-check mb-5">
+              <input class="form-check-input" type="radio" value="Razorpay" name="payment" id="flexRadioDefault2"
+                checked />
+              <label class="form-check-label" for="flexRadioDefault2">
+                Razorpay
+              </label>
+            </div>
+            <button type="submit" onclick="placeOrder('<%= index %>')"
+              class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+              PAY NOW
+            </button>
           </div>
-
-          <div class="d-flex justify-content-between flex-t p-b-13">
-            <div class="">
-              <span class="stext-110 cl2"> Delivery Charge </span>
-            </div>
-
-            <div class="">
-              <span class="mtext-110 cl2 text-success"> FREE </span>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between flex-t bor12 p-b-13">
-            <div class="">
-              <span class="stext-110 cl2"> Discount </span>
-            </div>
-
-            <div class="">
-              <span class="mtext-110 cl2 text-success">
-                ₹<%= cartItems.offer.discount %>
-              </span>
-            </div>
-          </div>
-
-          <div
-            class="d-flex justify-content-between flex-w flex-t bor12 p-t-27 p-b-33"
-          >
-            <style>
-              #codeInput::placeholder {
-                font-size: small;
-              }
-              #codeInput {
-                font-size: small;
-              }
-              .apply:hover {
-                background-color: #717fe0;
-                color: #fff;
-              }
-            </style>
-            <div class="row">
-              <span class="mtext-101 cl2 col-6">
-                <input
-                  type="text"
-                  class="border p-3"
-                  id="codeInput"
-                  placeholder="Apply coupen"
-                  style="border-radius: 10px; height: 3rem; width: 12rem"
-                />
-              </span>
-            </div>
-
-            <div class="p-t-1">
-              <span class="mtext-110 cl2 col-6">
-                <button
-                  class="btn border apply"
-                  style="border-radius: 10px; width: 75px; height: 3rem"
-                  onclick="getcoupen('<%= cartItems.cartTotal %>','<%= cartItems._id %>')"
-                >
-                  Apply
-                </button>
-              </span>
-            </div>
-          </div>
-          <div
-            class="d-flex justify-content-between flex-w flex-t bor12 p-t-27 p-b-33"
-          >
-            <div class="">
-              <span class="mtext-101 cl2"> Total </span>
-            </div>
-
-            <div class="p-t-1">
-              <span class="mtext-110 cl2"> ₹<%= cartItems.cartTotal %> </span>
-            </div>
-          </div>
-
-          <div class="mt-4 form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="cod"
-              name="payment"
-              id="cod"
-            />
-            <label class="form-check-label" for="flexRadioDefault1">
-              Cash on Delivery
-            </label>
-          </div>
-
-          <div class="form-check mb-5">
-            <input
-              class="form-check-input"
-              type="radio"
-              value="Razorpay"
-              name="payment"
-              id="flexRadioDefault2"
-              checked
-            />
-            <label class="form-check-label" for="flexRadioDefault2">
-              Razorpay
-            </label>
-          </div>
-          <button
-            type="submit"
-            onclick="placeOrder('<%= index %>')"
-            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-          >
-            PAY NOW
-          </button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  function submitForm(){
- const change = document.querySelector('#changeAddress').submit()
- axios.patch('/checkout')
- .then(()=>{
-  location.reload()
- })
-  }
-  function getcoupen(cartTotal, cartId) {
-    const code = document.querySelector("#codeInput").value;
-    axios
-      .post("/check-coupen", { code, cartTotal, cartId })
-      .then((response) => {
-        if (response.data.apply) {
-          Swal.fire("Success", "applayed coupen offer!", "success");
-          location.reload();
-          // $("#bill").load("bill > *");
-        } else if (response.data.exist) {
-          Swal.fire({
-            icon: "error",
-            title: "Already applied",
-            text: "only one offer can be applied!",
-          });
+  <script>
+    function submitForm() {
+      const change = document.querySelector('#changeAddress').submit()
+      axios.patch('/checkout')
+        .then(() => {
+          location.reload()
+        })
+    }
+    function getcoupen(cartTotal, cartId) {
+      const code = document.querySelector("#codeInput").value;
+      axios
+        .post("/check-coupen", { code, cartTotal, cartId })
+        .then((response) => {
+          if (response.data.apply) {
+            Swal.fire("Success", "applyed coupen offer!", "success");
+            location.reload();
+            // $("#bill").load("bill > *");
+          } else if (response.data.exist) {
+            Swal.fire({
+              icon: "error",
+              title: "Already applied",
+              text: "only one offer can be applied!",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid",
+              text: "coupen code is wrong !",
+            });
+          }
+
+          const codeInput = document.querySelector("#discountInput");
+          codeInput.value = response.data;
+        });
+    }
+  </script>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function placeOrder(indexof) {
+      let index = indexof;
+      let paymentMethod = document.querySelector("#cod").checked
+        ? "COD"
+        : "Razorpay";
+
+      axios.get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`).then((response) => {
+        if (response.data.payment) {
+          alert("success cash on delivery");
+          location.assign("/order-success");
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Invalid",
-            text: "coupen code is wrong !",
+          razorpayPayment(response);
+        }
+      });
+      function razorpayPayment(order) {
+        console.log(order)
+        var options = {
+          key: "rzp_test_ot382G21y8f1J7",
+          amount: order.data.amount,
+          currency: "INR",
+          name: "Gadsto",
+          description: "Test Transaction",
+          image: "https://example.com/your_logo",
+          order_id: order.data.id,
+          handler: function (response) {
+            verifyPayment(response, order);
+          },
+
+          prefill: {
+            name: "Gaurav Kumar",
+            email: "gaurav.kumar@example.com",
+            contact: "9999999999",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+        function verifyPayment(payment, order) {
+          axios.post("/payment-verify", { payment, order, index }).then((response) => {
+            location.assign("/order-success");
           });
         }
-
-        const codeInput = document.querySelector("#discountInput");
-        codeInput.value = response.data;
-      });
-  }
-</script>
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-  function placeOrder(indexof) {
-    let index = indexof;
-    let paymentMethod = document.querySelector("#cod").checked
-      ? "COD"
-      : "Razorpay";
-
-    axios.get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`).then((response) => {
-      if (response.data.payment) {
-        alert("success cash on delivery");
-        location.assign("/order-success");
-      } else {
-        razorpayPayment(response);
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
       }
-    });
-    function razorpayPayment(order) {
-      console.log(order)
-      var options = {
-        key: "rzp_test_ot382G21y8f1J7",
-        amount: order.data.amount,
-        currency: "INR",
-        name: "Gadsto",
-        description: "Test Transaction",
-        image: "https://example.com/your_logo",
-        order_id: order.data.id,
-        handler: function (response) {
-          verifyPayment(response, order);
-        },
-
-        prefill: {
-          name: "Gaurav Kumar",
-          email: "gaurav.kumar@example.com",
-          contact: "9999999999",
-        },
-        notes: {
-          address: "Razorpay Corporate Office",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-      function verifyPayment(payment, order) {
-        axios.post("/payment-verify", { payment, order, index }).then((response) => {
-          location.assign("/order-success");
-        });
-      }
-      var rzp1 = new Razorpay(options);
-      rzp1.open();
     }
-  }
-</script>
+  </script>
 
-<%- include ('./layouts/footer.ejs') %>
+  <%- include ('./layouts/footer.ejs') %>

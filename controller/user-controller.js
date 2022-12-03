@@ -107,6 +107,7 @@ module.exports = {
         if (isMatch) {
           req.session.login = true;
           req.session.userId = user._id;
+          req.session.userName = user.name;
           res.redirect("/");
         } else {
           req.session.passErr = true;
@@ -143,8 +144,8 @@ module.exports = {
     try {
       const id = req.session.userId;
       const user = await userModel.findOne({ _id: id });
-      req.session.userName = user.name;
-      res.render("user/myProfile", { user });
+      const userName = req.session.userName
+      res.render("user/myProfile", { userName,user });
     } catch (err) {
       console.log(err);
       res.json("Something wrong, please try again");

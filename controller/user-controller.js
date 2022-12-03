@@ -535,7 +535,6 @@ module.exports = {
           if (err) {
             console.log("error come orders" + err);
           } else {
-            console.log("new order", order);
             res.json(order);
           }
         });
@@ -726,14 +725,46 @@ module.exports = {
       const userId = req.session.userId
       const page = parseInt(req.query.page) || 1;
       const perPage = 4;
+      const sort = req.query.sort
+      let allProduct;
       const countAllProduct = await productModel
-        .find({ delete: { $ne: true } })
-        .countDocuments();
+      .find({ delete: { $ne: true } })
+      .countDocuments();
       const pageNum = Math.ceil(countAllProduct / 4);
-      allProduct = await productModel
-        .find({ delete: { $ne: true } })
-        .skip((page - 1) * perPage)
+
+      if (sort == "new"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true } }).sort({date:-1}).skip((page - 1) * perPage)
         .limit(perPage);
+      }else if (sort == "ascending"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true } }).sort({price:1}).skip((page - 1) * perPage)
+        .limit(perPage);
+      }else if(sort == "descendig"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true } }).sort({price:-1}).skip((page - 1) * perPage)
+        .limit(perPage);
+      }else if(sort == "500-1000"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true },price: {$gte: 500, $lte : 1000} }).skip((page - 1) * perPage)
+        .limit(perPage);
+      }else if (sort == "1000-50000"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true },price: {$gte: 1000, $lte : 50000} }).skip((page - 1) * perPage)
+        .limit(perPage);
+      }else if (sort == "50000-100000"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true },price: {$gte: 50000, $lte : 100000} }).skip((page - 1) * perPage)
+        .limit(perPage);
+      }else if (sort =="100000"){
+        allProduct =  await productModel
+        .find({ delete: { $ne: true },price: {$lte : 100000} }).skip((page - 1) * perPage)
+        .limit(perPage);
+      }else{
+        allProduct =  await productModel
+        .find({ delete: { $ne: true } }).skip((page - 1) * perPage)
+        .limit(perPage);
+      }
       const wishList = await wishListModel.findOne({ owner: userId });
       let wishPro;
       if (wishList) {

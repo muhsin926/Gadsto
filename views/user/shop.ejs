@@ -124,11 +124,6 @@
               <ul class="main-menu">
                 <li class="active-menu">
                   <a href="/">Home</a>
-                  <ul class="sub-menu">
-                    <li><a href="index.html">Homepage 1</a></li>
-                    <li><a href="home-02.html">Homepage 2</a></li>
-                    <li><a href="home-03.html">Homepage 3</a></li>
-                  </ul>
                 </li>
 
                 <li>
@@ -136,11 +131,7 @@
                 </li>
 
                 <li>
-                  <a href="about.html">About</a>
-                </li>
-
-                <li>
-                  <a href="contact.html">Contact</a>
+                  <a href="contact">Contact</a>
                 </li>
               </ul>
             </div>
@@ -183,9 +174,9 @@
                 </button>
 
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="myProfile">My profile</a>
-                  <a class="dropdown-item" href="#">My whish list</a>
-                  <a class="dropdown-item" href="#">My orders</a>
+                  <a class="dropdown-item" href="my-profile">My profile</a>
+                  <a class="dropdown-item" href="wishList">My whish list</a>
+                  <a class="dropdown-item" href="view-oreder">My orders</a>
                   <div class="dropdown-divider"></div>
                   <% if (login) { %>
                   <a class="dropdown-item" href="/logoutUser">Logout</a>
@@ -237,8 +228,8 @@
             <% if (login) { %>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="myProfile">My profile</a>
-              <a class="dropdown-item" href="#">My whish list</a>
-              <a class="dropdown-item" href="#">My orders</a>
+              <a class="dropdown-item" href="wishList">My whish list</a>
+              <a class="dropdown-item" href="order-view">My orders</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/logoutUser">Logout</a>
             </div>
@@ -258,7 +249,7 @@
       <div class="menu-mobile">
         <ul class="main-menu-m">
           <li>
-            <a href="index.html">Home</a>
+            <a href="/">Home</a>
 
             <span class="arrow-main-menu-m">
               <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -266,7 +257,7 @@
           </li>
 
           <li>
-            <a href="product.html">Shop</a>
+            <a href="shop">Shop</a>
           </li>
 
           <li>
@@ -299,108 +290,18 @@
       </div>
     </header>
 
-    <!-- Cart -->
-    <div class="wrap-header-cart js-panel-cart">
-      <div class="s-full js-hide-cart"></div>
-
-      <div class="header-cart flex-col-l p-l-65 p-r-25">
-        <div class="header-cart-title flex-w flex-sb-m p-b-8">
-          <span class="mtext-103 cl2"> Your Cart </span>
-
-          <div
-            class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart"
-          >
-            <i class="zmdi zmdi-close"></i>
-          </div>
-        </div>
-
-        <div class="header-cart-content flex-w js-pscroll">
-          <ul class="header-cart-wrapitem w-full">
-            <li class="header-cart-item flex-w flex-t m-b-12">
-              <div class="header-cart-item-img">
-                <img src="images/item-cart-01.jpg" alt="IMG" />
-              </div>
-
-              <div class="header-cart-item-txt p-t-8">
-                <a
-                  href="#"
-                  class="header-cart-item-name m-b-18 hov-cl1 trans-04"
-                >
-                  White Shirt Pleat
-                </a>
-
-                <span class="header-cart-item-info"> 1 x $19.00 </span>
-              </div>
-            </li>
-
-            <li class="header-cart-item flex-w flex-t m-b-12">
-              <div class="header-cart-item-img">
-                <img src="images/item-cart-02.jpg" alt="IMG" />
-              </div>
-
-              <div class="header-cart-item-txt p-t-8">
-                <a
-                  href="#"
-                  class="header-cart-item-name m-b-18 hov-cl1 trans-04"
-                >
-                  Converse All Star
-                </a>
-
-                <span class="header-cart-item-info"> 1 x $39.00 </span>
-              </div>
-            </li>
-
-            <li class="header-cart-item flex-w flex-t m-b-12">
-              <div class="header-cart-item-img">
-                <img src="images/item-cart-03.jpg" alt="IMG" />
-              </div>
-
-              <div class="header-cart-item-txt p-t-8">
-                <a
-                  href="#"
-                  class="header-cart-item-name m-b-18 hov-cl1 trans-04"
-                >
-                  Nixon Porter Leather
-                </a>
-
-                <span class="header-cart-item-info"> 1 x $17.00 </span>
-              </div>
-            </li>
-          </ul>
-
-          <div class="w-full">
-            <div class="header-cart-total w-full p-tb-40">Total: $75.00</div>
-
-            <div class="header-cart-buttons flex-w w-full">
-              <a
-                href="shoping-cart.html"
-                class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10"
-              >
-                View Cart
-              </a>
-
-              <a
-                href="shoping-cart.html"
-                class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10"
-              >
-                Check Out
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="bg0 m-t-23 p-b-140">
       <div class="container">
         <div class="flex-w flex-sb-m p-b-52 ">
           <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+            <a href="shop">
             <button
               class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1"
               data-filter="*"
             >
               All Products
             </button>
+            </a>
 
             <button
               class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
@@ -483,40 +384,28 @@
 
                 <ul>
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
+                    <a href="sohp?sort=default" class="filter-link stext-106 trans-04">
                       Default
                     </a>
                   </li>
 
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      Popularity
-                    </a>
-                  </li>
-
-                  <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      Average rating
-                    </a>
-                  </li>
-
-                  <li class="p-b-6">
                     <a
-                      href="#"
-                      class="filter-link stext-106 trans-04 filter-link-active"
+                      href="shop?sort=new"
+                      class="filter-link stext-106 trans-04 "
                     >
                       Newness
                     </a>
                   </li>
 
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
+                    <a href="shop?sort=ascending" class="filter-link stext-106 trans-04">
                       Price: Low to High
                     </a>
                   </li>
 
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
+                    <a href="shop?sort=descending" class="filter-link stext-106 trans-04">
                       Price: High to Low
                     </a>
                   </li>
@@ -529,40 +418,36 @@
                 <ul>
                   <li class="p-b-6">
                     <a
-                      href="#"
+                      href="shop?sort=all"
                       class="filter-link stext-106 trans-04 filter-link-active"
                     >
                       All
                     </a>
                   </li>
 
+                 
+
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      $0.00 - $50.00
+                    <a href="shop?sort=500-1000" class="filter-link stext-106 trans-04">
+                      ₹500 - ₹1000
                     </a>
                   </li>
 
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      $50.00 - $100.00
+                    <a href="shop?sort=1000-50000" class="filter-link stext-106 trans-04">
+                      ₹1000 - ₹50000
                     </a>
                   </li>
 
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      $100.00 - $150.00
+                    <a href="shop?sort-50000-100000" class="filter-link stext-106 trans-04">
+                      ₹50000 - ₹100000
                     </a>
                   </li>
 
                   <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      $150.00 - $200.00
-                    </a>
-                  </li>
-
-                  <li class="p-b-6">
-                    <a href="#" class="filter-link stext-106 trans-04">
-                      $200.00+
+                    <a href="shop?sort-100000" class="filter-link stext-106 trans-04">
+                      ₹100000+
                     </a>
                   </li>
                 </ul>

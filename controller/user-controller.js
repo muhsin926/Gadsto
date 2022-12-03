@@ -13,33 +13,33 @@ const Razorpay = require("razorpay");
 module.exports = {
   // User Landing Page
   home: async (req, res) => {
-    try{
-    const userId = req.session.userId;
-    const viewProduct = await productModel.find({ delete: { $ne: true } });
-    const allBanner = await bannerModel.find({ delete: { $ne: true } });
-    const wishList = await wishListModel.findOne({ owner: userId });
-    let wishPro;
-    if (wishList) {
-      wishPro = wishList.products;
+    try {
+      const userId = req.session.userId;
+      const viewProduct = await productModel.find({ delete: { $ne: true } });
+      const allBanner = await bannerModel.find({ delete: { $ne: true } });
+      const wishList = await wishListModel.findOne({ owner: userId });
+      let wishPro;
+      if (wishList) {
+        wishPro = wishList.products;
+      }
+      if (req.session.login) {
+        res.render("user/index", {
+          login: req.session.login,
+          viewProduct,
+          allBanner,
+          wishPro,
+        });
+      } else {
+        res.render("user/index", {
+          login: req.session.login,
+          viewProduct,
+          allBanner,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      res.json("Something Error, Please try again");
     }
-    if (req.session.login) {
-      res.render("user/index", {
-        login: req.session.login,
-        viewProduct,
-        allBanner,
-        wishPro,
-      });
-    } else {
-      res.render("user/index", {
-        login: req.session.login,
-        viewProduct,
-        allBanner,
-      });
-    }
-  }catch(err){
-    console.log(err);
-    res.json("Something Error, Please try again")
-  }
   },
 
   // User Signup
@@ -144,8 +144,8 @@ module.exports = {
     try {
       const id = req.session.userId;
       const user = await userModel.findOne({ _id: id });
-      const userName = req.session.userName
-      res.render("user/myProfile", { userName,user });
+      const userName = req.session.userName;
+      res.render("user/myProfile", { userName, user });
     } catch (err) {
       console.log(err);
       res.json("Something wrong, please try again");
@@ -560,11 +560,24 @@ module.exports = {
             console.log(err);
           }
 
-          res.render("user/view-order", { userName, allOrders });
+          res.render("user/view-order", { userName, moment, allOrders });
         });
     } catch {
       res.json("Something wrong, please try again");
     }
+  },
+
+  cancelOrder: async (req, res) => {
+    const { proId, orderId } = req.query;
+    await orderModel.findOneAndUpdate(
+      { _id: orerId, "products.product": proId },
+      {
+        $set: {
+          "products.$.status": "Canceled",
+        },
+      }
+    );
+    res.json('canceled')
   },
 
   pageNotFound: (req, res) => {
@@ -723,48 +736,59 @@ module.exports = {
   // Shop View
   shop: async (req, res) => {
     try {
-      const userId = req.session.userId
+      const userId = req.session.userId;
       const page = parseInt(req.query.page) || 1;
       const perPage = 4;
-      const sort = req.query.sort
+      const sort = req.query.sort;
       let allProduct;
       const countAllProduct = await productModel
-      .find({ delete: { $ne: true } })
-      .countDocuments();
+        .find({ delete: { $ne: true } })
+        .countDocuments();
       const pageNum = Math.ceil(countAllProduct / 4);
 
-      if (sort == "new"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true } }).sort({date:-1}).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else if (sort == "ascending"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true } }).sort({price:1}).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else if(sort == "descendig"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true } }).sort({price:-1}).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else if(sort == "500-1000"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true },price: {$gte: 500, $lte : 1000} }).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else if (sort == "1000-50000"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true },price: {$gte: 1000, $lte : 50000} }).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else if (sort == "50000-100000"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true },price: {$gte: 50000, $lte : 100000} }).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else if (sort =="100000"){
-        allProduct =  await productModel
-        .find({ delete: { $ne: true },price: {$lte : 100000} }).skip((page - 1) * perPage)
-        .limit(perPage);
-      }else{
-        allProduct =  await productModel
-        .find({ delete: { $ne: true } }).skip((page - 1) * perPage)
-        .limit(perPage);
+      if (sort == "new") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .sort({ date: -1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "ascending") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .sort({ price: 1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "descendig") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .sort({ price: -1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "500-1000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $gte: 500, $lte: 1000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "1000-50000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $gte: 1000, $lte: 50000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "50000-100000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $gte: 50000, $lte: 100000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "100000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $lte: 100000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
       }
       const wishList = await wishListModel.findOne({ owner: userId });
       let wishPro;
@@ -776,7 +800,7 @@ module.exports = {
         allProduct,
         pageNum,
         page,
-        wishPro
+        wishPro,
       });
     } catch (err) {
       console.log(err);

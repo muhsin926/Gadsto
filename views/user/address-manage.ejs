@@ -117,11 +117,10 @@
                             
                                 <div class="p-3 mt-3 mb-3 border ">
                                     <span><strong>
-                                            <%= address.fullName %>
+                                            <%= address.fullName %> <br>
                                                 <%= address.phone %>
                                         </strong></span>
-                                        <a href="#">  <button onclick="deleteAddress('<%= address._id %> ')" class="btn float-right">Delete</button></a>
-                                  <a href="/edit-address/<%= index%>">  <button class="btn float-right">Edit</button></a>
+                                        <a href="#">  <button onclick="deleteAddress('<%= address._id %> ')" class="btn text-danger float-right">Delete</button></a>
                                   
                                     <br>
                                     <span>

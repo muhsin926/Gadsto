@@ -61,6 +61,7 @@ router
 router
     .route('/order-view')
     .get(userController.orderView)
+    .patch(userController.cancelOrder)
 
 
 router

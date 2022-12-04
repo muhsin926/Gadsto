@@ -243,7 +243,7 @@
               </style>
               <div class="row">
                 <span class="mtext-101 cl2 col-6">
-                  <input type="text" class="border p-3" id="codeInput" placeholder="Apply coupen"
+                  <input type="text" class="border p-3" id="codeInput" placeholder="Apply coupon"
                     style="border-radius: 10px; height: 3rem; width: 12rem" />
                 </span>
               </div>
@@ -251,7 +251,7 @@
               <div class="p-t-1">
                 <span class="mtext-110 cl2 col-6">
                   <button class="btn border apply" style="border-radius: 10px; width: 75px; height: 3rem"
-                    onclick="getcoupen('<%= cartItems.cartTotal %>','<%= cartItems._id %>')">
+                    onclick="getcoupon('<%= cartItems.cartTotal %>','<%= cartItems._id %>')">
                     Apply
                   </button>
                 </span>
@@ -291,94 +291,9 @@
     </div>
   </div>
 
-  <script>
-    function submitForm() {
-      const change = document.querySelector('#changeAddress').submit()
-      axios.patch('/checkout')
-        .then(() => {
-          location.reload()
-        })
-    }
-    function getcoupen(cartTotal, cartId) {
-      const code = document.querySelector("#codeInput").value;
-      axios
-        .post("/check-coupen", { code, cartTotal, cartId })
-        .then((response) => {
-          if (response.data.apply) {
-            Swal.fire("Success", "applyed coupen offer!", "success");
-            location.reload();
-            // $("#bill").load("bill > *");
-          } else if (response.data.exist) {
-            Swal.fire({
-              icon: "error",
-              title: "Already applied",
-              text: "only one offer can be applied!",
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Invalid",
-              text: "coupen code is wrong !",
-            });
-          }
-
-          const codeInput = document.querySelector("#discountInput");
-          codeInput.value = response.data;
-        });
-    }
-  </script>
+ 
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
-    function placeOrder(indexof) {
-      let index = indexof;
-      let paymentMethod = document.querySelector("#cod").checked
-        ? "COD"
-        : "Razorpay";
 
-      axios.get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`).then((response) => {
-        if (response.data.payment) {
-          alert("success cash on delivery");
-          location.assign("/order-success");
-        } else {
-          razorpayPayment(response);
-        }
-      });
-      function razorpayPayment(order) {
-        console.log(order)
-        var options = {
-          key: "rzp_test_ot382G21y8f1J7",
-          amount: order.data.amount,
-          currency: "INR",
-          name: "Gadsto",
-          description: "Test Transaction",
-          image: "https://example.com/your_logo",
-          order_id: order.data.id,
-          handler: function (response) {
-            verifyPayment(response, order);
-          },
-
-          prefill: {
-            name: "Gaurav Kumar",
-            email: "gaurav.kumar@example.com",
-            contact: "9999999999",
-          },
-          notes: {
-            address: "Razorpay Corporate Office",
-          },
-          theme: {
-            color: "#3399cc",
-          },
-        };
-        function verifyPayment(payment, order) {
-          axios.post("/payment-verify", { payment, order, index }).then((response) => {
-            location.assign("/order-success");
-          });
-        }
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
-      }
-    }
-  </script>
 
   <%- include ('./layouts/footer.ejs') %>

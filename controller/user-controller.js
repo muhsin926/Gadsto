@@ -21,6 +21,8 @@ module.exports = {
       let wishPro;
       if (wishList) {
         wishPro = wishList.products;
+      }else{
+        wishPro = null
       }
       if (req.session.login) {
         res.render("user/index", {
@@ -380,7 +382,12 @@ module.exports = {
             console.log(err);
             res.redirect("/");
           }
-          const products = wishLists.products;
+          let products
+          if (wishLists){
+            products = wishLists.products
+          }else{
+            products = null
+          } 
           res.render("user/wishList", { login: req.session.userId, products });
         });
     } catch {
@@ -590,9 +597,15 @@ module.exports = {
       const userName = req.session.userName;
       const userId = req.session.userId;
       const getAllAddresses = await addressModel.findOne({ userId });
-      const addresses = getAllAddresses.address;
+      let addresses ;
+      if (getAllAddresses){
+         addresses = getAllAddresses.address;
+      }else{
+        addresses = null
+      }
       res.render("user/address-manage", { userName, addresses });
-    } catch {
+    } catch(err) {
+      console.log(err)
       res.json("Something wrong, please try again");
     }
   },
@@ -701,7 +714,7 @@ module.exports = {
   },
 
   // Check Coupen
-  checkCoupen: async (req, res) => {
+  checkCoupon: async (req, res) => {
     try {
       const userId = req.session.userId;
       const clientCode = req.body.code;
@@ -807,7 +820,6 @@ module.exports = {
       res.json("something wrong");
     }
   },
-
   // Contact
   contact: (req, res) => {
     res.render("user/contact", { login: req.session.login });

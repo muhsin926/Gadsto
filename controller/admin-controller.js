@@ -18,7 +18,7 @@ module.exports = {
       const totalCategory = await categoryModel.find({}).countDocuments()
       const totalUser = await userModel.find({}).countDocuments()
       const recentOrders = await orderModel.find({}).sort({date:-1}).limit(10)
-      const newUser = await userModel.find({}).sort({date:-1}).limit(4)
+      const newUser = await userModel.find({type:{$eq : "User"}}).sort({date:-1}).limit(4)
       res.render("admin/index",{totalCategory,totalOrder,totalProduct,totalUser,recentOrders,moment,newUser});
     } else {
       res.render("admin/login");
@@ -104,11 +104,11 @@ module.exports = {
   productManage: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const perPage = 5;
+      const perPage = 4;
       const countAllProduct = await productModel
         .find({ delete: { $ne: true } })
         .countDocuments();
-      const pageNum = Math.ceil(countAllProduct / 5);
+      const pageNum = Math.ceil(countAllProduct / 4);
       const allProducts = await productModel
         .find({ delete: { $ne: true } })
         .skip((page - 1) * perPage)
@@ -432,11 +432,27 @@ module.exports = {
   },
 
   salesReport: async(req,res)=>{
+
+    const salesReport = await orderModel.aggregate(
+      [{
+        '$match' : { 'products.status' : { $ne: 'Cancelled'}}
+      },
+      {
+          $group : {
+              _id : { month: { $month: "$date" }, day: { $dayOfMonth: "$date" }, year: { $year: "$date" } },
+              totalPrice: { $sum:  "$grandTotal"  },
+              products: { $sum :{$size: "$products"}},
+              count: { $sum: 1 },
+              
+                  }
+              }
+      ])
+      console.log(salesReport)
     
-      let orders = await orderModel.find({})
+      
     
     const filterOrder = await orderModel.find({})
-    res.render('admin/sales-report',{orders})
+    res.render('admin/sales-report',{salesReport})
   },
 
   //Admin Logout

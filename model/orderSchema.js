@@ -55,7 +55,7 @@ const orderSchema = new mongoose.Schema({
     },
 
     grandTotal: {
-        type: String,
+        type: Number,
         required: true
     },
     paymentMethod: {

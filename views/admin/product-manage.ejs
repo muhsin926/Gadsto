@@ -1,77 +1,91 @@
-<%- include('./layouts/header.ejs') -%> <%- include('./layouts/skins.ejs') -%>
-<%- include("./layouts/sidebar.ejs") -%>
-<div class="main-panel">
-  <div class="content-wrapper">
-    <div class="row">
-      <a class="text-end" href="/admin/addProduct"
-        ><button class="btn btn-primary mb-3">Add Product</button></a
-      >
-
-      <div class="col-12 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">All Products</h4>
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Image</th>
-                    <th>Category</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Stock</th>
-                    <th>Price</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% allProducts.forEach((data)=> { %>
-                  <tr>
-                    <td>
-                      <img src="../images/<%= data.image %>" alt="" />
-                    </td>
-                    <td><%= data.category %></td>
-                    <td><%= data.name %></td>
-                    <td><%= data.description %></td>
-                    <td><%= data.stock %></td>
-                    <td><%= data.price %></td>
-                    <td>
-                      <form
-                        action="/admin/edit-product?proId=<%= data._id %>"
-                        method="post"
-                      >
-                        <button type="submit" class="btn border">Edit</button>
-                      </form>
-                    </td>
-                    <td>
-                      <button
-                        onclick="deleteProduct('<%= data._id %>')"
-                        class="btn btn-danger"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                  <% }) %>
-                </tbody>
-              </table>
+<%- include('./layouts/header.ejs') -%>
+  <%- include('./layouts/skins.ejs') -%>
+    <%- include("./layouts/sidebar.ejs") -%>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <a class="text-end" href="/admin/addProduct"><button class="btn btn-primary mb-3">
+                Add Product
+              </button></a>
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">All Products</p>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table class="display expandable-table " style="width: 100%">
+                          <thead>
+                            <tr>
+                              <th>Image</th>
+                              <th>Category</th>
+                              <th>Title</th>
+                              <th>Description</th>
+                              <th>Stock</th>
+                              <th>Price</th>
+                              <th>Edit</th>
+                              <th>Delete</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% allProducts.forEach((data)=> { %>
+                              <tr>
+                                <td>
+                                  <img style="width: 5rem;" src="../images/<%= data.image %>" alt="" />
+                                </td>
+                                <td>
+                                  <%= data.category %>
+                                </td>
+                                <td>
+                                  <%= data.name %>
+                                </td>
+                                <td>
+                                  <%= data.description %>
+                                </td>
+                                <td>
+                                  <%= data.stock %>
+                                </td>
+                                <td>
+                                  <%= data.price %>
+                                </td>
+                                <td>
+                                  <form action="/admin/edit-product?proId=<%= data._id %>" method="post">
+                                    <button type="submit" class="btn border">Edit</button>
+                                  </form>
+                                </td>
+                                <td>
+                                  <button onclick="deleteProduct('<%= data._id %>')" class="btn btn-danger">
+                                    Delete
+                                  </button>
+                                </td>
+                              </tr>
+                              <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <section class="d-flex justify-content-center mt-2">
+              <% for(let i=1;i<=pageNum; i++){ %>
+                <% if(page==i){ %>
+                  <a class="atag" href="/admin/product-manage?page=<%= i %>">
+                    <div class="page focus">
+                      <%= i %>
+                    </div>
+                  </a>
+                  <% }else{ %>
+                    <a class="atag" href="/admin/product-manage?page=<%= i %>">
+                      <div class="page">
+                        <%= i %>
+                      </div>
+                    </a>
+                    <% } %>
+                      <% } %>
+            </section>
+            <%- include('./layouts/footer.ejs') -%>
           </div>
         </div>
       </div>
-      <section class="d-flex justify-content-center mt-2">
-        <% for(let i=1;i<=pageNum; i++){ %> <% if(page==i){ %>
-        <a class="atag" href="/admin/product-manage?page=<%= i %>">
-          <div class="page focus"><%= i %></div>
-        </a>
-        <% }else{ %>
-        <a class="atag" href="/admin/product-manage?page=<%= i %>">
-          <div class="page"><%= i %></div>
-        </a>
-        <% } %> <% } %>
-      </section>
-      <%- include('./layouts/footer.ejs') -%>
-    </div>
-  </div>
-</div>

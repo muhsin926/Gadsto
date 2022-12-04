@@ -90,8 +90,8 @@ router
     .patch(userController.checkout)
 
 router
-    .route('/check-coupen')
-    .post(userController.checkCoupen)
+    .route('/check-coupon')
+    .post(userController.checkCoupon)
 
 router
     .route('/payment-verify')

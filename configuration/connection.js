@@ -1,7 +1,13 @@
 const mongoose = require('mongoose')
 
 // Database connection 
-mongoose.connect('mongodb://localhost:27017/electro')
+const db = "mongodb+srv://Gadsto:xtoxsUWSgqRbuoSp@cluster0.fcpe9hg.mongodb.net/Gadsto?retryWrites=true&w=majority"
+
+mongoose.connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+   
+})
 
 // connection checking
 mongoose.connection

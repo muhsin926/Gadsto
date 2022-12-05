@@ -9,6 +9,7 @@ module.exports = {
     },
 
     userSession: (req, res, next) => {
+       
         if (req.session.login) {
             next()
         }

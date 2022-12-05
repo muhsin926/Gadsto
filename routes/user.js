@@ -14,7 +14,7 @@ router
 
 router
     .route('/signup')
-    .get(userController.signup)
+    .get(authControll.signup)
     .post(authControll.dosignup)
 
 
@@ -26,8 +26,8 @@ router
 
 router
     .route('/login')
-    .get(userController.login)
-    .post(userController.dologin)
+    .get(authControll.login)
+    .post(authControll.dologin)
 
 
  router
@@ -67,7 +67,7 @@ router
 router
     .route('/product-view')
     .get(userController.productView)
-    .post(userSession.userSession, userController.addToCart)
+    .post( userSession.userSession, userController.addToCart)
 
 
 router

@@ -44,82 +44,9 @@ module.exports = {
     }
   },
 
-  // User Signup
-  signup: (req, res) => {
-    res.render("user/signup", { unique: req.session.uniqueErr });
-  },
+ 
 
-  // User Submit Signup
-  dosignup: async (req, res) => {
-    try {
-      if (!req.session.login) {
-        const user = await userModel.findOne({ email });
-        req.session.uniqueErr = false;
-        if (user) {
-          req.session.uniqueErr = true;
-          return res.redirect("/signup");
-        }
-        const hashpass = await bcrypt.hash(password, 10);
-        const newUser = new userModel({
-          name,
-          email,
-          password: hashpass,
-        });
-        try {
-          await newUser.save();
-          req.session.login = true;
-          res.redirect("/");
-        } catch (error) {
-          res.redirect("/login");
-        }
-      } else {
-        res.redirect("user/user");
-      }
-    } catch {
-      res.json("Something Error, Please try again");
-    }
-  },
 
-  // User Login
-  login: (req, res) => {
-    if (req.session.login) {
-      res.redirect("/");
-    } else {
-      res.render("user/login", {
-        email: req.session.emailErr,
-        pass: req.session.passErr,
-      });
-    }
-  },
-
-  //User Submit Login
-  dologin: async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      req.session.emailErr = false;
-      req.session.passErr = false;
-      const user = await userModel.findOne({
-        $and: [{ email: email }, { type: "User" }],
-      });
-      if (!user) {
-        req.session.emailErr = true;
-        res.redirect("/login");
-      } else {
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (isMatch) {
-          req.session.login = true;
-          req.session.userId = user._id;
-          req.session.userName = user.name;
-          res.redirect("/");
-        } else {
-          req.session.passErr = true;
-          res.redirect("/login");
-        }
-      }
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
 
   // Product View Page
   productView: async (req, res) => {
@@ -199,6 +126,7 @@ module.exports = {
   // Add To Cart
   addToCart: async (req, res) => {
     try {
+      console.log('addtocart')
       const productId = req.query.proId;
 
       const user = await cartModel.findOne({ owner: req.session.userId });
@@ -628,7 +556,7 @@ module.exports = {
             }
           )
           .then(() => {
-            res.redirect("/address-manage");
+            res.redirect("back");
           });
       } else {
         const addAddress = await addressModel({
@@ -636,7 +564,7 @@ module.exports = {
           address: [req.body],
         });
         addAddress.save().then(() => {
-          res.redirect("/address-manage");
+          res.redirect("back");
         });
       }
     } catch {
@@ -817,6 +745,8 @@ module.exports = {
       let wishPro;
       if (wishList) {
         wishPro = wishList.products;
+      }else{
+        wishPro = []
       }
       res.render("user/shop", {
         login: req.session.login,

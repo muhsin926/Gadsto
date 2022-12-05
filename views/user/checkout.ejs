@@ -113,7 +113,7 @@
 
                 <!-- Text input -->
                 <div class="form-outline mb-4">
-                  <label class="form-label" for="form7Example4">Flat, House no., Building, Company, Apartment</label>
+                  <label class="form-label" for="form7Example4">Flat, House no, Building, Company, Apartment</label>
                   <input type="text" name="addressLine" id="form7Example4" class="form-control" />
                 </div>
 
@@ -281,7 +281,7 @@
                 Razorpay
               </label>
             </div>
-            <% if (addresses.addrss.length == 0){ %> 
+            <% if ( address.length == 0){ %> 
             <button type="submit" onclick="placeOrder('<%= index %>')"
               class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" disabled>
               PAY NOW

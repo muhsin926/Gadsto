@@ -4,6 +4,7 @@
 	<div class="wrap-slick1">
 		<div class="slick1">
 			<% allBanner.forEach((data)=>{ %>
+				<% console.log(allBanner) %> 
 				<div class="item-slick1" style="background-image: url('/images/<%= data.imageUrl %>');">
 					<div class="container h-full">
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
@@ -20,7 +21,7 @@
 							</div>
 
 							<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-								<a href="product.html"
+								<a href="shop?cat=<%= data.category %> "
 									class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 									Shop Now
 								</a>
@@ -141,15 +142,15 @@
 					Cameras
 				</button>
 
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".headset">
+				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Headset">
 					Headsets
 				</button>
 
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".speaker">
+				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Speaker">
 					Speakers
 				</button>
 
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watch">
+				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Watch">
 					Watches
 				</button>
 			</div>

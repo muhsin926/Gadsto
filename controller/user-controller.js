@@ -755,12 +755,13 @@ module.exports = {
       const page = parseInt(req.query.page) || 1;
       const perPage = 4;
       const sort = req.query.sort;
+      const category = req.query.cat
       let allProduct;
       const countAllProduct = await productModel
         .find({ delete: { $ne: true } })
         .countDocuments();
       const pageNum = Math.ceil(countAllProduct / 4);
-
+     
       if (sort == "new") {
         allProduct = await productModel
           .find({ delete: { $ne: true } })
@@ -802,6 +803,13 @@ module.exports = {
       } else {
         allProduct = await productModel
           .find({ delete: { $ne: true } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      }
+
+      if(category){
+        allProduct = await productModel
+          .find({ delete: { $ne: true },category, })
           .skip((page - 1) * perPage)
           .limit(perPage);
       }

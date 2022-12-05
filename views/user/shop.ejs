@@ -304,7 +304,7 @@
                 </li>
 
                 <li class="p-b-6">
-                  <a href="shop?sort-50000-100000" class="filter-link stext-106 trans-04">
+                  <a href="shop?sort=50000-100000" class="filter-link stext-106 trans-04">
                     ₹50000 - ₹100000
                   </a>
                 </li>
@@ -394,10 +394,10 @@
   </div>
   <script>
     	function addWish(proId,proName){
-  alert("add")
     axios.patch(`/?proId=${proId}`)
-    .then(e =>{
+    .then(() =>{
         Swal.fire(proName, "is added to wishlist", "success");
+        location.reload()
     })
 }
 

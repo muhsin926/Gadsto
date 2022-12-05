@@ -31,7 +31,7 @@
                                     <% for ( cart of allCart.items) { %>
                                         <tr class="table_row">
                                             <td class="column-1">
-                                                <a href="#" onclick="deleteProduct('<%= cart.product._id  %>')">
+                                                <a href="#" >
                                                     <div class="how-itemcart1">
                                                         <img src="/images/<%= cart.product.image %>" alt="IMG">
                                                     </div>
@@ -75,6 +75,9 @@
                                             <td class="column-5">
                                                 ₹<%= cart.totalPrice %>
                                             </td>
+                                            <td><a href="#"><span  onclick="deleteProduct('<%= cart.product._id  %>')" class=" material-symbols-outlined mr-3 text-danger">
+                                                cancel_presentation
+                                                </span></a></td>
                                         </tr>
                                         <% } %>
                                 </table>

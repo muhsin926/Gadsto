@@ -474,5 +474,10 @@
             </div>
         </div>
     </div>
-   
+   <script>
+    const addToCart = document.querySelector("#btn");
+        addToCart.onclick = () => {
+            axios.post("http://localhost:4000/product-view?proId=<%= product._id %>");
+        };
+   </script>
     <%- include ('./layouts/footer.ejs') %>

@@ -416,7 +416,7 @@
 										</button>
 								<% } %> 
 								<% }else{ %> 
-									<button onclick="addWish('<%= data._id %>')" >
+									<button onclick="doLogin('<%= data._id %>')" >
 										<img   class="icon-heart1 dis-block trans-04 "
 											src="../user/images/icons/icon-heart-01.png" alt="ICON">
 									</button>
@@ -437,6 +437,45 @@
 		</div>
 	</div>
 </section>
+
+<script>
+	function addWish(proId,proName){
+  alert("add")
+    axios.patch(`/?proId=${proId}`)
+    .then(e =>{
+        Swal.fire(proName, "is added to wishlist", "success");
+    })
+}
+
+function deleteWish(productId,proName){
+        Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios.delete(`/wishlist?productId=${productId}`)
+                  .then((result) => {
+                    if (result.data) {
+                      Swal.fire(
+                        "Deleted!",
+                        "Your wishlist has been deleted.",
+                        "success"
+                      );
+                      location.reload()
+                    } else {
+                      alert("something went wrong");
+                    }
+                  });
+              }
+            });
+
+}
+</script>
 
 
 <%- include('./layouts/footer.ejs') %>

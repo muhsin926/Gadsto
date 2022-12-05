@@ -146,7 +146,37 @@
         <!-- container-scroller -->
 </div>
 <!-- plugins:js -->
+<script>
+    function deleteAddress(id){
 
+Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.delete(`/address-manage?address = ${id}`)
+              .then((result) => {
+                if (result.data) {
+                  Swal.fire(
+                    "Deleted!",
+                    "Your file has been deleted.",
+                    "success"
+                  );
+                  location.reload()
+                } else {
+                  alert("something went wrong");
+                }
+              });
+          }
+        });
+}
+
+</script>
 <script src="/admin/common js/sweatAlert.js"></script>
 <script src="/admin/common js/dom.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

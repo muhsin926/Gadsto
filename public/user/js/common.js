@@ -21,6 +21,7 @@ function showAllAddress(){
 
 // LANDING PAGE WISHLIST MANAGE
 function addWish(proId,proName){
+  alert("add")
     axios.patch(`/?proId=${proId}`)
     .then(e =>{
         Swal.fire(proName, "is added to wishlist", "success");

@@ -22,7 +22,7 @@ module.exports = {
       if (wishList) {
         wishPro = wishList.products;
       }else{
-        wishPro = null
+        wishPro = []
       }
       if (req.session.login) {
         res.render("user/index", {
@@ -511,6 +511,7 @@ module.exports = {
       const paymentMethod = req.query.paymentMethod;
       const userId = req.session.userId;
       const indexof = parseInt(req.query.index);
+      
       const addresses = await addressModel.findOne({ user: userId });
       const address = addresses.address[indexof];
       const cart = await cartModel.findOne({ owner: userId });
@@ -547,6 +548,7 @@ module.exports = {
           }
         });
       }
+    
     } catch (err) {
       console.log(err);
       res.json("Something wrong, please try again");

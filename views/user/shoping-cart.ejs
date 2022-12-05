@@ -140,5 +140,20 @@
                 <a class="mb-5 btn btn-primary" href="/">Back To Home</a>
             </div>
             <% } %>
+        <script>
+            function changeQuantity(cartId, proId, count) {
+  let qty = document.querySelector('#qty')
+  axios.patch(`/shoping-cart?cartId=${cartId}&productId=${proId}&count=${count}`)
+      .then(() => {
+         location.reload()
+      })
+}
 
+function deleteProduct(proId) {
+  axios.delete(`/shoping-cart?productId=${proId}`)
+      .then(() => {
+          location.reload()
+      })
+}
+        </script>
                 <%- include ('./layouts/footer.ejs') %>

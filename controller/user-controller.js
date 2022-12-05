@@ -21,8 +21,8 @@ module.exports = {
       let wishPro;
       if (wishList) {
         wishPro = wishList.products;
-      }else{
-        wishPro = []
+      } else {
+        wishPro = [];
       }
       if (req.session.login) {
         res.render("user/index", {
@@ -44,9 +44,89 @@ module.exports = {
     }
   },
 
- 
+   // Shop View, Filter And Sort 
+   shop: async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const page = parseInt(req.query.page) || 1;
+      const perPage = 4;
+      const sort = req.query.sort;
+      const category = req.query.cat;
+      let allProduct;
+      const countAllProduct = await productModel
+        .find({ delete: { $ne: true } })
+        .countDocuments();
+      const pageNum = Math.ceil(countAllProduct / 4);
+      if (sort == "new") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .sort({ date: -1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "ascending") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .sort({ price: 1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "descendig") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .sort({ price: -1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "500-1000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $gte: 500, $lte: 1000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "1000-50000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $gte: 1000, $lte: 50000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "50000-100000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $gte: 50000, $lte: 100000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else if (sort == "100000") {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, price: { $lte: 100000 } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      } else {
+        allProduct = await productModel
+          .find({ delete: { $ne: true } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      }
 
-
+      if (category) {
+        allProduct = await productModel
+          .find({ delete: { $ne: true }, category })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      }
+      const wishList = await wishListModel.findOne({ owner: userId });
+      let wishPro;
+      if (wishList) {
+        wishPro = wishList.products;
+      } else {
+        wishPro = [];
+      }
+      res.render("user/shop", {
+        login: req.session.login,
+        allProduct,
+        pageNum,
+        page,
+        wishPro,
+      });
+    } catch (err) {
+      console.log(err);
+      res.json("something wrong");
+    }
+  },
 
   // Product View Page
   productView: async (req, res) => {
@@ -68,7 +148,6 @@ module.exports = {
   },
 
   //User Profile
-  // =================
   myProfile: async (req, res) => {
     try {
       const id = req.session.userId;
@@ -82,7 +161,6 @@ module.exports = {
   },
 
   // Edit and Update user
-  // =====================
   editUser: async (req, res) => {
     try {
       const { name, email } = req.body;
@@ -99,6 +177,119 @@ module.exports = {
     }
   },
 
+   //Address Manage
+   addressManage: async (req, res) => {
+    try {
+      const userName = req.session.userName;
+      const userId = req.session.userId;
+      const getAllAddresses = await addressModel.findOne({ userId });
+      let addresses;
+      if (getAllAddresses) {
+        addresses = getAllAddresses.address;
+      } else {
+        addresses = null;
+      }
+      res.render("user/address-manage", { userName, addresses });
+    } catch (err) {
+      console.log(err);
+      res.json("Something wrong, please try again");
+    }
+  },
+
+   //new Address
+   newAddress: async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const existAddress = await addressModel.findOne({ user: userId });
+      if (existAddress) {
+        await addressModel
+          .findOneAndUpdate(
+            { user: userId },
+            {
+              $push: {
+                address: [req.body],
+              },
+            }
+          )
+          .then(() => {
+            res.redirect("/checkout");
+          });
+      } else {
+        const addAddress = await addressModel({
+          user: userId,
+          address: [req.body],
+        });
+        addAddress.save().then(() => {
+          res.redirect("/checkout");
+        });
+      }
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
+
+    //New Address
+    addAddress: async (req, res) => {
+      try {
+        const userId = req.session.userId;
+        const existAddress = await addressModel.findOne({ user: userId });
+        if (existAddress) {
+          await addressModel
+            .findOneAndUpdate(
+              { user: userId },
+              {
+                $push: {
+                  address: [req.body],
+                },
+              }
+            )
+            .then(() => {
+              res.redirect("back");
+            });
+        } else {
+          const addAddress = await addressModel({
+            user: userId,
+            address: [req.body],
+          });
+          addAddress.save().then(() => {
+            res.redirect("back");
+          });
+        }
+      } catch {
+        res.json("Something wrong, please try again");
+      }
+    },
+  
+    // Delete Address
+    deleteAddress: async (req, res) => {
+      try {
+        const userId = req.session.userId;
+        const id = req.params.id;
+        await addressModel.updateOne(
+          { user: userId },
+          { $pull: { address: { _id: id } } }
+        );
+        res.json("success");
+      } catch {
+        res.json("Something wrong, please try again");
+      }
+    },
+  
+    // Edit Address
+    editAddress: async (req, res) => {
+      try {
+        const userName = req.session.userName;
+        const userId = req.session.userId;
+        const indexof = req.params.indexof;
+        const addresses = await addressModel.findOne({ user: userId });
+        const index = addresses.indexof;
+        const address = await addressModel.findOne({ "address.[index]": _id });
+        res.render("user/edit-address", { address, userName });
+      } catch {
+        res.json("Something wrong, please try again");
+      }
+    },
+
   // Shoping Cart
   shopingCart: async (req, res) => {
     try {
@@ -110,7 +301,6 @@ module.exports = {
           if (err) {
             return console.log(err);
           }
-
           let coupenDiscount = 0;
           res.render("user/shoping-cart", {
             login: req.session.login,
@@ -126,9 +316,8 @@ module.exports = {
   // Add To Cart
   addToCart: async (req, res) => {
     try {
-      console.log('addtocart')
+      console.log("addtocart");
       const productId = req.query.proId;
-
       const user = await cartModel.findOne({ owner: req.session.userId });
       const product = await productModel.findOne({ _id: productId });
       const cartTotal = product.price;
@@ -183,6 +372,7 @@ module.exports = {
     }
   },
 
+  //Change Quantity
   changeProductQuantity: async (req, res) => {
     try {
       const { cartId, productId, count } = req.query;
@@ -209,70 +399,7 @@ module.exports = {
       res.json("Something wrong, please try again");
     }
   },
-
-  // Place Order
-  checkout: async (req, res) => {
-    try {
-      let index = Number(req.query.index);
-      if (!index) {
-        index = 0;
-      }
-      const userId = req.session.userId;
-      const addresses = await addressModel.findOne({ user: userId });
-      let address;
-      if (addresses) {
-        address = addresses.address;
-      } else {
-        address = [];
-      }
-      const cartItems = await cartModel.findOne({ owner: userId });
-      if (cartItems) {
-        res.render("user/checkout", {
-          login: req.session.login,
-          address,
-          index,
-          cartItems,
-        });
-      } else {
-        res.redirect("/login");
-      }
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  //new Address
-  newAddress: async (req, res) => {
-    try {
-      const userId = req.session.userId;
-      const existAddress = await addressModel.findOne({ user: userId });
-      if (existAddress) {
-        await addressModel
-          .findOneAndUpdate(
-            { user: userId },
-            {
-              $push: {
-                address: [req.body],
-              },
-            }
-          )
-          .then(() => {
-            res.redirect("/checkout");
-          });
-      } else {
-        const addAddress = await addressModel({
-          user: userId,
-          address: [req.body],
-        });
-        addAddress.save().then(() => {
-          res.redirect("/checkout");
-        });
-      }
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
+ 
   //Delete Product From Cart
   deleteCartProduct: async (req, res) => {
     try {
@@ -310,12 +437,12 @@ module.exports = {
             console.log(err);
             res.redirect("/");
           }
-          let products
-          if (wishLists){
-            products = wishLists.products
-          }else{
-            products = null
-          } 
+          let products;
+          if (wishLists) {
+            products = wishLists.products;
+          } else {
+            products = null;
+          }
           res.render("user/wishList", { login: req.session.userId, products });
         });
     } catch {
@@ -426,223 +553,44 @@ module.exports = {
         { owner: userId },
         { $pull: { products: productId } }
       );
-
       res.json();
     } catch {
       res.json("Something wrong, please try again");
     }
   },
 
-  // Oreder Conform
-  orderConfirm: async (req, res) => {
+  //Checkout Page
+  checkout: async (req, res) => {
     try {
-      const paymentMethod = req.query.paymentMethod;
+      let index = Number(req.query.index);
+      if (!index) {
+        index = 0;
+      }
       const userId = req.session.userId;
-      const indexof = parseInt(req.query.index);
-      
       const addresses = await addressModel.findOne({ user: userId });
-      const address = addresses.address[indexof];
-      const cart = await cartModel.findOne({ owner: userId });
-      const products = cart.items;
-      const grandTotal = cart.cartTotal;
-      console.log(grandTotal);
-      let addOrder;
-      // await cartModel.findOneAndDelete({ owner: userId })
-      if (paymentMethod === "COD") {
-        addOrder = await orderModel({
-          userId,
-          products,
-          address,
-          grandTotal,
-          paymentMethod,
-        });
-        addOrder.save();
-        await cartModel.findOneAndDelete({ owner: userId });
-        res.json({ payment: "COD" });
+      let address;
+      if (addresses) {
+        address = addresses.address;
       } else {
-        var instance = new Razorpay({
-          key_id: "rzp_test_ot382G21y8f1J7",
-          key_secret: "QegvCVlutW7TdMqKKFVLQt1I",
-        });
-        const options = {
-          amount: grandTotal * 100,
-          currency: "INR",
-        };
-        instance.orders.create(options, (err, order) => {
-          if (err) {
-            console.log("error come orders" + err);
-          } else {
-            res.json(order);
-          }
-        });
+        address = [];
       }
-    
-    } catch (err) {
-      console.log(err);
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  //Orders View
-  orderView: async (req, res) => {
-    try {
-      const userName = req.session.userName;
-      const userId = req.session.userId;
-
-      const Orders = await orderModel
-        .find({ userId: userId })
-        .populate("products.product")
-        .exec((err, allOrders) => {
-          if (err) {
-            console.log(err);
-          }
-
-          res.render("user/view-order", { userName, moment, allOrders });
-        });
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  cancelOrder: async (req, res) => {
-    const { proId, orderId } = req.query;
-    await orderModel.findOneAndUpdate(
-      { _id: orerId, "products.product": proId },
-      {
-        $set: {
-          "products.$.status": "Canceled",
-        },
-      }
-    );
-    res.json('canceled')
-  },
-
-  pageNotFound: (req, res) => {
-    res.render("pageNotFound", { login: req.session.login });
-  },
-
-  //Address Manage
-  addressManage: async (req, res) => {
-    try {
-      const userName = req.session.userName;
-      const userId = req.session.userId;
-      const getAllAddresses = await addressModel.findOne({ userId });
-      let addresses ;
-      if (getAllAddresses){
-         addresses = getAllAddresses.address;
-      }else{
-        addresses = null
-      }
-      res.render("user/address-manage", { userName, addresses });
-    } catch(err) {
-      console.log(err)
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  //new Address
-  addAddress: async (req, res) => {
-    try {
-      const userId = req.session.userId;
-      const existAddress = await addressModel.findOne({ user: userId });
-      if (existAddress) {
-        await addressModel
-          .findOneAndUpdate(
-            { user: userId },
-            {
-              $push: {
-                address: [req.body],
-              },
-            }
-          )
-          .then(() => {
-            res.redirect("back");
-          });
-      } else {
-        const addAddress = await addressModel({
-          user: userId,
-          address: [req.body],
-        });
-        addAddress.save().then(() => {
-          res.redirect("back");
-        });
-      }
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  // Delete Address
-  deleteAddress: async (req, res) => {
-    try {
-      const userId = req.session.userId;
-      const id = req.params.id;
-      await addressModel.updateOne(
-        { user: userId },
-        { $pull: { address: { _id: id } } }
-      );
-      res.json("success");
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  // Edit Address
-  editAddress: async (req, res) => {
-    try {
-      const userName = req.session.userName;
-      const userId = req.session.userId;
-      const indexof = req.params.indexof;
-      const addresses = await addressModel.findOne({ user: userId });
-      const index = addresses.indexof;
-      const address = await addressModel.findOne({ "address.[index]": _id });
-      res.render("user/edit-address", { address, userName });
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
-  //payment verification
-  paymentVerification: async (req, res) => {
-    try {
-      const index = parseInt(req.body.index);
-      const userId = req.session.userId;
-      const addresses = await addressModel.findOne({ user: userId });
-      const address = addresses.address[index];
-      const cart = await cartModel.findOne({ owner: userId });
-      const products = cart.items;
-      const grandTotal = cart.cartTotal;
-      const crypto = require("crypto");
-      let hmac = crypto.createHmac("sha256", "QegvCVlutW7TdMqKKFVLQt1I");
-      hmac.update(
-        req.body.payment.razorpay_order_id +
-          "|" +
-          req.body.payment.razorpay_payment_id
-      );
-      hmac = hmac.digest("hex");
-      if (hmac == req.body.payment.razorpay_signature) {
-        const addOrder = await orderModel({
-          userId,
-          products,
+      const cartItems = await cartModel.findOne({ owner: userId });
+      if (cartItems) {
+        res.render("user/checkout", {
+          login: req.session.login,
           address,
-          grandTotal,
-          paymentMethod: "Razorpay",
-          payment: "paid",
+          index,
+          cartItems,
         });
-        addOrder.save();
-        await cartModel.findOneAndDelete({ owner: userId });
-        response = { valid: true };
-        res.json(response);
+      } else {
+        res.redirect("/login");
       }
     } catch {
       res.json("Something wrong, please try again");
     }
   },
 
-  orderSuccess: (req, res) => {
-    res.render("user/order-success", { login: req.session.login });
-  },
-
+  
   // Check Coupen
   checkCoupon: async (req, res) => {
     try {
@@ -676,90 +624,129 @@ module.exports = {
     }
   },
 
-  // Shop View
-  shop: async (req, res) => {
-    try {
-      const userId = req.session.userId;
-      const page = parseInt(req.query.page) || 1;
-      const perPage = 4;
-      const sort = req.query.sort;
-      const category = req.query.cat
-      let allProduct;
-      const countAllProduct = await productModel
-        .find({ delete: { $ne: true } })
-        .countDocuments();
-      const pageNum = Math.ceil(countAllProduct / 4);
-     
-      if (sort == "new") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true } })
-          .sort({ date: -1 })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else if (sort == "ascending") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true } })
-          .sort({ price: 1 })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else if (sort == "descendig") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true } })
-          .sort({ price: -1 })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else if (sort == "500-1000") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true }, price: { $gte: 500, $lte: 1000 } })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else if (sort == "1000-50000") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true }, price: { $gte: 1000, $lte: 50000 } })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else if (sort == "50000-100000") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true }, price: { $gte: 50000, $lte: 100000 } })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else if (sort == "100000") {
-        allProduct = await productModel
-          .find({ delete: { $ne: true }, price: { $lte: 100000 } })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      } else {
-        allProduct = await productModel
-          .find({ delete: { $ne: true } })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
-      }
 
-      if(category){
-        allProduct = await productModel
-          .find({ delete: { $ne: true },category, })
-          .skip((page - 1) * perPage)
-          .limit(perPage);
+  // Oreder Conform
+  orderConfirm: async (req, res) => {
+    try {
+      const paymentMethod = req.query.paymentMethod;
+      const userId = req.session.userId;
+      const indexof = parseInt(req.query.index);
+      const addresses = await addressModel.findOne({ user: userId });
+      const address = addresses.address[indexof];
+      const cart = await cartModel.findOne({ owner: userId });
+      const products = cart.items;
+      const grandTotal = cart.cartTotal;
+      console.log(grandTotal);
+      let addOrder;
+      if (paymentMethod === "COD") {
+        addOrder = await orderModel({
+          userId,
+          products,
+          address,
+          grandTotal,
+          paymentMethod,
+        });
+        addOrder.save();
+        await cartModel.findOneAndDelete({ owner: userId });
+        res.json({ payment: "COD" });
+      } else {
+        var instance = new Razorpay({
+          key_id: "rzp_test_ot382G21y8f1J7",
+          key_secret: "QegvCVlutW7TdMqKKFVLQt1I",
+        });
+        const options = {
+          amount: grandTotal * 100,
+          currency: "INR",
+        };
+        instance.orders.create(options, (err, order) => {
+          if (err) {
+            console.log("error come orders" + err);
+          } else {
+            res.json(order);
+          }
+        });
       }
-      const wishList = await wishListModel.findOne({ owner: userId });
-      let wishPro;
-      if (wishList) {
-        wishPro = wishList.products;
-      }else{
-        wishPro = []
-      }
-      res.render("user/shop", {
-        login: req.session.login,
-        allProduct,
-        pageNum,
-        page,
-        wishPro,
-      });
     } catch (err) {
       console.log(err);
-      res.json("something wrong");
+      res.json("Something wrong, please try again");
     }
   },
+
+ 
+  //payment verification
+  paymentVerification: async (req, res) => {
+    try {
+      const index = parseInt(req.body.index);
+      const userId = req.session.userId;
+      const addresses = await addressModel.findOne({ user: userId });
+      const address = addresses.address[index];
+      const cart = await cartModel.findOne({ owner: userId });
+      const products = cart.items;
+      const grandTotal = cart.cartTotal;
+      const crypto = require("crypto");
+      let hmac = crypto.createHmac("sha256", "QegvCVlutW7TdMqKKFVLQt1I");
+      hmac.update(
+        req.body.payment.razorpay_order_id +
+        "|" +
+        req.body.payment.razorpay_payment_id
+      );
+      hmac = hmac.digest("hex");
+      if (hmac == req.body.payment.razorpay_signature) {
+        const addOrder = await orderModel({
+          userId,
+          products,
+          address,
+          grandTotal,
+          paymentMethod: "Razorpay",
+          payment: "paid",
+        });
+        addOrder.save();
+        await cartModel.findOneAndDelete({ owner: userId });
+        response = { valid: true };
+        res.json(response);
+      }
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
+  
+// Order Success Page
+  orderSuccess: (req, res) => {
+    res.render("user/order-success", { login: req.session.login });
+  },
+
+   //Orders View
+   orderView: async (req, res) => {
+    try {
+      const userName = req.session.userName;
+      const userId = req.session.userId;
+      const Orders = await orderModel
+        .find({ userId: userId })
+        .populate("products.product")
+        .exec((err, allOrders) => {
+          if (err) {
+            console.log(err);
+          }
+          res.render("user/view-order", { userName, moment, allOrders });
+        });
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
+ // Cancel Order
+  cancelOrder: async (req, res) => {
+    const { proId, orderId } = req.query;
+    await orderModel.findOneAndUpdate(
+      { _id: orerId, "products.product": proId },
+      {
+        $set: {
+          "products.$.status": "Canceled",
+        },
+      }
+    );
+    res.json("canceled");
+  },
+
   // Contact
   contact: (req, res) => {
     res.render("user/contact", { login: req.session.login });

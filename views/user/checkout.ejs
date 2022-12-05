@@ -1,16 +1,16 @@
 <%- include('./layouts/userHeader.ejs') %>
   <div class="container mt-5">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-45 p-lr-0-lg">
-      <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+      <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
         Home
         <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
       </a>
 
-      <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+      <a href="shoping-cart" class="stext-109 cl8 hov-cl1 trans-04">
         Shoping Cart
         <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
       </a>
-      <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+      <a href="#" class="stext-109 cl8 hov-cl1 trans-04">
         Place Order
       </a>
     </div>
@@ -281,140 +281,141 @@
                 Razorpay
               </label>
             </div>
-            <% if ( address.length == 0){ %> 
-            <button type="submit" onclick="placeOrder('<%= index %>')"
-              class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" disabled>
-              PAY NOW
-            </button>
-            <% }else{ %> 
+            <% if ( address.length==0){ %>
               <button type="submit" onclick="placeOrder('<%= index %>')"
-                class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" disabled>
                 PAY NOW
               </button>
-              <% } %> 
+              <% }else{ %>
+                <button type="submit" onclick="placeOrder('<%= index %>')"
+                  class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                  PAY NOW
+                </button>
+                <% } %>
           </div>
         </div>
       </div>
     </div>
   </div>
 
- <script>
-function showAddressForm(){
-    const form = document.getElementById('addressForm')
-    
-    if (form.style.display === 'none'){
-        form.style.display = 'block'
-    }else{
-        form.style.display = 'none'
-    }
+  <script>
+    function showAddressForm() {
+      const form = document.getElementById("addressForm");
 
-}
-
-function showAllAddress(){
-    const form = document.getElementById('allAddress')
-    
-    if (form.style.display === 'none'){
-        form.style.display = 'block'
-    }else{
-        form.style.display = 'none'
-    }
-}
-
-  function submitForm() {
-  const change = document.querySelector('#changeAddress').submit()
-  axios.patch('/checkout')
-    .then(() => {
-      location.reload()
-    })
-}
-
-// COUPON VERIFICATION
-function getcoupon(cartTotal, cartId) {
-  const code = document.querySelector("#codeInput").value;
-  axios
-    .post("/check-coupen", { code, cartTotal, cartId })
-    .then((response) => {
-      if (response.data.apply) {
-        Swal.fire("Success", "applyed coupen offer!", "success");
-        location.reload();
-      } else if (response.data.exist) {
-        Swal.fire({
-          icon: "error",
-          title: "Already applied",
-          text: "only one offer can be applied!",
-        });
+      if (form.style.display === "none") {
+        form.style.display = "block";
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Invalid",
-          text: "coupen code is wrong !",
-        });
+        form.style.display = "none";
       }
-
-      const codeInput = document.querySelector("#discountInput");
-      codeInput.value = response.data;
-    });
-}
-
-// CHECKOUT AND PAYMENT
-function placeOrder(indexof) {
-  let index = indexof;
-  let paymentMethod = document.querySelector("#cod").checked
-    ? "COD"
-    : "Razorpay";
-
-  axios.get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`).then((response) => {
-    if (response.data.payment) {
-      alert("success cash on delivery");
-      location.assign("/order-success");
-    }else if(response.data.indexNull){
-      Swal.fire({
-          icon: "error",
-          title: "Invalid",
-          text: "Please add address first !",
-        });
-    } else {
-      razorpayPayment(response);
     }
-  });
-  function razorpayPayment(order) {
-    console.log(order)
-    var options = {
-      key: "rzp_test_ot382G21y8f1J7",
-      amount: order.data.amount,
-      currency: "INR",
-      name: "Gadsto",
-      description: "Test Transaction",
-      image: "https://example.com/your_logo",
-      order_id: order.data.id,
-      handler: function (response) {
-        verifyPayment(response, order);
-      },
 
-      prefill: {
-        name: "Gaurav Kumar",
-        email: "gaurav.kumar@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-    function verifyPayment(payment, order) {
-      axios.post("/payment-verify", { payment, order, index }).then((response) => {
-        location.assign("/order-success");
+    function showAllAddress() {
+      const form = document.getElementById("allAddress");
+
+      if (form.style.display === "none") {
+        form.style.display = "block";
+      } else {
+        form.style.display = "none";
+      }
+    }
+
+    function submitForm() {
+      const change = document.querySelector("#changeAddress").submit();
+      axios.patch("/checkout").then(() => {
+        location.reload();
       });
     }
-    var rzp1 = new Razorpay(options);
-    rzp1.open();
-  }
-}
- </script>
+
+    // COUPON VERIFICATION
+    function getcoupon(cartTotal, cartId) {
+      const code = document.querySelector("#codeInput").value;
+      axios
+        .post("/check-coupen", { code, cartTotal, cartId })
+        .then((response) => {
+          if (response.data.apply) {
+            Swal.fire("Success", "applyed coupen offer!", "success");
+            location.reload();
+          } else if (response.data.exist) {
+            Swal.fire({
+              icon: "error",
+              title: "Already applied",
+              text: "only one offer can be applied!",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid",
+              text: "coupen code is wrong !",
+            });
+          }
+
+          const codeInput = document.querySelector("#discountInput");
+          codeInput.value = response.data;
+        });
+    }
+
+    // CHECKOUT AND PAYMENT
+    function placeOrder(indexof) {
+      let index = indexof;
+      let paymentMethod = document.querySelector("#cod").checked
+        ? "COD"
+        : "Razorpay";
+
+      axios
+        .get(`/payment-verify?index=${index}&paymentMethod=${paymentMethod}`)
+        .then((response) => {
+          if (response.data.payment) {
+            alert("success cash on delivery");
+            location.assign("/order-success");
+          } else if (response.data.indexNull) {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid",
+              text: "Please add address first !",
+            });
+          } else {
+            razorpayPayment(response);
+          }
+        });
+      function razorpayPayment(order) {
+        console.log(order);
+        var options = {
+          key: "rzp_test_ot382G21y8f1J7",
+          amount: order.data.amount,
+          currency: "INR",
+          name: "Gadsto",
+          description: "Test Transaction",
+          image: "https://example.com/your_logo",
+          order_id: order.data.id,
+          handler: function (response) {
+            verifyPayment(response, order);
+          },
+
+          prefill: {
+            name: "Gaurav Kumar",
+            email: "gaurav.kumar@example.com",
+            contact: "9999999999",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+        function verifyPayment(payment, order) {
+          axios
+            .post("/payment-verify", { payment, order, index })
+            .then((response) => {
+              location.assign("/order-success");
+            });
+        }
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+      }
+    }
+  </script>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
 
   <%- include ('./layouts/footer.ejs') %>

@@ -230,7 +230,6 @@ module.exports = {
         category: category,
         delete: { $ne: true },
       });
-
       if (exist) {
         req.session.category = true;
         res.redirect("/admin/category-manage");
@@ -246,7 +245,7 @@ module.exports = {
     }
   },
 
-  //delete category
+  //Delete Category
   deleteCategory: async (req, res) => {
     try {
       console.log('vannu');
@@ -346,19 +345,6 @@ module.exports = {
     }
   },
 
-  //Order Management
-  orderManage: async (req, res) => {
-    try {
-      const getAllOrders = await orderModel
-        .find({})
-        .populate("userId")
-        .populate("products.product");
-      res.render("admin/order-manage", { getAllOrders, moment });
-    } catch {
-      res.json("Something wrong, please try again");
-    }
-  },
-
   // Coupen Management
   coupenManage: async (req, res) => {
     try {
@@ -380,6 +366,19 @@ module.exports = {
       res.json("Something wrong, please try again");
     }
   },
+
+    //Order Management
+    orderManage: async (req, res) => {
+      try {
+        const getAllOrders = await orderModel
+          .find({})
+          .populate("userId")
+          .populate("products.product");
+        res.render("admin/order-manage", { getAllOrders, moment });
+      } catch {
+        res.json("Something wrong, please try again");
+      }
+    },
 
   // change status
   changeStatus: async (req, res) => {
@@ -431,8 +430,8 @@ module.exports = {
     res.render("admin/bill", { order, products, moment });
   },
 
+  // Sales Report
   salesReport: async(req,res)=>{
-
     const salesReport = await orderModel.aggregate(
       [{
         '$match' : { 'products.status' : { $ne: 'Cancelled'}}
@@ -448,9 +447,6 @@ module.exports = {
               }
       ])
       console.log(salesReport)
-    
-      
-    
     const filterOrder = await orderModel.find({})
     res.render('admin/sales-report',{salesReport})
   },

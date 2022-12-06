@@ -8,8 +8,13 @@ const authControll = require('../controller/auth-controll')
 router
     .route('/')
     .get(userController.home)
-    .post(userController.logoutUser)
     .patch(userSession.userSession, userController.addToWishlist)
+
+
+router
+    .route('/login')
+    .get(authControll.login)
+    .post(authControll.dologin)
 
 
 router
@@ -19,15 +24,14 @@ router
 
 
 router
-    .route('/otp')
-    .post(authControll.veryfy)
-    .get(authControll.resendOTP)
+    .route('/logoutUser')
+    .get(userController.logoutUser)
 
 
 router
-    .route('/login')
-    .get(authControll.login)
-    .post(authControll.dologin)
+    .route('/otp')
+    .post(authControll.veryfy)
+    .get(authControll.resendOTP)
 
 
  router

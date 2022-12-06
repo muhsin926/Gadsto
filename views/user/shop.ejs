@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Home</title>
+  <title>Gadsto</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!--===============================================================================================-->
@@ -169,11 +169,11 @@
         <li>
           <div class="dropdown-divider"></div>
         </li>
-        <form action="/" method="post"></form>
+        <% if (login) { %> 
         <li>
-          <a type="submit" href="#">Logout</a>
+          <a type="submit" href="logoutUser">Logout</a>
         </li>
-        </form>
+        <% } %> 
       </ul>
     </div>
 

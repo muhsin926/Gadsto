@@ -13,33 +13,32 @@
     <div class="mt-5 container">
       <h4>Wish List</h4>
       <% for ( wishList of products) { %>
-        <div class="my-5 row border p-4 d-flex align-items-center justify-content-center text-center">
-          <div class="col-12 col-md-2">
-            <img class="how-itemcart1" src="/images/<%= wishList.image %> " alt="" />
+        <% console.log(products) %> 
+        <div class="my-5 row border d-flex align-items-center justify-content-center text-center">
+          <div class="col-12  col-md-2">
+            <a href="/product-view?proId=<% wishList._id %> ">
+            <img style="width: 11rem;" src="/images/<%= wishList.image %> " alt="" />
+          </a>
           </div>
           <div class="col-12 col-md-2">
             <p>
               <%= wishList.name %>
             </p>
           </div>
-          <div class="col-12 col-md-3">
-            <p>
-              <%= wishList.description %>
-            </p>
-          </div>
+        
           <div class="col-12 col-md-2">
             <p>
-              <%= wishList.price %>
+              ₹<%= wishList.price %>
             </p>
           </div>
-          <div class="col-12 col-md-2">
+          <div class="col-12 my-2 col-md-2">
             <button type="submit" class="btn border addToCart" onclick="addToCart('<%= wishList._id %>')">
               Add To Cart
             </button>
           </div>
           <div class="col-12 col-md-1">
             <a>
-              <button class="btn border" onclick="removeWish('<%= wishList._id %>','<%= wishList.name %>')">
+              <button class="btn border-danger text-danger" onclick="removeWish('<%= wishList._id %>','<%= wishList.name %>')">
                 Remove
               </button>
             </a>

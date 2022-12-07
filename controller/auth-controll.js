@@ -72,7 +72,6 @@ module.exports = {
 
   // OTP Veryfication
   veryfy: async (req, res) => {
-    console.log("verify");
     if (req.body.otp == otp) {
       try {
         await newUser.save();
@@ -82,7 +81,7 @@ module.exports = {
       }
       res.redirect("/");
     } else {
-      res.render("otp", { msg: "OTP is incorrect" });
+      res.render("user/otp", { msg: "OTP is incorrect" });
     }
   },
 

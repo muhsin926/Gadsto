@@ -554,7 +554,7 @@ module.exports = {
         { owner: userId },
         { $pull: { products: productId } }
       );
-      res.json();
+      res.json('removed');
     } catch {
       res.json("Something wrong, please try again");
     }

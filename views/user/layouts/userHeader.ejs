@@ -111,10 +111,8 @@
 								<a class="dropdown-item" href="order-view">My orders</a>
 								<div class="dropdown-divider"></div>
 								<% if (login) { %>
-									<form action="/" method="post">
-										<a type="submit" class="dropdown-item" href="#"><button
-												type="submit">Logout</button></a>
-									</form>
+										<a type="submit" class="dropdown-item" href="/logoutUser"><button
+												type="">Logout</button></a>
 									<% } %>
 							</div>
 						</div>
@@ -165,13 +163,17 @@
 				<li>
 					<a href="contact">Contact</a>
 				</li>
-				<% if (login) { %>
+				
 				<li>
 					<div class="dropdown-divider"></div>
 				</li>
-				
+				<% if (login) { %>
 				<li>
-						<a type="submit" href="#">Logout</a>
+						<a type="button" href="/logoutUser">Logout</a>
+				</li>
+				<% }else{ %> 
+					<li>
+						<a type="button" href="/login">Login</a>
 				</li>
 				<% } %> 
 			</ul>

@@ -182,10 +182,11 @@ module.exports = {
     try {
       const userName = req.session.userName;
       const userId = req.session.userId;
-      const getAllAddresses = await addressModel.findOne({ userId });
+      const getAllAddresses = await addressModel.findOne({ user: userId });
       let addresses;
       if (getAllAddresses) {
         addresses = getAllAddresses.address;
+        
       } else {
         addresses = null;
       }

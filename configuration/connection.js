@@ -7,7 +7,7 @@ mongoose.connect(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
    
-})
+}) 
 
 // connection checking
 mongoose.connection

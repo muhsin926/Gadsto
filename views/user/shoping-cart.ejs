@@ -31,7 +31,7 @@
                                     <% for ( cart of allCart.items) { %>
                                         <tr class="table_row">
                                             <td class="column-1">
-                                                <a href="#" >
+                                                <a href="#">
                                                     <div class="how-itemcart1">
                                                         <img src="/images/<%= cart.product.image %>" alt="IMG">
                                                     </div>
@@ -75,9 +75,10 @@
                                             <td class="column-5">
                                                 ₹<%= cart.totalPrice %>
                                             </td>
-                                            <td><a href="#"><span  onclick="deleteProduct('<%= cart.product._id  %>')" class=" material-symbols-outlined mr-3 text-danger">
-                                                cancel_presentation
-                                                </span></a></td>
+                                            <td><a href="#"><span onclick="deleteProduct('<%= cart.product._id  %>')"
+                                                        class=" material-symbols-outlined mr-3 text-danger">
+                                                        cancel_presentation
+                                                    </span></a></td>
                                         </tr>
                                         <% } %>
                                 </table>
@@ -143,20 +144,20 @@
                 <a class="mb-5 btn btn-primary" href="/">Back To Home</a>
             </div>
             <% } %>
-        <script>
-            function changeQuantity(cartId, proId, count) {
-  let qty = document.querySelector('#qty')
-  axios.patch(`/shoping-cart?cartId=${cartId}&productId=${proId}&count=${count}`)
-      .then(() => {
-         location.reload()
-      })
-}
+                <script>
+                    function changeQuantity(cartId, proId, count) {
+                        let qty = document.querySelector('#qty')
+                        axios.patch(`/shoping-cart?cartId=${cartId}&productId=${proId}&count=${count}`)
+                            .then(() => {
+                                location.reload()
+                            })
+                    }
 
-function deleteProduct(proId) {
-  axios.delete(`/shoping-cart?productId=${proId}`)
-      .then(() => {
-          location.reload()
-      })
-}
-        </script>
+                    function deleteProduct(proId) {
+                        axios.delete(`/shoping-cart?productId=${proId}`)
+                            .then(() => {
+                                location.reload()
+                            })
+                    }
+                </script>
                 <%- include ('./layouts/footer.ejs') %>

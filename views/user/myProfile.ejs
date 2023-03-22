@@ -1,76 +1,76 @@
-<%- include('./layouts/profile-header.ejs') %> 
+<%- include('./layouts/profile-header.ejs') %>
 
-          <div class=" p-5 user-info border col rounded ">
-            <form action="/my-profile" method="post">
-            <div class="d-flex justify-content-between">
-              <h4> Personal Information</h4>
-              <button class="btn border text-white "
-                style="background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104)); "
-                type="submit">Update</button>
+  <div class=" p-5 user-info border col rounded ">
+    <form action="/my-profile" method="post">
+      <div class="d-flex justify-content-between">
+        <h4> Personal Information</h4>
+        <button class="btn border text-white "
+          style="background-image: linear-gradient(to bottom, rgb(61, 167, 216), rgb(2, 63, 104)); "
+          type="submit">Update</button>
 
-            </div>
-
-            <hr>
-            <br>
-            
-              <div class="row">
-
-                <div class="form-group">
-                  <label for="">Name</label>
-                  <input type="text" class="form-control" value="<%= user.name %>" id="email" placeholder="Enter email"
-                    name="name">
-                </div>
-                <div class="col">
-                  <label for="">Email</label>
-                  <input type="email" class="form-control" value="<%= user.email %>" placeholder="email" name="email">
-                </div>
-                <div class="col">
-                  <label for="">Mobile</label>
-                  <input type="number" class="form-control" placeholder="Mobile Number" name="mob">
-                </div>
-              </div>
-            </form><br>
-            <a class="a-tag" href="">Change your password</a>
-          </div>
-
-
-
-        </div>
-        <!-- partial -->
       </div>
-      <!-- main-panel ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
-</div>
-<!-- plugins:js -->
-<script src="/admin/common js/sweatAlert.js"></script>
-<script src="/admin/common js/dom.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/admin/vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<script src="/admin/vendors/chart.js/Chart.min.js"></script>
-<script src="/admin/vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-<script src="/admin/js/dataTables.select.min.js"></script>
-<script src="https://kit.fontawesome.com/23385eff2a.js" crossorigin="anonymous"></script>
 
-<!-- End plugin js for this page -->
-<!-- inject:js -->
+      <hr>
+      <br>
 
-<script src="/admin/js/off-canvas.js"></script>
-<script src="/admin/js/hoverable-collapse.js"></script>
-<script src="/admin/js/template.js"></script>
-<script src="/admin/js/settings.js"></script>
-<script src="/admin/js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<script src="/admin/js/dashboard.js"></script>
-<script src="/admin/js/Chart.roundedBarCharts.js"></script>
-<!-- End custom js for this page-->
-</body>
+      <div class="row">
 
-</html>
+        <div class="form-group">
+          <label for="">Name</label>
+          <input type="text" class="form-control" value="<%= user.name %>" id="email" placeholder="Enter email"
+            name="name">
+        </div>
+        <div class="col">
+          <label for="">Email</label>
+          <input type="email" class="form-control" value="<%= user.email %>" placeholder="email" name="email">
+        </div>
+        <div class="col">
+          <label for="">Mobile</label>
+          <input type="number" class="form-control" placeholder="Mobile Number" name="mob">
+        </div>
+      </div>
+    </form><br>
+    <a class="a-tag" href="">Change your password</a>
+  </div>
+
+
+
+  </div>
+  <!-- partial -->
+  </div>
+  <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  </div>
+  <!-- plugins:js -->
+  <script src="/admin/common js/sweatAlert.js"></script>
+  <script src="/admin/common js/dom.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="/admin/vendors/chart.js/Chart.min.js"></script>
+  <script src="/admin/vendors/datatables.net/jquery.dataTables.js"></script>
+  <script src="/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+  <script src="/admin/js/dataTables.select.min.js"></script>
+  <script src="https://kit.fontawesome.com/23385eff2a.js" crossorigin="anonymous"></script>
+
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+
+  <script src="/admin/js/off-canvas.js"></script>
+  <script src="/admin/js/hoverable-collapse.js"></script>
+  <script src="/admin/js/template.js"></script>
+  <script src="/admin/js/settings.js"></script>
+  <script src="/admin/js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="/admin/js/dashboard.js"></script>
+  <script src="/admin/js/Chart.roundedBarCharts.js"></script>
+  <!-- End custom js for this page-->
+  </body>
+
+  </html>

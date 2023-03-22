@@ -44,8 +44,8 @@ module.exports = {
     }
   },
 
-   // Shop View, Filter And Sort 
-   shop: async (req, res) => {
+  // Shop View, Filter And Sort
+  shop: async (req, res) => {
     try {
       const userId = req.session.userId;
       const page = parseInt(req.query.page) || 1;
@@ -177,8 +177,8 @@ module.exports = {
     }
   },
 
-   //Address Manage
-   addressManage: async (req, res) => {
+  //Address Manage
+  addressManage: async (req, res) => {
     try {
       const userName = req.session.userName;
       const userId = req.session.userId;
@@ -186,7 +186,6 @@ module.exports = {
       let addresses;
       if (getAllAddresses) {
         addresses = getAllAddresses.address;
-        
       } else {
         addresses = null;
       }
@@ -197,8 +196,8 @@ module.exports = {
     }
   },
 
-   //new Address
-   newAddress: async (req, res) => {
+  //new Address
+  newAddress: async (req, res) => {
     try {
       const userId = req.session.userId;
       const existAddress = await addressModel.findOne({ user: userId });
@@ -229,67 +228,67 @@ module.exports = {
     }
   },
 
-    //New Address
-    addAddress: async (req, res) => {
-      try {
-        const userId = req.session.userId;
-        const existAddress = await addressModel.findOne({ user: userId });
-        if (existAddress) {
-          await addressModel
-            .findOneAndUpdate(
-              { user: userId },
-              {
-                $push: {
-                  address: [req.body],
-                },
-              }
-            )
-            .then(() => {
-              res.redirect("back");
-            });
-        } else {
-          const addAddress = await addressModel({
-            user: userId,
-            address: [req.body],
-          });
-          addAddress.save().then(() => {
+  //New Address
+  addAddress: async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const existAddress = await addressModel.findOne({ user: userId });
+      if (existAddress) {
+        await addressModel
+          .findOneAndUpdate(
+            { user: userId },
+            {
+              $push: {
+                address: [req.body],
+              },
+            }
+          )
+          .then(() => {
             res.redirect("back");
           });
-        }
-      } catch {
-        res.json("Something wrong, please try again");
+      } else {
+        const addAddress = await addressModel({
+          user: userId,
+          address: [req.body],
+        });
+        addAddress.save().then(() => {
+          res.redirect("back");
+        });
       }
-    },
-  
-    // Delete Address
-    deleteAddress: async (req, res) => {
-      try {
-        const userId = req.session.userId;
-        const id = req.params.id;
-        await addressModel.updateOne(
-          { user: userId },
-          { $pull: { address: { _id: id } } }
-        );
-        res.json("success");
-      } catch {
-        res.json("Something wrong, please try again");
-      }
-    },
-  
-    // Edit Address
-    editAddress: async (req, res) => {
-      try {
-        const userName = req.session.userName;
-        const userId = req.session.userId;
-        const indexof = req.params.indexof;
-        const addresses = await addressModel.findOne({ user: userId });
-        const index = addresses.indexof;
-        const address = await addressModel.findOne({ "address.[index]": _id });
-        res.render("user/edit-address", { address, userName });
-      } catch {
-        res.json("Something wrong, please try again");
-      }
-    },
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
+
+  // Delete Address
+  deleteAddress: async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const id = req.params.id;
+      await addressModel.updateOne(
+        { user: userId },
+        { $pull: { address: { _id: id } } }
+      );
+      res.json("success");
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
+
+  // Edit Address
+  editAddress: async (req, res) => {
+    try {
+      const userName = req.session.userName;
+      const userId = req.session.userId;
+      const indexof = req.params.indexof;
+      const addresses = await addressModel.findOne({ user: userId });
+      const index = addresses.indexof;
+      const address = await addressModel.findOne({ "address.[index]": _id });
+      res.render("user/edit-address", { address, userName });
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
 
   // Shoping Cart
   shopingCart: async (req, res) => {
@@ -317,7 +316,6 @@ module.exports = {
   // Add To Cart
   addToCart: async (req, res) => {
     try {
-      console.log("addtocart");
       const productId = req.query.proId;
       const user = await cartModel.findOne({ owner: req.session.userId });
       const product = await productModel.findOne({ _id: productId });
@@ -400,11 +398,10 @@ module.exports = {
       res.json("Something wrong, please try again");
     }
   },
- 
+
   //Delete Product From Cart
   deleteCartProduct: async (req, res) => {
     try {
-      console.log(req.query);
       const userId = req.session.userId;
       const productId = req.query.productId;
       const product = await productModel.findOne({ _id: productId });
@@ -430,7 +427,8 @@ module.exports = {
   wishList: async (req, res) => {
     try {
       const userId = req.session.userId;
-      const allwishLists = await wishListModel
+      console.log(userId);
+      await wishListModel
         .findOne({ owner: userId })
         .populate("products")
         .exec((err, wishLists) => {
@@ -520,7 +518,6 @@ module.exports = {
           owner: userId,
           products: productId,
         });
-        console.log(existProduct);
         if (!existProduct) {
           await wishListModel.findOneAndUpdate(
             { owner: userId },
@@ -548,13 +545,12 @@ module.exports = {
   removeWishlist: async (req, res) => {
     try {
       const productId = req.query.productId;
-      console.log(productId);
       const userId = req.session.userId;
       await wishListModel.findOneAndUpdate(
         { owner: userId },
         { $pull: { products: productId } }
       );
-      res.json('removed');
+      res.json("removed");
     } catch {
       res.json("Something wrong, please try again");
     }
@@ -591,7 +587,6 @@ module.exports = {
     }
   },
 
-  
   // Check Coupen
   checkCoupon: async (req, res) => {
     try {
@@ -625,7 +620,6 @@ module.exports = {
     }
   },
 
-
   // Oreder Conform
   orderConfirm: async (req, res) => {
     try {
@@ -637,7 +631,6 @@ module.exports = {
       const cart = await cartModel.findOne({ owner: userId });
       const products = cart.items;
       const grandTotal = cart.cartTotal;
-      console.log(grandTotal);
       let addOrder;
       if (paymentMethod === "COD") {
         addOrder = await orderModel({
@@ -673,7 +666,6 @@ module.exports = {
     }
   },
 
- 
   //payment verification
   paymentVerification: async (req, res) => {
     try {
@@ -688,8 +680,8 @@ module.exports = {
       let hmac = crypto.createHmac("sha256", "QegvCVlutW7TdMqKKFVLQt1I");
       hmac.update(
         req.body.payment.razorpay_order_id +
-        "|" +
-        req.body.payment.razorpay_payment_id
+          "|" +
+          req.body.payment.razorpay_payment_id
       );
       hmac = hmac.digest("hex");
       if (hmac == req.body.payment.razorpay_signature) {
@@ -710,14 +702,14 @@ module.exports = {
       res.json("Something wrong, please try again");
     }
   },
-  
-// Order Success Page
+
+  // Order Success Page
   orderSuccess: (req, res) => {
     res.render("user/order-success", { login: req.session.login });
   },
 
-   //Orders View
-   orderView: async (req, res) => {
+  //Orders View
+  orderView: async (req, res) => {
     try {
       const userName = req.session.userName;
       const userId = req.session.userId;
@@ -734,18 +726,24 @@ module.exports = {
       res.json("Something wrong, please try again");
     }
   },
- // Cancel Order
+  // Cancel Order
   cancelOrder: async (req, res) => {
-    const { proId, orderId } = req.query;
-    await orderModel.findOneAndUpdate(
-      { _id: orerId, "products.product": proId },
-      {
-        $set: {
-          "products.$.status": "Canceled",
-        },
-      }
-    );
-    res.json("canceled");
+    try {
+      const proId = req.query.proId.trim();
+      const orderId = req.query.orderId.trim();
+
+      await orderModel.findOneAndUpdate(
+        { _id: orderId, "products.product": proId },
+        {
+          $set: {
+            "products.$.status": "Canceled",
+          },
+        }
+      );
+      res.json("canceled");
+    } catch (err) {
+      console.log(err);
+    }
   },
 
   // Contact

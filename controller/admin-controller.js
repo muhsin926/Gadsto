@@ -11,15 +11,29 @@ const moment = require("moment");
 
 module.exports = {
   // Admin Login Page
-  login: async(req, res) => {
+  login: async (req, res) => {
     if (req.session.adminLogin) {
-      const totalOrder = await orderModel.find({}).countDocuments()
-      const totalProduct = await productModel.find({}).countDocuments()
-      const totalCategory = await categoryModel.find({}).countDocuments()
-      const totalUser = await userModel.find({}).countDocuments()
-      const recentOrders = await orderModel.find({}).sort({date:-1}).limit(10)
-      const newUser = await userModel.find({type:{$eq : "User"}}).sort({date:-1}).limit(4)
-      res.render("admin/index",{totalCategory,totalOrder,totalProduct,totalUser,recentOrders,moment,newUser});
+      const totalOrder = await orderModel.find({}).countDocuments();
+      const totalProduct = await productModel.find({}).countDocuments();
+      const totalCategory = await categoryModel.find({}).countDocuments();
+      const totalUser = await userModel.find({}).countDocuments();
+      const recentOrders = await orderModel
+        .find({})
+        .sort({ date: -1 })
+        .limit(10);
+      const newUser = await userModel
+        .find({ type: { $eq: "User" } })
+        .sort({ date: -1 })
+        .limit(4);
+      res.render("admin/index", {
+        totalCategory,
+        totalOrder,
+        totalProduct,
+        totalUser,
+        recentOrders,
+        moment,
+        newUser,
+      });
     } else {
       res.render("admin/login");
     }
@@ -248,14 +262,13 @@ module.exports = {
   //Delete Category
   deleteCategory: async (req, res) => {
     try {
-      console.log('vannu');
       const id = req.query.catId;
       const deleteCategory = await categoryModel.findByIdAndUpdate(
         { _id: id },
         { $set: { delete: true } }
       );
       await deleteCategory.save().then(() => {
-        res.json('success')
+        res.json("success");
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -301,7 +314,7 @@ module.exports = {
         { $set: { delete: true } }
       );
       deleteBanner.save().then(() => {
-        res.json('success')
+        res.json("success");
       });
     } catch {
       res.json("Something wrong, please try again");
@@ -359,7 +372,6 @@ module.exports = {
   addCoupen: async (req, res) => {
     try {
       const coupen = req.body;
-      console.log(coupen);
       await new coupenModel(coupen).save();
       res.redirect("/admin/coupen-manage");
     } catch {
@@ -367,24 +379,22 @@ module.exports = {
     }
   },
 
-    //Order Management
-    orderManage: async (req, res) => {
-      try {
-        const getAllOrders = await orderModel
-          .find({})
-          .populate("userId")
-          .populate("products.product");
-        res.render("admin/order-manage", { getAllOrders, moment });
-      } catch {
-        res.json("Something wrong, please try again");
-      }
-    },
+  //Order Management
+  orderManage: async (req, res) => {
+    try {
+      const getAllOrders = await orderModel
+        .find({})
+        .populate("userId")
+        .populate("products.product");
+      res.render("admin/order-manage", { getAllOrders, moment });
+    } catch {
+      res.json("Something wrong, please try again");
+    }
+  },
 
   // change status
   changeStatus: async (req, res) => {
-    console.log("ehing");
     const { status, orderId, proId } = req.body;
-    console.log(req.body);
     if (status == "Order Confirmed") {
       await orderModel.findOneAndUpdate(
         { _id: orderId, "products.product": proId },
@@ -431,24 +441,26 @@ module.exports = {
   },
 
   // Sales Report
-  salesReport: async(req,res)=>{
-    const salesReport = await orderModel.aggregate(
-      [{
-        '$match' : { 'products.status' : { $ne: 'Cancelled'}}
+  salesReport: async (req, res) => {
+    const salesReport = await orderModel.aggregate([
+      {
+        $match: { "products.status": { $ne: "Cancelled" } },
       },
       {
-          $group : {
-              _id : { month: { $month: "$date" }, day: { $dayOfMonth: "$date" }, year: { $year: "$date" } },
-              totalPrice: { $sum:  "$grandTotal"  },
-              products: { $sum :{$size: "$products"}},
-              count: { $sum: 1 },
-              
-                  }
-              }
-      ])
-      console.log(salesReport)
-    const filterOrder = await orderModel.find({})
-    res.render('admin/sales-report',{salesReport})
+        $group: {
+          _id: {
+            month: { $month: "$date" },
+            day: { $dayOfMonth: "$date" },
+            year: { $year: "$date" },
+          },
+          totalPrice: { $sum: "$grandTotal" },
+          products: { $sum: { $size: "$products" } },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const filterOrder = await orderModel.find({});
+    res.render("admin/sales-report", { salesReport });
   },
 
   //Admin Logout

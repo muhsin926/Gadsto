@@ -1,208 +1,207 @@
-<%- include('./layouts/profile-header.ejs') %> 
+<%- include('./layouts/profile-header.ejs') %>
 
-                    <div class="  user-info col rounded ">
-                        <div class="p-3 mt-3 mb-3 border ">
-                            <a href="#" style="text-decoration: none;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
-                                aria-controls="collapseExample">
-                                <h6 class=""><i class="fs-16 zmdi zmdi-plus mr-2" style="font-size: 1rem;"></i>Add New
-                                    Address</h6>
-                            </a>
-                        </div>
-
-                        <div id="collapseExample" class="collapse p-5  border">
-                            <div class="mb-5card-header py-3">
-                                <h5 class="mtext-101 mb-0">Address details</h5>
-                            </div>
-                            <form action="/checkout" method="post">
-                                <div class="row mb-4">
-                                    <div class="col">
-                                        <div class="form-outline">
-                                            <label class="form-label" for="form7Example1">Full Name</label>
-                                            <input type="text" name="fullName" id="form7Example1"required
-                                                class="form-control" />
-
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-outline">
-                                            <label class="form-label" for="form7Example2">Phone</label>
-                                            <input type="number" name="phone" id="form7Example2" class="form-control" required />
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Text input -->
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="form7Example3">Picode</label>
-                                    <input type="number" name="pincode" id="form7Example3" class="form-control" required/>
-
-                                </div>
-
-                                <!-- Text input -->
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="form7Example4">Flat, House no., Building,
-                                        Company, Apartment</label>
-                                    <input type="text" name="addressLine" id="form7Example4" class="form-control" required/>
-
-                                </div>
-
-                                <!-- Email input -->
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="form7Example5">Landmark</label>
-                                    <input type="text" name="landMark" id="form7Example5" class="form-control"required />
-
-                                </div>
-
-                                <div class="row mb-4">
-                                    <div class="col">
-                                        <div class="form-outline">
-                                            <label class="form-label" for="form7Example1">City</label>
-                                            <input type="text" name="city" id="form7Example1" class="form-control"required />
-
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-outline">
-                                            <label class="form-label" for="form7Example2">State</label>
-                                            <select name="state" id="state" class="form-control"required>
-                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar
-                                                    Islands</option>
-                                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                                <option value="Assam">Assam</option>
-                                                <option value="Bihar">Bihar</option>
-                                                <option value="Chandigarh">Chandigarh</option>
-                                                <option value="Chhattisgarh">Chhattisgarh</option>
-                                                <option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli
-                                                </option>
-                                                <option value="Daman and Diu">Daman and Diu</option>
-                                                <option value="Delhi">Delhi</option>
-                                                <option value="Lakshadweep">Lakshadweep</option>
-                                                <option value="Puducherry">Puducherry</option>
-                                                <option value="Goa">Goa</option>
-                                                <option value="Gujarat">Gujarat</option>
-                                                <option value="Haryana">Haryana</option>
-                                                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                                                <option value="Jharkhand">Jharkhand</option>
-                                                <option value="Karnataka">Karnataka</option>
-                                                <option value="Kerala">Kerala</option>
-                                                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                                <option value="Maharashtra">Maharashtra</option>
-                                                <option value="Manipur">Manipur</option>
-                                                <option value="Meghalaya">Meghalaya</option>
-                                                <option value="Mizoram">Mizoram</option>
-                                                <option value="Nagaland">Nagaland</option>
-                                                <option value="Odisha">Odisha</option>
-                                                <option value="Punjab">Punjab</option>
-                                                <option value="Rajasthan">Rajasthan</option>
-                                                <option value="Sikkim">Sikkim</option>
-                                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                                <option value="Telangana">Telangana</option>
-                                                <option value="Tripura">Tripura</option>
-                                                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                                <option value="Uttarakhand">Uttarakhand</option>
-                                                <option value="West Bengal">West Bengal</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary float-right ">Save Address</button>
-                            </form>
-                        </div>
-
-                        <% if(addresses!=null){ %> 
-                        <% addresses.forEach((address,index)=>{  %>
-                            
-                                <div class="p-3 mt-3 mb-3 border ">
-                                    <span><strong>
-                                            <%= address.fullName %> <br>
-                                                <%= address.phone %>
-                                        </strong></span>
-                                        <a href="#">  <button onclick="deleteAddress('<%= address._id %> ')" class="btn text-danger float-right">Delete</button></a>
-                                  
-                                    <br>
-                                    <span>
-                                        <%= address.addressLine %>, <%= address.city %>, <%= address.state %>, <%=
-                                                        address.pincode %>
-                                    </span>
-                                    
-
-                                </div>
-                                <% }) %>
-                            <% } %> 
-                    </div>
-
-
-
-
-                    <!-- partial -->
-                </div>
-                <!-- main-panel ends -->
-            </div>
-            <!-- page-body-wrapper ends -->
+    <div class="  user-info col rounded ">
+        <div class="p-3 mt-3 mb-3 border ">
+            <a href="#" style="text-decoration: none;" data-toggle="collapse" data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+                <h6 class=""><i class="fs-16 zmdi zmdi-plus mr-2" style="font-size: 1rem;"></i>Add New
+                    Address</h6>
+            </a>
         </div>
-        <!-- container-scroller -->
-</div>
-<!-- plugins:js -->
-<script>
-    function deleteAddress(id){
 
-Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axios.delete(`/address-manage?address = ${id}`)
-              .then((result) => {
-                if (result.data) {
-                  Swal.fire(
-                    "Deleted!",
-                    "Your file has been deleted.",
-                    "success"
-                  );
-                  location.reload()
-                } else {
-                  alert("something went wrong");
+        <div id="collapseExample" class="collapse p-5  border">
+            <div class="mb-5card-header py-3">
+                <h5 class="mtext-101 mb-0">Address details</h5>
+            </div>
+            <form action="/checkout" method="post">
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label" for="form7Example1">Full Name</label>
+                            <input type="text" name="fullName" id="form7Example1" required class="form-control" />
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label" for="form7Example2">Phone</label>
+                            <input type="number" name="phone" id="form7Example2" class="form-control" required />
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example3">Picode</label>
+                    <input type="number" name="pincode" id="form7Example3" class="form-control" required />
+
+                </div>
+
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example4">Flat, House no., Building,
+                        Company, Apartment</label>
+                    <input type="text" name="addressLine" id="form7Example4" class="form-control" required />
+
+                </div>
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example5">Landmark</label>
+                    <input type="text" name="landMark" id="form7Example5" class="form-control" required />
+
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label" for="form7Example1">City</label>
+                            <input type="text" name="city" id="form7Example1" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label" for="form7Example2">State</label>
+                            <select name="state" id="state" class="form-control" required>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar
+                                    Islands</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli
+                                </option>
+                                <option value="Daman and Diu">Daman and Diu</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Lakshadweep">Lakshadweep</option>
+                                <option value="Puducherry">Puducherry</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary float-right ">Save Address</button>
+            </form>
+        </div>
+
+        <% if(addresses!=null){ %>
+            <% addresses.forEach((address,index)=>{ %>
+
+                <div class="p-3 mt-3 mb-3 border ">
+                    <span><strong>
+                            <%= address.fullName %> <br>
+                                <%= address.phone %>
+                        </strong></span>
+                    <a href="#"> <button onclick="deleteAddress('<%= address._id %> ')"
+                            class="btn text-danger float-right">Delete</button></a>
+
+                    <br>
+                    <span>
+                        <%= address.addressLine %>, <%= address.city %>, <%= address.state %>, <%= address.pincode %>
+                    </span>
+
+
+                </div>
+                <% }) %>
+                    <% } %>
+    </div>
+
+
+
+
+    <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    </div>
+    <!-- plugins:js -->
+    <script>
+        function deleteAddress(id) {
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/address-manage?address = ${id}`)
+                        .then((result) => {
+                            if (result.data) {
+                                Swal.fire(
+                                    "Deleted!",
+                                    "Your file has been deleted.",
+                                    "success"
+                                );
+                                location.reload()
+                            } else {
+                                alert("something went wrong");
+                            }
+                        });
                 }
-              });
-          }
-        });
-}
+            });
+        }
 
-</script>
-<script src="/admin/common js/sweatAlert.js"></script>
-<script src="/admin/common js/dom.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/admin/vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<script src="/admin/vendors/chart.js/Chart.min.js"></script>
-<script src="/admin/vendors/datatables.net/jquery.dataTables.js"></script>
-<script src="/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-<script src="/admin/js/dataTables.select.min.js"></script>
-<script src="https://kit.fontawesome.com/23385eff2a.js" crossorigin="anonymous"></script>
+    </script>
+    <script src="/admin/common js/sweatAlert.js"></script>
+    <script src="/admin/common js/dom.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/admin/vendors/chart.js/Chart.min.js"></script>
+    <script src="/admin/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="/admin/js/dataTables.select.min.js"></script>
+    <script src="https://kit.fontawesome.com/23385eff2a.js" crossorigin="anonymous"></script>
 
-<!-- End plugin js for this page -->
-<!-- inject:js -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
 
-<script src="/admin/js/off-canvas.js"></script>
-<script src="/admin/js/hoverable-collapse.js"></script>
-<script src="/admin/js/template.js"></script>
-<script src="/admin/js/settings.js"></script>
-<script src="/admin/js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<script src="/admin/js/dashboard.js"></script>
-<script src="/admin/js/Chart.roundedBarCharts.js"></script>
-<!-- End custom js for this page-->
-</body>
+    <script src="/admin/js/off-canvas.js"></script>
+    <script src="/admin/js/hoverable-collapse.js"></script>
+    <script src="/admin/js/template.js"></script>
+    <script src="/admin/js/settings.js"></script>
+    <script src="/admin/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="/admin/js/dashboard.js"></script>
+    <script src="/admin/js/Chart.roundedBarCharts.js"></script>
+    <!-- End custom js for this page-->
+    </body>
 
-</html>
+    </html>
